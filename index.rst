@@ -33,8 +33,9 @@ What's New
 ++++++++++
 
 - Workshop updated for the following software versions:
-  - Prism Central 5.11
-  - AOS 5.10.x or 5.11
+
+    - Prism Central 5.11
+    - AOS 5.10.x or 5.11
 
 Initial Setup
 +++++++++++++

@@ -11,7 +11,7 @@
 
 .. _xplay:
 
-.. http://10.42.247.70:3000/ replace:: http://10.45.32.157/
+.. http://10.42.247.70 replace:: http://10.45.32.157/
 .. |br| raw:: html
 
 ------------------------
@@ -42,7 +42,7 @@ Applications provisioned as part of the  :ref:`linux_tools_vm` will be used to a
 #. Please follow the instructions to deploy the :ref:`linux_tools_vm` before moving on with this lab.
 
 
-#. Right click the following URL to open a new tab and navigate to the webpage at http://10.42.247.70:3000/ and enter the details in the Setup portion of the form. Then click 'Begin Setup' once you have filled in all the fields. This will get your environment ready for this lab. **Keep this tab open during entire Prism Pro lab to return to as directed in later portions.**
+#. Right click the following URL to open a new tab and navigate to the webpage at http://10.42.247.70 and enter the details in the Setup portion of the form. Then click 'Begin Setup' once you have filled in all the fields. This will get your environment ready for this lab. **Keep this tab open during entire Prism Pro lab to return to as directed in later portions.**
 
    .. figure:: images/ppro_08.png
 
@@ -228,7 +228,7 @@ You are welcome to compose your own subject message. The above is just an exampl
 
    .. figure:: images/ppro_41.png
 
-#. **Switch tabs back to** the http://10.42.247.70:3000/ page and continue to the Story 1-3 Step.
+#. **Switch tabs back to** the http://10.42.247.70 page and continue to the Story 1-3 Step.
 
    .. figure:: images/ppro_66.png
 
@@ -310,7 +310,7 @@ For this story we will be using Habitica to show how we can use 3rd Party APIs w
 
    .. figure:: images/ppro_55.png
 
-#. **Switch back to the other tab** running http://10.42.247.70:3000/ and Simulate the ‘VM Bully Detected’ alert for Story 5.
+#. **Switch back to the other tab** running http://10.42.247.70 and Simulate the ‘VM Bully Detected’ alert for Story 5.
 
    .. figure:: images/ppro_65.png
 
