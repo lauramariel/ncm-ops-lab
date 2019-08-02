@@ -171,9 +171,6 @@ export default class EntitySearch extends React.Component {
         return;
       }
       if (!response || !response.data) {
-        this.props.onError({
-          message: 'Failed to query VMs. Check to make sure your PC IP is entered correctly.'
-        });
         return;
       }
       // Default handling of entity_results
@@ -254,8 +251,20 @@ export default class EntitySearch extends React.Component {
       method: 'POST',
       data: JSON.stringify({
         filter: filter,
-        pcIp: this.props.pcIp
+        pcIp: this.props.pcIp,
+        password: this.props.password
       })
+    }).then(resp => {
+      if (resp && resp.data && resp.data.error) {
+        this.props.onError({
+          message: resp.data.error
+        });
+      } else if (!resp || !resp.data) {
+        this.props.onError({
+          message: 'Failed to query VMs. Check to make sure your PC IP is entered correctly.'
+        });
+      }
+      return Promise.resolve(resp);
     }).catch(e => {
       console.log(e)
       this.props.onError(e);
