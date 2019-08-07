@@ -14,12 +14,7 @@ echo "Initialize Capacity Data and Anomalies"
 
 sshpass -p $PC_SSH_PASS ssh -o "StrictHostKeyChecking=no" $PC_SSH_USER@$PC_IP "cd lab; source /etc/profile; ./initialize_capacity.sh $PC_IP"
 
-echo "Creating UDA for PC:$PC_IP ID:$UVM_ENTITY_ID VMIP:$UVM_IP"
-
-python create_uda.py --username="$PC_USER" --password="$PC_PASS" --ip_address="$PC_IP" --title="${10} - VM Memory Constrained" --vm_uuid="$UVM_ENTITY_ID" --memory_metric=true
-python create_uda.py --username="$PC_USER" --password="$PC_PASS" --ip_address="$PC_IP" --title="${10} - VM Bully Detected" --vm_uuid="$UVM_ENTITY_ID" --memory_metric=false
-
-echo "Begin Stressing $UVM_IP"
+echo "Begin Stressing $UVM_IP to show some CPU and Memory Usage"
 
 sshpass -p $UVM_PASS ssh -o "StrictHostKeyChecking=no" $UVM_USER@$UVM_IP "yum install -y stress"
 sshpass -p $UVM_PASS ssh -o "StrictHostKeyChecking=no" $UVM_USER@$UVM_IP "stress -m 4 --vm-bytes 500M </dev/null >/dev/null 2>/dev/null &"

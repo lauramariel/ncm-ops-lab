@@ -25,7 +25,7 @@ Step 5: Follow the instructions in the directory `webserver` to set up the helpe
 
     * Note this VM will need to be hosted somewhere that has network access to the Prism Central. It is recommended to host it in the PE registered to the PC for convenience.
 
-Step 6: Follow the steps in `lab-steps/index.rst` to step through the lab.
+Step 6: Follow the steps in `prismpro_xplay/prismpro_xplay.rst` to step through the lab.
 
 
 __Questions, issues or suggestions? Reach out to Sarah Hernandez (@sarah.hernandez on slack)

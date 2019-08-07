@@ -94,7 +94,7 @@ In this lab story you will take a look at VMs with an anomaly. An anomaly is a d
 
    .. figure:: images/ppro_25.png
 
-#. Save the policy.
+#. Hit **Cancel** to exit the policy creation workflow.
 
 
 Capacity Planning Runway
@@ -173,9 +173,13 @@ In this lab story we will now use X-Play to create a Playbook to automatically a
 
    .. figure:: images/ppro_28.png
 
-#. Search and select **<YOUR VM NAME> - VM Memory Constrained** as the alert policy, since this is the issue we are looking to take automated steps to remediate.
+#. Search and select **VM {vm_name} Memory Constrained** as the alert policy, since this is the issue we are looking to take automated steps to remediate.
 
    .. figure:: images/ppro_29.png
+
+#. Select the *Specify VMs* radio button and choose the VM you created for the lab. This will make it so only alerts raised on your VM will trigger this Playbook.
+
+   .. figure:: images/ppro_29b.png
 
 #. We will first need to snapshot the VM. Click **Add Action** on the left side and select the **VM Snapshot** action.
 
@@ -240,7 +244,7 @@ You are welcome to compose your own subject message. The above is just an exampl
 
 #. You should also receive an email. Check the email to see that its subject and email body have filled the real value for the parameters you set up.
 
-#. Go to the **Playbook** page, click the playbook you just created and click the **disable** button in the upper right corner to disable this playbook
+#. Go to the **Playbook** page, click the playbook you just created.
 
    .. figure:: images/ppro_44.png
 
@@ -290,9 +294,13 @@ For this story we will be using Habitica to show how we can use 3rd Party APIs w
 
 #. Navigate back to the Playbooks page using the search bar.
 
-#. Select the **Alert trigger** and search for and select the alert policy **<YOUR VM NAME> - VM Bully Detected**. This is the alert that we would like to act on to handle when the system detects a Bully VM.
+#. Select the **Alert trigger** and search for and select the alert policy **VM Bully {vm_name}**. This is the alert that we would like to act on to handle when the system detects a Bully VM.
 
    .. figure:: images/ppro_50.png
+
+#. Select the **Specify VMs** radio button and choose the VM you created for the lab. This will make it so only alerts raised on your VM will trigger this Playbook.
+
+   .. figure:: images/ppro_50b.png
 
 #. The first thing we would like to do is Power off the VM, so we can make sure it is not starving other VMs of resources. Click the **Add Action** button and select **Power Off VM**.
 

@@ -57,18 +57,25 @@ class App extends Component {
   }
 
   onVMSearchErr = (e) => {
-    this.setState({
-      error: e
-    });
+    if (e && e.message === 'AUTHENTICATION_REQUIRED') {
+      this.setState({
+        authenticationRequired: true,
+        error: 'Failed to authenticate using default password. Please enter your PC Password to continue.'
+      });
+    } else {
+      this.setState({
+        error: e
+      });
+    }
   }
 
   renderStep1() {
-    const { pcIp, vm, vmIp } = this.state;
+    const { pcIp, vm, vmIp, authenticationRequired, password } = this.state;
     const isValidPcIp = isValidIP(pcIp);
     return (
       <StackingLayout>
         <Title size="h3">Setup: Initiate some setup scripts to begin</Title>
-        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>We will initiate some setup scripts that will stress your VM and set up some data for the lab stories 1-3. Click skip if you have already completed this step, as it does not need to be completed twice.</TextLabel></div>
+        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>We will initiate some setup scripts that will stress your VM and set up some data for the lab stories 1-3.</TextLabel></div>
         <InputPlusLabel
           error={ pcIp && !isValidPcIp }
           onChange={e => this.setState({ pcIp : e.target.value }) }
@@ -78,22 +85,17 @@ class App extends Component {
           placeholder="Enter your Prism Central IP Address"
           helpText={ pcIp && !isValidPcIp ? 'Enter a Valid IP Address' : '' }
         />
-        { isValidPcIp ? (
-          <ElementPlusLabel
-            label="Select your VM"
-            element={
-              <EntitySearch
-                onEntitiesChange={ selectedvm => this.setState({ vm : selectedvm }) }
-                selectedEntities={ vm }
-                placeholder='Type to search for your VM'
-                entityType="vm"
-                pcIp={ this.state.pcIp }
-                onError={ this.onVMSearchErr }
-              />
-            }
-            helpText="Choose the VM that you created for this lab"
+        { authenticationRequired ? (
+          <InputPlusLabel
+            onChange={e => this.setState({ password : e.target.value }) }
+            id="password"
+            value={ password }
+            label="Prism Central Password"
+            placeholder="Enter your Prism Central Password"
+            type="password"
           />
         ) : null }
+        { this.renderEntityPicker() }
         { vm && !isValidIP(vm.ip) ? (
           <InputPlusLabel
             error={ vmIp && !isValidIP(vmIp) }
@@ -118,7 +120,7 @@ class App extends Component {
   }
 
   renderStep3() {
-    const { pcIp } = this.state;
+    const { pcIp, password, authenticationRequired } = this.state;
     const isValidPcIp = isValidIP(pcIp);
     return (
       <StackingLayout>
@@ -133,12 +135,23 @@ class App extends Component {
           placeholder="Enter your Prism Central IP Address"
           helpText={ pcIp && !isValidPcIp ? 'Enter a Valid IP Address' : '' }
         />
+        { authenticationRequired ? (
+          <InputPlusLabel
+            onChange={e => this.setState({ password : e.target.value }) }
+            id="password"
+            value={ password }
+            label="Prism Central Password"
+            placeholder="Enter your Prism Central Password"
+            type="password"
+          />
+        ) : null }
+        { this.renderEntityPicker() }
       </StackingLayout>
     );
   }
 
   renderStep4() {
-    const { pcIp } = this.state;
+    const { pcIp, password, authenticationRequired } = this.state;
     const isValidPcIp = isValidIP(pcIp);
     return (
       <StackingLayout>
@@ -153,7 +166,43 @@ class App extends Component {
           placeholder="Enter your Prism Central IP Address"
           helpText={ pcIp && !isValidPcIp ? 'Enter a Valid IP Address' : '' }
         />
+        { authenticationRequired ? (
+          <InputPlusLabel
+            onChange={e => this.setState({ password : e.target.value }) }
+            id="password"
+            value={ password }
+            label="Prism Central Password"
+            placeholder="Enter your Prism Central Password"
+            type="password"
+          />
+        ) : null }
+        { this.renderEntityPicker() }
       </StackingLayout>
+    );
+  }
+
+  renderEntityPicker() {
+    const { pcIp, vm, password, authenticationRequired } = this.state;
+    const isValidPcIp = isValidIP(pcIp);
+    if (!isValidPcIp || (authenticationRequired && !password)) {
+      return null;
+    }
+    return (
+      <ElementPlusLabel
+        label="Select your VM"
+        element={
+          <EntitySearch
+            onEntitiesChange={ selectedvm => this.setState({ vm : selectedvm }) }
+            selectedEntities={ vm }
+            placeholder='Type to search for your VM'
+            entityType="vm"
+            pcIp={ pcIp }
+            password={ password }
+            onError={ this.onVMSearchErr }
+          />
+        }
+        helpText="Choose the VM that you created for this lab"
+      />
     );
   }
 
@@ -190,7 +239,7 @@ class App extends Component {
   }
 
   completeCurrentStep() {
-    const { step, pcIp, vmIp, vm } = this.state;
+    const { step, pcIp, vmIp, vm, password } = this.state;
     this.setState({
       loading: false,
       error: false,
@@ -208,7 +257,8 @@ class App extends Component {
             pcIp: pcIp,
             vmIp: uvmIp,
             vmId: vm && vm.uuid,
-            vmName: vm && vm.name
+            vmName: vm && vm.name,
+            password
           })
         }).then(resp => {
           if (resp && resp.stderr) {
@@ -236,7 +286,7 @@ class App extends Component {
         return;
       case 2:
         // simulate alert
-        this.simulateAlert().then(resp => {
+        this.simulateAlert('A120241').then(resp => {
           if (resp && resp.stderr) {
             this.setState({
               error: resp.stderr,
@@ -259,7 +309,7 @@ class App extends Component {
         return;
       case 3:
         // simulate alert
-        this.simulateAlert().then(resp => {
+        this.simulateAlert('A120245').then(resp => {
           if (resp && resp.stderr) {
             this.setState({
               error: resp.stderr,
@@ -284,22 +334,26 @@ class App extends Component {
     }
   }
 
-  simulateAlert() {
+  simulateAlert(alert_uid) {
+    const { pcIp, vm, password } = this.state;
     // initiate script
     this.setState({ loading: true });
     return basicFetch({
-      url: `generate_alert/`,
+      url: `generate_alert/${alert_uid}`,
       method: 'POST',
       data: JSON.stringify({
-        pcIp: this.state.pcIp
+        pcIp: pcIp,
+        vmId: vm && vm.uuid,
+        vmName: vm && vm.name,
+        password
       })
     });
   }
 
   getFooter() {
     const { step, pcIp, vmIp, vm } = this.state;
-    let enabled = step === 1 || this.state.pcIp;
-    if (step === 0) {
+    let enabled = step === 1 || isValidIP(pcIp);
+    if (step === 0 ) {
       enabled = isValidIP(pcIp) && vm && (isValidIP(vm.ip) || isValidIP(vmIp));
     }
     return (
