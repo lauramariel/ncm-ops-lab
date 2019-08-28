@@ -263,6 +263,14 @@ Using X-Play with 3rd Party API
 For this story we will be using Habitica to show how we can use 3rd Party APIs with X-Play. Habitica is a free habit and productivity app that treats your real life like a game. We will be creating a task with Habitica.
 
 
+#. Use the search bar to navigate to the **Playbooks** page.
+
+   .. figure:: images/ppro_26.png
+
+#. We will start by creating a Playbook. Click **Create Playbook** at the top of the table view
+
+   .. figure:: images/ppro_27.png
+
 #. Use the search bar to navigate to the **Action Gallery** page.
 
    .. figure:: images/ppro_47.png
