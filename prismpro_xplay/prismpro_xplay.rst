@@ -220,7 +220,7 @@ You are welcome to compose your own subject message. The above is just an exampl
 
    .. figure:: images/ppro_37.png
 
-#. Click **Save & Close** button and save it with a name “<YOUR NAME> - Auto Increase Constrained VM Memory” (replace <YOUR NAME> with your name). **Be sure to enable the ‘Enabled’ toggle.**
+#. Click **Save & Close** button and save it with a name “*Initials* - Auto Increase Constrained VM Memory”. **Be sure to enable the ‘Enabled’ toggle.**
 
    .. figure:: images/ppro_39.png
 
@@ -281,13 +281,13 @@ For this story we will be using Habitica to show how we can use 3rd Party APIs w
 
 #. We are creating an Action that we can later use in our playbook to create a Task in Habitica. Fill in the following values replacing your name in the <YOUR NAME HERE> part.
 
-**Name:** Create Habitica Task
+**Name:** *Initials* - Create Habitica Task
 
 **Method:** POST
 
 **URL:** https://habitica.com/api/v3/tasks/user
 
-**Request Body:** ``{"text":"<YOUR NAME HERE> Check {{trigger[0].source_entity_info.name}}","type":"todo","notes":"VM has been detected as a bully VM and has been temporarily powered off.","priority":2}``
+**Request Body:** ``{"text":"*Initials* Check {{trigger[0].source_entity_info.name}}","type":"todo","notes":"VM has been detected as a bully VM and has been temporarily powered off.","priority":2}``
 
 **Request Header:**
 
@@ -322,7 +322,7 @@ For this story we will be using Habitica to show how we can use 3rd Party APIs w
 
    .. figure:: images/ppro_54.png
 
-#. Save & Enable the playbook. You can name it  “<YOUR NAME> - Power Off Bully VM for Investigation” (replace <YOUR NAME> with your name). **Be sure to enable the ‘Enabled’ toggle.** Click the Save button.
+#. Save & Enable the playbook. You can name it  “*Initials* - Power Off Bully VM for Investigation”. **Be sure to enable the ‘Enabled’ toggle.** Click the Save button.
 
    .. figure:: images/ppro_55.png
 
