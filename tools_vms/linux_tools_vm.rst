@@ -38,7 +38,9 @@ Fill out the following fields:
     - **VLAN Name** - Secondary
     - Select **Add**
 
-Click **Save** to create the VM.
+- Check **Custom Script**
+    - Select **Type or Paste Script**
+    - Paste Below script, and click **Save**
 
 .. code-block:: bash
 
@@ -94,59 +96,14 @@ Click **Save** to create the VM.
   ​
   final_message: CentOS 7 Tools Machine setup successfully!
 
+
+Click **Save** to create the VM.
+
 Power on the VM.
 
-Installing Tools
-++++++++++++++++
+Verify Tools Install
+++++++++++++++++++++
 
-Login to the VM via ssh or Console session, using the following credentials:
+Open Console session.
 
-- **Username** - root
-- **password** - nutanix/4u
-
-Install the software needed by running the following commands:
-
-.. code-block:: bash
-
-  yum update -y
-  yum install -y ntp ntpdate unzip stress nodejs python-pip s3cmd awscli
-  npm install -g request
-  npm install -g express
-
-
-Configuring NTP
-...............
-
-Enable and configure NTP by running the following commands:
-
-.. code-block:: bash
-
-  systemctl start ntpd
-  systemctl enable ntpd
-  ntpdate -u -s 0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org
-  systemctl restart ntpd
-
-Disabling Firewall and SELinux
-..............................
-
-Disable the firewall and SELinux by running the following commands:
-
-.. code-block:: bash
-
-  systemctl disable firewalld
-  systemctl stop firewalld
-  setenforce 0
-  sed -i 's/enforcing/disabled/g' /etc/selinux/config /etc/selinux/config
-
-Installing Python
-.................
-
-Install Python by running the following commands:
-
-.. code-block:: bash
-
-  yum -y install python36
-  python3.6 -m ensurepip
-  yum -y install python36-setuptools
-  pip install -U pip
-  pip install boto3
+Watch as the Cloud-Init script is run, and once you see **CentOS 7 Tools Machine setup successfully!** you are done.
