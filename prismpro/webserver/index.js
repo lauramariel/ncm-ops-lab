@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var https = require('https');
 var exec = require('child_process').exec;
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 // Load in the config file - Note that any time this file is changed
 // the node server must be restarted.
@@ -32,6 +32,26 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
 
+app.get('/', function(req, res){
+  res.sendfile('public/index.html');
+});
+
+app.get('/bootcamp', function(req, res){
+  res.sendfile('public/index.html');
+});
+
+app.get('/alerts', function(req, res){
+  res.sendfile('public/index.html');
+});
+
+app.get(/\/public\/(.*)/ , function(req, res) {
+  res.sendfile('.' + req.path);
+});
+
+app.get(/\/client\/build\/(.*)/ , function(req, res) {
+  res.sendfile('.' + req.path);
+});
+
 app.get('/log', function(req, res){
   // Return the log.
   res.sendfile('out.log');
@@ -40,16 +60,6 @@ app.get('/log', function(req, res){
 app.get('/error', function(req, res){
   // Return the error log.
   res.sendfile('err.log');
-});
-
-app.get('/clientlog', function(req, res){
-  // Return the log.
-  res.sendfile('client/clientOut.log');
-});
-
-app.get('/clienterror', function(req, res){
-  // Return the error log.
-  res.sendfile('client/clientErr.log');
 });
 
 // create a GET route
