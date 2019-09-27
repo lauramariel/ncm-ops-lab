@@ -8,6 +8,7 @@ import {
 } from 'prism-reactjs';
 
 import DefaultPage from './pages/DefaultPage.jsx';
+import AlertPage from './pages/AlertPage.jsx';
 
 // Styles
 import './styles/main.less';
@@ -18,10 +19,11 @@ class App extends Component {
   renderPage() {
     const { path } = this.props;
     switch(path) {
-      case '/bootcamp':
-      case '/bootcamp/':
       case '/alerts':
       case '/alerts/':
+        return <AlertPage/>;
+      case '/bootcamp':
+      case '/bootcamp/':
       default:
         return <DefaultPage />;
     }

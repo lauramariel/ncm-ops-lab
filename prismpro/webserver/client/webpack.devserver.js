@@ -10,8 +10,7 @@ const devServerConfig = Object.assign({}, config, {
   devServer: {
     https: false,
     proxy: {
-      "/api": "http://localhost:3010",
-      "/PrismGateway": "http://localhost:3010"
+      "/": "http://localhost:3010"
     },
     port: 3005
   },

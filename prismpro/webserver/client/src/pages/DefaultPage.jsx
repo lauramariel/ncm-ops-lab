@@ -11,7 +11,8 @@ import {
   Steps,
   Loader,
   TextLabel,
-  Alert
+  Alert,
+  Link
 } from 'prism-reactjs';
 
 import EntitySearch from '../components/EntitySearch.jsx';
@@ -53,12 +54,12 @@ class DefaultPage extends Component {
   }
 
   renderStep1() {
-    const { pcIp, vm, vmIp, authenticationRequired, password } = this.state;
+    const { pcIp, ppvm, ppvmIp, authenticationRequired, password } = this.state;
     const isValidPcIp = isValidIP(pcIp);
     return (
       <StackingLayout>
-        <Title size="h3">Setup: Initiate some setup scripts to begin</Title>
-        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>We will initiate some setup scripts that will stress your VM and set up some data for the lab stories 1-3.</TextLabel></div>
+        <Title size="h3">Setup: Initialize Server</Title>
+        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>The PrismProServer needs to be initialized in order to begin. Start by entering the Prism Central IP address and selecting the PrismProServer VM.</TextLabel></div>
         <InputPlusLabel
           error={ pcIp && !isValidPcIp }
           onChange={e => this.setState({ pcIp : e.target.value }) }
@@ -78,26 +79,68 @@ class DefaultPage extends Component {
             type="password"
           />
         ) : null }
-        { this.renderEntityPicker() }
-        { vm && !isValidIP(vm.ip) ? (
+        { this.renderEntityPicker('Select the PrismProServer VM', ' ', true) }
+        { ppvm && !isValidIP(ppvm.ip) ? (
           <InputPlusLabel
-            error={ vmIp && !isValidIP(vmIp) }
-            onChange={e => this.setState({ vmIp : e.target.value }) }
-            id="vmIP"
-            label="VM IP Address"
-            placeholder="Enter the IP Address of your VM"
-            helpText={ vmIp && !isValidIP(vmIp) ? 'Enter a Valid IP Address' : '' }
+            error={ ppvmIp && !isValidIP(ppvmIp) }
+            onChange={e => this.setState({ ppvmIp : e.target.value }) }
+            id="ppvmIP"
+            label="PrismProServer IP Address"
+            placeholder="Enter the IP Address of the PrismProServer VM"
+            helpText={ ppvmIp && !isValidIP(ppvmIp) ? 'Enter a Valid IP Address' : '' }
           />
         ) : null }
       </StackingLayout>
     );
   }
 
+  // renderStep1() {
+  //   const { pcIp, vm, vmIp, authenticationRequired, password } = this.state;
+  //   const isValidPcIp = isValidIP(pcIp);
+  //   return (
+  //     <StackingLayout>
+  //       <Title size="h3">Setup: Initialize Webserver</Title>
+  //       <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>We will initiate some setup scripts that will stress your VM and set up some data for the lab stories 1-3.</TextLabel></div>
+  //       <InputPlusLabel
+  //         error={ pcIp && !isValidPcIp }
+  //         onChange={e => this.setState({ pcIp : e.target.value }) }
+  //         id="pcIP"
+  //         value={ pcIp }
+  //         label="Prism Central IP Address"
+  //         placeholder="Enter your Prism Central IP Address"
+  //         helpText={ pcIp && !isValidPcIp ? 'Enter a Valid IP Address' : '' }
+  //       />
+  //       { authenticationRequired ? (
+  //         <InputPlusLabel
+  //           onChange={e => this.setState({ password : e.target.value }) }
+  //           id="password"
+  //           value={ password }
+  //           label="Prism Central Password"
+  //           placeholder="Enter your Prism Central Password"
+  //           type="password"
+  //         />
+  //       ) : null }
+  //       { this.renderEntityPicker() }
+  //       { vm && !isValidIP(vm.ip) ? (
+  //         <InputPlusLabel
+  //           error={ vmIp && !isValidIP(vmIp) }
+  //           onChange={e => this.setState({ vmIp : e.target.value }) }
+  //           id="vmIP"
+  //           label="VM IP Address"
+  //           placeholder="Enter the IP Address of your VM"
+  //           helpText={ vmIp && !isValidIP(vmIp) ? 'Enter a Valid IP Address' : '' }
+  //         />
+  //       ) : null }
+  //     </StackingLayout>
+  //   );
+  // }
+
   renderStep2() {
+    const ip = this.state.ppvm && this.state.ppvm.ip || '10.45.32.162';
     return (
       <StackingLayout>
-        <Title size="h3">Story 1-3: Follow the instructions in the lab document</Title>
-        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>When the lab instructions tell you to proceed to the next step, click the 'Continue' button.</TextLabel></div>
+        <Title size="h3">Launch the PrismProServer by clicking <Link target="_blank" href={ `http://${ip}/` }>here</Link></Title>
+        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>Return to the lab document and follow the instructions. When the lab instructions tell you to proceed to the next step, click the 'Continue' button.</TextLabel></div>
       </StackingLayout>
     );
   }
@@ -164,27 +207,28 @@ class DefaultPage extends Component {
     );
   }
 
-  renderEntityPicker() {
-    const { pcIp, vm, password, authenticationRequired } = this.state;
+  renderEntityPicker(label, helpText, isPPVM) {
+    const { pcIp, password, authenticationRequired } = this.state;
     const isValidPcIp = isValidIP(pcIp);
+    const attr = isPPVM ? 'ppvm' : 'vm';
     if (!isValidPcIp || (authenticationRequired && !password)) {
       return null;
     }
     return (
       <ElementPlusLabel
-        label="Select your VM"
+        label={ label || 'Select your VM'}
         element={
           <EntitySearch
-            onEntitiesChange={ selectedvm => this.setState({ vm : selectedvm }) }
-            selectedEntities={ vm }
-            placeholder='Type to search for your VM'
+            onEntitiesChange={ selectedvm => this.setState({ [attr] : selectedvm }) }
+            selectedEntities={ this.state[attr] }
+            placeholder='Type to search for a VM'
             entityType="vm"
             pcIp={ pcIp }
             password={ password }
             onError={ this.onVMSearchErr }
           />
         }
-        helpText="Choose the VM that you created for this lab"
+        helpText={ helpText || 'Choose the VM that you created for this lab'}
       />
     );
   }
@@ -222,7 +266,7 @@ class DefaultPage extends Component {
   }
 
   completeCurrentStep() {
-    const { step, pcIp, vmIp, vm, password } = this.state;
+    const { step, pcIp, ppvmIp, ppvm, password } = this.state;
     this.setState({
       loading: false,
       error: false,
@@ -230,7 +274,7 @@ class DefaultPage extends Component {
     });
     switch(step) {
       case 0:
-        const uvmIp = (vm && isValidIP(vm.ip) && vm.ip) || vmIp;
+        const uvmIp = (ppvm && isValidIP(ppvm.ip) && ppvm.ip) || ppvmIp;
         // initiate script
         this.setState({ loading: true });
         basicFetch({
@@ -239,8 +283,8 @@ class DefaultPage extends Component {
           data: JSON.stringify({
             pcIp: pcIp,
             vmIp: uvmIp,
-            vmId: vm && vm.uuid,
-            vmName: vm && vm.name,
+            vmId: ppvm && ppvm.uuid,
+            vmName: ppvm && ppvm.name,
             password
           })
         }).then(resp => {
@@ -334,10 +378,10 @@ class DefaultPage extends Component {
   }
 
   getFooter() {
-    const { step, pcIp, vmIp, vm } = this.state;
+    const { step, pcIp, ppvmIp, ppvm } = this.state;
     let enabled = step === 1 || isValidIP(pcIp);
     if (step === 0 ) {
-      enabled = isValidIP(pcIp) && vm && (isValidIP(vm.ip) || isValidIP(vmIp));
+      enabled = isValidIP(pcIp) && ppvm && (isValidIP(ppvm.ip) || isValidIP(ppvmIp));
     }
     return (
       <div>

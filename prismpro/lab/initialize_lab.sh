@@ -6,7 +6,7 @@ cd capacity_data
 
 echo 'Writing VMBL Data'
 # Write VBML data to IDF
-python vmbl_prismpro_write.py
+python xfit_prismpro_write.py
 
 cd ../
 
