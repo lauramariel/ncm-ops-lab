@@ -84,7 +84,7 @@ for entity_type in entity_types:
 				continue
                         ed = EntityData()
 			fd.start_time_usec = fd.start_time_usec + (time_delta * 1000000)
-			fd.end_time_usec = current_time * 1000000
+			fd.end_time_usec = fd.end_time_usec + (time_delta * 1000000)
 
 			ed_start_time = min(ed_start_time, fd.start_time_usec)
 			ed_end_time = max(ed_end_time, fd.end_time_usec)
@@ -103,20 +103,17 @@ for entity_type in entity_types:
 						fd.values[i] = last_good_value
 					if fd.values[i] != -1:
 						last_good_value = fd.values[i]
-
+						
 				zeroes = 0
 				non_zeroes = 0
 				for x in fd.values:
 					if x==0:
 						zeroes = zeroes+1
 					else:
-						non_zeroes = non_zeroes+1
-
+						non_zeroes = non_zeroes+1	
+			
                         #print "num of zeroes =",zeroes," and num of non zeroes = ",non_zeroes," for ", fd.field_name, " of ",entity_id
                         time.sleep(0.5)
-                        fd.update_start_time_usec()
-                        ed_start_time = (fd.start_time_usec)
-                        ed_end_time = (fd.end_time_usec)
 			#print "Prepared entity data object for ", entity_type," with entity id = ", entity_id
                         idf.write(ed, entity_type_temp, entity_id, [fd.field_name], fd.start_time_usec/1000000, fd.end_time_usec/1000000, fd.sampling_interval_sec)
 			#print "Added metrics for ", entity_type," with entity id = ", entity_id," field_name= ",fd.field_name," and sampling interval = ",fd.sampling_interval_sec
