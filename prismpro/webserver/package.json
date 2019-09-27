@@ -8,6 +8,7 @@
   },
   "author": "Sarah Hernandez",
   "dependencies": {
-    "express": "^4.17.0"
+    "express": "^4.17.0",
+    "request": "^2.88.0"
   }
 }

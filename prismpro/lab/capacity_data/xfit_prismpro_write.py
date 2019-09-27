@@ -16,10 +16,10 @@ import time
 import math
 import copy
 import os
-import json 
+import json
 
 hglobals = HealthServerGlobals()
-idf = hglobals.get_insights_da() 
+idf = hglobals.get_insights_da()
 options = {"create_entity" : True}
 
 
@@ -35,8 +35,8 @@ for entity_type, _ , entity_files in os.walk(".", topdown=False):
         entity_type = entity_type[2:]
 	all_files[entity_type] = entity_files
 
-print "all files", all_files
-entity_types = ["cluster", "node", "container", "storage_pool", "vm", "vm_small"]
+# print "all files", all_files
+entity_types = ["cluster", "node", "container", "storage_pool", "vm"]
 
 for entity_type in entity_types:
 	path = "entity_type"
@@ -60,18 +60,18 @@ for entity_type in entity_types:
 		if entity_id in completed_entity_ids:
 			continue
 		completed_entity_ids.add(entity_id)
-                
+
                 print "entity id", entity_id
 		if entity_type != "vm_small":
 			attribute_file = open(entity_type + "/" + entity_id + "_attr.json", "rb")
 		metric_file = open(entity_type + "/" + entity_id + "_metrics.json", "rb")
 
                 if entity_type != "vm_small":
-			print "Creating", entity_type ," with entity id = ", entity_id
+			# print "Creating", entity_type ," with entity id = ", entity_id
 			idf.register_entity(entity_type=entity_type, attribute_dict=json.loads(attribute_file.read()), entity_id=entity_id)
-			print "Created", entity_type ,"with entity id = ", entity_id
-		
-		print "Adding metrics for ", entity_type," with entity id = ", entity_id
+			# print "Created", entity_type ,"with entity id = ", entity_id
+
+		# print "Adding metrics for ", entity_type," with entity id = ", entity_id
 
 		# print type(metric_file.read())
 		entity_data = EntityData()
@@ -93,7 +93,7 @@ for entity_type in entity_types:
 			ed.append_field_data(entity_id, fd)
 			if entity_type == "vm_small":
                         	entity_type_temp = "vm"
-				print fd.values
+				# print fd.values
 				last_good_value = -1
 				for i in range(len(fd.values)):
 					if i == 0:
@@ -102,23 +102,23 @@ for entity_type in entity_types:
 						fd.values[i] = last_good_value
 					if fd.values[i] != -1:
 						last_good_value = fd.values[i]
-						
+
 				zeroes = 0
 				non_zeroes = 0
 				for x in fd.values:
 					if x==0:
 						zeroes = zeroes+1
 					else:
-						non_zeroes = non_zeroes+1	
-				print "num of zeroes =",zeroes," and num of non zeroes = ",non_zeroes," for ", fd.field_name, " of ",entity_id
+						non_zeroes = non_zeroes+1
+				# print "num of zeroes =",zeroes," and num of non zeroes = ",non_zeroes," for ", fd.field_name, " of ",entity_id
                         time.sleep(0.5)
-			print "Prepared entity data object for ", entity_type," with entity id = ", entity_id
+			# print "Prepared entity data object for ", entity_type," with entity id = ", entity_id
                         idf.write(ed, entity_type_temp, entity_id, [fd.field_name], fd.start_time_usec/1000000, fd.end_time_usec/1000000, fd.sampling_interval_sec)
-			print "Added metrics for ", entity_type," with entity id = ", entity_id," field_name= ",fd.field_name," and sampling interval = ",fd.sampling_interval_sec
+			# print "Added metrics for ", entity_type," with entity id = ", entity_id," field_name= ",fd.field_name," and sampling interval = ",fd.sampling_interval_sec
 
 		#print "Prepared entity data object for ", entity_type," with entity id = ", entity_id
 		#idf.write(entity_data, entity_type, entity_id, ed_fields, ed_start_time, ed_end_time, sampling_interval)
-		print "Added metrics for ", entity_type," with entity id = ", entity_id
+		# print "Added metrics for ", entity_type," with entity id = ", entity_id
 
 
 
