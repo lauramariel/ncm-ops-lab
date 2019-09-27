@@ -1,5 +1,6 @@
 # lab
-Step 1: Copy this directory, make sure it is still named lab, to the home directory of the Prism Central
+Step 1: Copy this directory to the Prism Central
+```scp -r lab nutanix@<PC-IP>:~/lab```
 
 Step 2: SSH into the PC and cd to lab.
 
@@ -18,9 +19,6 @@ cluster stop
 cluster destroy
 cluster --cluster_function_list="multicluster" --skip_discovery -s <PC_IP> create
 ```
-
-* Capacity data only is kept around for a short number of hours, must rerun the `./initialize_capacity.sh <PC_IP>`
-if the data is no longer populated.
 
 Troubleshooting:
 ------------
