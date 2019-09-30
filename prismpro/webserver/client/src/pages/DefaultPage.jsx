@@ -136,10 +136,11 @@ class DefaultPage extends Component {
   // }
 
   renderStep2() {
-    const ip = this.state.ppvm && this.state.ppvm.ip || '10.45.32.162';
+    const { ppvm, ppvmIp } = this.state;
+    const ip = (ppvm && ppvm.ip) || ppvmIp;
     return (
       <StackingLayout>
-        <Title size="h3">Launch the PrismProServer by clicking <Link target="_blank" href={ `http://${ip}/` }>here</Link></Title>
+        { ip ? <Title size="h3">Launch the PrismProServer by clicking <Link target="_blank" href={ `http://${ip}/` }>here</Link></Title> : null }
         <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>Return to the lab document and follow the instructions. When the lab instructions tell you to proceed to the next step, click the 'Continue' button.</TextLabel></div>
       </StackingLayout>
     );
@@ -151,7 +152,7 @@ class DefaultPage extends Component {
     return (
       <StackingLayout>
         <Title size="h3">Story 4: Simulate VM Memory Constrained Alert</Title>
-        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>In the Setup step we stressed your VMs memory usage. Now we will use that VM and it's high memory usage to simulate a Memory Constrained alert.</TextLabel></div>
+        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>Now we will simulate a Memory Constrained alert for your VM.</TextLabel></div>
         <InputPlusLabel
           error={ pcIp && !isValidPcIp }
           onChange={e => this.setState({ pcIp : e.target.value }) }
@@ -182,7 +183,7 @@ class DefaultPage extends Component {
     return (
       <StackingLayout>
         <Title size="h3">Story 5: Simulate VM Bully Detected Alert</Title>
-        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>In the Setup step we stressed your VMs CPU usage. Now we will use that VM and it's aggressive CPU usage to simulate a Bully Detected alert.</TextLabel></div>
+        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>Now we will simulate a Bully Detected alert for your VM.</TextLabel></div>
         <InputPlusLabel
           error={ pcIp && !isValidPcIp }
           onChange={e => this.setState({ pcIp : e.target.value }) }

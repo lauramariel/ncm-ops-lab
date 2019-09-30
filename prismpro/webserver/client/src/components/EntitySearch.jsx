@@ -184,7 +184,7 @@ export default class EntitySearch extends React.Component {
           title: itemName,
           lowercaseTitle: itemName && itemName.toLowerCase(),
           key: itemId,
-          ip: data.ip_address
+          ip: data.ip_address || data.ip_addresses
         };
       });
       return this.setState({

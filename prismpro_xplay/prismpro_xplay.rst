@@ -35,18 +35,20 @@ There are no other tools in the market taking this approach and has the power to
 Lab Setup
 +++++++++
 
-This lab requires a VM to be provisioned and will be stressed later in the lab to produce CPU and memory metrics.
+This lab requires a VM to be provisioned and powered on for the X-Play portion.
 
 Applications provisioned as part of the  :ref:`linux_tools_vm` will be used to accomplish this.
 
-#. Please follow the instructions to deploy the :ref:`linux_tools_vm` before moving on with this lab.
+#. Please follow the instructions to deploy the :ref:`linux_tools_vm` and power it on before moving on with this lab.
 
 
 #. Right click the following URL to open a new tab and navigate to the webpage at http://10.42.247.70 and enter the details in the Setup portion of the form. Then click 'Begin Setup' once you have filled in all the fields. This will get your environment ready for this lab. **Keep this tab open during entire Prism Pro lab to return to as directed in later portions.**
 
    .. figure:: images/ppro_08.png
 
-#. After hitting continue, it will take a bit of time for the setup to complete. In the meantime, switch back to Prism Central and go through the labs.
+#. Once step 1 completes, launch the PrismProServer by clicking the provided link. This should load the Prism Central UI. Use this version of the UI to go through the lab. If the link does not work on the first try, it is possible the PrismProServer might still be starting. Wait a few seconds and refresh the page.
+
+   .. figure:: images/ppro_08b.png
 
 VM Efficiency
 +++++++++++++++++++++++++++
@@ -84,7 +86,7 @@ In this lab story you will take a look at VMs with an anomaly. An anomaly is a d
 
    .. figure:: images/ppro_61.png
 
-#. Go to Metrics > CPU Usage. Notice a dark blue line, and a lighter blue area around it. The dark blue line is the CPU Usage. The light blue area is the expected CPU Usage range for this VM. This range is calculated using Prism Pro’s X-FIT machine learning engine. In this case, an anomaly has been raised for this VM, because the Usage is far below the expected range. You can also reduce the time range “Last 24 hours” to examine the chart more closely.
+#. Go to Metrics > CPU Usage. Notice a dark blue line, and a lighter blue area around it. The dark blue line is the CPU Usage. The light blue area is the expected CPU Usage range for this VM. This range is calculated using Prism Pro’s X-FIT machine learning engine. This particular VM is running an application that is upgraded at the same time each day, which explains the usage pattern. Notice that X-FIT detects the seasonality in this usage pattern and has adjusted the expected range accordingly. In this case, an anomaly has been raised for this VM, because the Usage is far above the expected range. You can also reduce the time range “Last 24 hours” to examine the chart more closely.
 
    .. figure:: images/ppro_60.png
 
@@ -216,7 +218,7 @@ You are welcome to compose your own subject message. The above is just an exampl
 
    .. figure:: images/ppro_36.png
 
-#. Click **Add Action** to add the **Acknowledge Alert** action
+#. Click **Add Action** to add the **Resolve Alert** action.
 
    .. figure:: images/ppro_37.png
 
@@ -232,11 +234,11 @@ You are welcome to compose your own subject message. The above is just an exampl
 
    .. figure:: images/ppro_41.png
 
-#. **Switch tabs back to** the http://10.42.247.70 page and continue to the Story 1-3 Step.
+#. **Switch tabs back to** the http://10.42.247.70 page and press Continue from the Story 1-3 Step, if you have not already.
 
-   .. figure:: images/ppro_66.png
+   .. figure:: images/ppro_08b.png
 
-#. Now we will simulate an alert for ‘VM Memory Constrained’ which will trigger the Playbook we just created. Click the ‘Simulate Alert’ button to create the alert.
+#. Now we will simulate an alert for ‘VM Memory Constrained’ which will trigger the Playbook we just created. Select your VM from the dropdown and click the ‘Simulate Alert’ button to create the alert.
 
    .. figure:: images/ppro_64.png
 
@@ -262,15 +264,6 @@ Using X-Play with 3rd Party API
 
 For this story we will be using Habitica to show how we can use 3rd Party APIs with X-Play. Habitica is a free habit and productivity app that treats your real life like a game. We will be creating a task with Habitica.
 
-
-#. Use the search bar to navigate to the **Playbooks** page.
-
-   .. figure:: images/ppro_26.png
-
-#. We will start by creating a Playbook. Click **Create Playbook** at the top of the table view
-
-   .. figure:: images/ppro_27.png
-
 #. Use the search bar to navigate to the **Action Gallery** page.
 
    .. figure:: images/ppro_47.png
@@ -279,7 +272,7 @@ For this story we will be using Habitica to show how we can use 3rd Party APIs w
 
    .. figure:: images/ppro_48.png
 
-#. We are creating an Action that we can later use in our playbook to create a Task in Habitica. Fill in the following values replacing your name in the <YOUR NAME HERE> part.
+#. We are creating an Action that we can later use in our playbook to create a Task in Habitica. Fill in the following values replacing your initials in the *Initials* part.
 
 **Name:** *Initials* - Create Habitica Task
 
@@ -302,6 +295,12 @@ For this story we will be using Habitica to show how we can use 3rd Party APIs w
 
 #. Navigate back to the Playbooks page using the search bar.
 
+   .. figure:: images/ppro_49b.png
+
+#. Click **Create Playbook** at the top of the table view.
+
+   .. figure:: images/ppro_27.png
+
 #. Select the **Alert trigger** and search for and select the alert policy **VM Bully {vm_name}**. This is the alert that we would like to act on to handle when the system detects a Bully VM.
 
    .. figure:: images/ppro_50.png
@@ -314,11 +313,11 @@ For this story we will be using Habitica to show how we can use 3rd Party APIs w
 
    .. figure:: images/ppro_51.png
 
-#. Next we would like to create a task so that we can look into what is causing this VM to be a Bully. Add another Action. This time select the action you created called, Create Habitica Task.
+#. Next we would like to create a task so that we can look into what is causing this VM to be a Bully. Add another Action. This time select the action you created called, Create Habitica Task - *Initials*.
 
    .. figure:: images/ppro_53.png
 
-#. Add one more action, select the Acknowledge Alert action. Use the parameters for this action to fill in the ‘Alert’ parameter.
+#. Add one more action, select the Resolve Alert action.
 
    .. figure:: images/ppro_54.png
 
