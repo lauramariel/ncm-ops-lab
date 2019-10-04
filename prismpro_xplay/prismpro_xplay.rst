@@ -11,9 +11,6 @@
 
 .. _xplay:
 
-.. http://10.42.247.70 replace:: http://10.45.32.157/
-.. |br| raw:: html
-
 ------------------------
 Prism Pro
 ------------------------
@@ -42,7 +39,7 @@ Applications provisioned as part of the  :ref:`linux_tools_vm` will be used to a
 #. Please follow the instructions to deploy the :ref:`linux_tools_vm` and power it on before moving on with this lab.
 
 
-#. Right click the following URL to open a new tab and navigate to the webpage at http://10.42.247.70 and enter the details in the Setup portion of the form. Then click 'Begin Setup' once you have filled in all the fields. This will get your environment ready for this lab. **Keep this tab open during entire Prism Pro lab to return to as directed in later portions.**
+#. Right click the following URL to open a new tab and navigate to the webpage at http://10.42.247.70:8080/ and enter the details in the Setup portion of the form. Then click 'Begin Setup' once you have filled in all the fields. This will get your environment ready for this lab. **Keep this tab open during entire Prism Pro lab to return to as directed in later portions.**
 
    .. figure:: images/ppro_08.png
 
@@ -104,17 +101,14 @@ Capacity Planning Runway
 
 Capacity runway is a measure of the remaining capacity left within a given cluster or node. There is an overall cluster runway as well as individual runway measurements for CPU, Memory and storage capacity. Lets view the Capacity Runway of your lab cluster.
 
-#. Navigate to ‘Planning’ using the search bar.
+#. In **Prism Central > Planning > Capacity Runway**.
 
-   .. figure:: images/ppro_09.png
+- Note the runway summaries showing the days left for each cluster.
+- How long does the current cluster has before it runs out of memory, CPU, and storage?
 
-#. Click on the **‘Capacity Runway’** tab and select the cluster ‘Prism-Pro-Cluster’.
+#. Click on the **Prism-Pro-Cluster** cluster.
 
-   .. figure:: images/ppro_10.png
-
-   .. figure:: images/ppro_11.png
-
-#. You can now take a look at the Runway for Storage, CPU, and Memory.
+. You can now take a look at the Runway for Storage, CPU, and Memory.
 
    .. figure:: images/ppro_12.png
 
@@ -234,7 +228,7 @@ You are welcome to compose your own subject message. The above is just an exampl
 
    .. figure:: images/ppro_41.png
 
-#. **Switch tabs back to** the http://10.42.247.70 page and press Continue from the Story 1-3 Step, if you have not already.
+#. **Switch tabs back to** the http://10.42.247.70:8080 page and press Continue from the Story 1-3 Step, if you have not already.
 
    .. figure:: images/ppro_08b.png
 
