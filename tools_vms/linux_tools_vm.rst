@@ -106,4 +106,7 @@ Verify Tools Install
 
 Open Console session.
 
+- **User** - root
+- **Password** - nutanix/4u
+
 Watch as the Cloud-Init script is run, and once you see **CentOS 7 Tools Machine setup successfully!** you are done.
