@@ -1,4 +1,4 @@
-.. title:: Prism Pro Beta Labs
+.. title:: Prism Pro Demo Labs
 
 .. toctree::
   :maxdepth: 2
@@ -23,7 +23,7 @@
 Getting Started
 ---------------
 
-Welcome to the **Beta** Prism Pro labs. These are not meant to be share with Cutomers or Prospects. We are using this format to work out any issues before releasing into the Essentials Bootcamp.
+Welcome to the Prism Pro Demo Labs. These are not meant to be share with Cutomers or Prospects. We are using this format to work out any issues before releasing into the Essentials Bootcamp.
 
 Start with an HPOC running AOS 5.10.x or 5.11, with no images or Prism Central deployed.
 
