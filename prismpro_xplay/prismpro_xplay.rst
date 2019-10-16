@@ -39,7 +39,7 @@ Applications provisioned as part of the  :ref:`linux_tools_vm` will be used to a
 #. Please follow the instructions to deploy the :ref:`linux_tools_vm` and power it on before moving on with this lab.
 
 
-#. Right click the following URL to open a new tab and navigate to the webpage at http://10.42.247.70:8080/ and enter the details in the Setup portion of the form. Then click 'Begin Setup' once you have filled in all the fields. This will get your environment ready for this lab. **Keep this tab open during entire Prism Pro lab to return to as directed in later portions.**
+#. Right click the following URL to open a new tab and navigate to the webpage at http://10.42.247.70 and enter the details in the Setup portion of the form. Then click 'Begin Setup' once you have filled in all the fields. This will get your environment ready for this lab. **Keep this tab open during entire Prism Pro lab to return to as directed in later portions.**
 
    .. figure:: images/ppro_08.png
 
@@ -228,7 +228,7 @@ You are welcome to compose your own subject message. The above is just an exampl
 
    .. figure:: images/ppro_41.png
 
-#. **Switch tabs back to** the http://10.42.247.70:8080 page and press Continue from the Story 1-3 Step, if you have not already.
+#. **Switch tabs back to** the http://10.42.247.70 page and press Continue from the Story 1-3 Step, if you have not already.
 
    .. figure:: images/ppro_08b.png
 
