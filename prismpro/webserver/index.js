@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var https = require('https');
 var exec = require('child_process').exec;
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 80;
 
 // Load in the config file - Note that any time this file is changed
 // the node server must be restarted.
