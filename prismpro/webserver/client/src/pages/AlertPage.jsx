@@ -44,7 +44,6 @@ class DefaultPage extends Component {
   onVMSearchErr = (e) => {
     if (e && e.message === 'AUTHENTICATION_REQUIRED') {
       this.setState({
-        authenticationRequired: true,
         error: 'Failed to authenticate using default password. Please enter your PC Password to continue.'
       });
     } else {
@@ -55,9 +54,9 @@ class DefaultPage extends Component {
   }
 
   renderEntityPicker() {
-    const { pcIp, vm, password, authenticationRequired } = this.state;
+    const { pcIp, vm, password } = this.state;
     const isValidPcIp = isValidIP(pcIp);
-    if (!isValidPcIp || (authenticationRequired && !password)) {
+    if (!isValidPcIp || !password) {
       return null;
     }
     return (
@@ -80,7 +79,7 @@ class DefaultPage extends Component {
   }
 
   renderBody() {
-    const { pcIp, password, authenticationRequired } = this.state;
+    const { pcIp, password } = this.state;
     const isValidPcIp = isValidIP(pcIp);
     return (
       <StackingLayout padding="20px">
@@ -115,16 +114,14 @@ class DefaultPage extends Component {
           placeholder="Enter your Prism Central IP Address"
           helpText={ pcIp && !isValidPcIp ? 'Enter a Valid IP Address' : '' }
         />
-        { authenticationRequired ? (
-          <InputPlusLabel
-            onChange={e => this.setState({ password : e.target.value }) }
-            id="password"
-            value={ password }
-            label="Prism Central Password"
-            placeholder="Enter your Prism Central Password"
-            type="password"
-          />
-        ) : null }
+        <InputPlusLabel
+          onChange={e => this.setState({ password : e.target.value }) }
+          id="password"
+          value={ password }
+          label="Prism Central Password"
+          placeholder="Enter your Prism Central Password"
+          type="password"
+        />
         { this.renderEntityPicker() }
       </StackingLayout>
     );

@@ -16,7 +16,7 @@ sshpass -p $PC_SSH_PASS ssh -o "StrictHostKeyChecking=no" $PC_SSH_USER@$PC_IP "c
 
 echo "Initialize PrismProServer $UVM_IP"
 
-sshpass -p $UVM_PASS ssh -o "StrictHostKeyChecking=no" $UVM_USER@$UVM_IP "cd /root/main/prism/aphrodite/anteros/projects/ssp/dev_ui_server; ./stop.sh; rm my_local_config.js; echo 'var env={app:{proxyHost:\"$PC_IP\",userName:\"$PC_USER\",userPass:\"$PC_PASS\",simulatePrismPro:true,cacheApiCall:false,release:true,listenerPort:80}};module.exports=env;' >> my_local_config.js; ./start.sh"
+sshpass -p $UVM_PASS ssh -o "StrictHostKeyChecking=no" $UVM_USER@$UVM_IP "cd /root/main/prism/aphrodite/anteros/projects/ssp/dev_ui_server; forever list | grep -c 'No forever processes running' && echo 'var env={app:{proxyHost:\"$PC_IP\",userName:\"$PC_USER\",userPass:\"$PC_PASS\",simulatePrismPro:true,cacheApiCall:false,release:true,listenerPort:80}};module.exports=env;' >> my_local_config.js && ./start.sh"
 
 echo "Node JS Server Initialized...."
 

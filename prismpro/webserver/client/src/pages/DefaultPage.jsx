@@ -43,7 +43,6 @@ class DefaultPage extends Component {
   onVMSearchErr = (e) => {
     if (e && e.message === 'AUTHENTICATION_REQUIRED') {
       this.setState({
-        authenticationRequired: true,
         error: 'Failed to authenticate using default password. Please enter your PC Password to continue.'
       });
     } else {
@@ -54,7 +53,7 @@ class DefaultPage extends Component {
   }
 
   renderStep1() {
-    const { pcIp, ppvm, ppvmIp, authenticationRequired, password } = this.state;
+    const { pcIp, ppvm, ppvmIp, password } = this.state;
     const isValidPcIp = isValidIP(pcIp);
     return (
       <StackingLayout>
@@ -69,16 +68,14 @@ class DefaultPage extends Component {
           placeholder="Enter your Prism Central IP Address"
           helpText={ pcIp && !isValidPcIp ? 'Enter a Valid IP Address' : '' }
         />
-        { authenticationRequired ? (
-          <InputPlusLabel
-            onChange={e => this.setState({ password : e.target.value }) }
-            id="password"
-            value={ password }
-            label="Prism Central Password"
-            placeholder="Enter your Prism Central Password"
-            type="password"
-          />
-        ) : null }
+        <InputPlusLabel
+          onChange={e => this.setState({ password : e.target.value }) }
+          id="password"
+          value={ password }
+          label="Prism Central Password"
+          placeholder="Enter your Prism Central Password"
+          type="password"
+        />
         { this.renderEntityPicker('Select the PrismProServer VM', ' ', true) }
         { ppvm && !isValidIP(ppvm.ip) ? (
           <InputPlusLabel
@@ -94,64 +91,24 @@ class DefaultPage extends Component {
     );
   }
 
-  // renderStep1() {
-  //   const { pcIp, vm, vmIp, authenticationRequired, password } = this.state;
-  //   const isValidPcIp = isValidIP(pcIp);
-  //   return (
-  //     <StackingLayout>
-  //       <Title size="h3">Setup: Initialize Webserver</Title>
-  //       <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>We will initiate some setup scripts that will stress your VM and set up some data for the lab stories 1-3.</TextLabel></div>
-  //       <InputPlusLabel
-  //         error={ pcIp && !isValidPcIp }
-  //         onChange={e => this.setState({ pcIp : e.target.value }) }
-  //         id="pcIP"
-  //         value={ pcIp }
-  //         label="Prism Central IP Address"
-  //         placeholder="Enter your Prism Central IP Address"
-  //         helpText={ pcIp && !isValidPcIp ? 'Enter a Valid IP Address' : '' }
-  //       />
-  //       { authenticationRequired ? (
-  //         <InputPlusLabel
-  //           onChange={e => this.setState({ password : e.target.value }) }
-  //           id="password"
-  //           value={ password }
-  //           label="Prism Central Password"
-  //           placeholder="Enter your Prism Central Password"
-  //           type="password"
-  //         />
-  //       ) : null }
-  //       { this.renderEntityPicker() }
-  //       { vm && !isValidIP(vm.ip) ? (
-  //         <InputPlusLabel
-  //           error={ vmIp && !isValidIP(vmIp) }
-  //           onChange={e => this.setState({ vmIp : e.target.value }) }
-  //           id="vmIP"
-  //           label="VM IP Address"
-  //           placeholder="Enter the IP Address of your VM"
-  //           helpText={ vmIp && !isValidIP(vmIp) ? 'Enter a Valid IP Address' : '' }
-  //         />
-  //       ) : null }
-  //     </StackingLayout>
-  //   );
-  // }
-
   renderStep2() {
-    const ip = this.state.ppvm && this.state.ppvm.ip || '10.45.32.162';
+    const { ppvm, ppvmIp } = this.state;
+    const ip = (ppvm && ppvm.ip) || ppvmIp;
     return (
       <StackingLayout>
-        <Title size="h3">Launch the PrismProServer by clicking <Link target="_blank" href={ `http://${ip}/` }>here</Link></Title>
+        { ip ? <Title size="h3">Launch the PrismProServer by clicking <Link target="_blank" href={ `http://${ip}/` }>here</Link></Title> : null }
         <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>Return to the lab document and follow the instructions. When the lab instructions tell you to proceed to the next step, click the 'Continue' button.</TextLabel></div>
       </StackingLayout>
     );
   }
 
   renderStep3() {
-    const { pcIp, password, authenticationRequired } = this.state;
+    const { pcIp, password } = this.state;
     const isValidPcIp = isValidIP(pcIp);
     return (
       <StackingLayout>
         <Title size="h3">Story 4: Simulate VM Memory Constrained Alert</Title>
-        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>In the Setup step we stressed your VMs memory usage. Now we will use that VM and it's high memory usage to simulate a Memory Constrained alert.</TextLabel></div>
+        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>Now we will simulate a Memory Constrained alert for your VM.</TextLabel></div>
         <InputPlusLabel
           error={ pcIp && !isValidPcIp }
           onChange={e => this.setState({ pcIp : e.target.value }) }
@@ -161,28 +118,26 @@ class DefaultPage extends Component {
           placeholder="Enter your Prism Central IP Address"
           helpText={ pcIp && !isValidPcIp ? 'Enter a Valid IP Address' : '' }
         />
-        { authenticationRequired ? (
-          <InputPlusLabel
-            onChange={e => this.setState({ password : e.target.value }) }
-            id="password"
-            value={ password }
-            label="Prism Central Password"
-            placeholder="Enter your Prism Central Password"
-            type="password"
-          />
-        ) : null }
+        <InputPlusLabel
+          onChange={e => this.setState({ password : e.target.value }) }
+          id="password"
+          value={ password }
+          label="Prism Central Password"
+          placeholder="Enter your Prism Central Password"
+          type="password"
+        />
         { this.renderEntityPicker() }
       </StackingLayout>
     );
   }
 
   renderStep4() {
-    const { pcIp, password, authenticationRequired } = this.state;
+    const { pcIp, password } = this.state;
     const isValidPcIp = isValidIP(pcIp);
     return (
       <StackingLayout>
         <Title size="h3">Story 5: Simulate VM Bully Detected Alert</Title>
-        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>In the Setup step we stressed your VMs CPU usage. Now we will use that VM and it's aggressive CPU usage to simulate a Bully Detected alert.</TextLabel></div>
+        <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>Now we will simulate a Bully Detected alert for your VM.</TextLabel></div>
         <InputPlusLabel
           error={ pcIp && !isValidPcIp }
           onChange={e => this.setState({ pcIp : e.target.value }) }
@@ -192,26 +147,24 @@ class DefaultPage extends Component {
           placeholder="Enter your Prism Central IP Address"
           helpText={ pcIp && !isValidPcIp ? 'Enter a Valid IP Address' : '' }
         />
-        { authenticationRequired ? (
-          <InputPlusLabel
-            onChange={e => this.setState({ password : e.target.value }) }
-            id="password"
-            value={ password }
-            label="Prism Central Password"
-            placeholder="Enter your Prism Central Password"
-            type="password"
-          />
-        ) : null }
+        <InputPlusLabel
+          onChange={e => this.setState({ password : e.target.value }) }
+          id="password"
+          value={ password }
+          label="Prism Central Password"
+          placeholder="Enter your Prism Central Password"
+          type="password"
+        />
         { this.renderEntityPicker() }
       </StackingLayout>
     );
   }
 
   renderEntityPicker(label, helpText, isPPVM) {
-    const { pcIp, password, authenticationRequired } = this.state;
+    const { pcIp, password } = this.state;
     const isValidPcIp = isValidIP(pcIp);
     const attr = isPPVM ? 'ppvm' : 'vm';
-    if (!isValidPcIp || (authenticationRequired && !password)) {
+    if (!isValidPcIp || !password) {
       return null;
     }
     return (
