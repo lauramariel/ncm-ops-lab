@@ -23,11 +23,7 @@
 Getting Started
 ---------------
 
-Welcome to the Prism Pro Demo Labs. These are not meant to be share with Cutomers or Prospects. We are using this format to work out any issues before releasing into the Essentials Bootcamp.
-
-Start with an HPOC running AOS 5.10.x or 5.11, with no images or Prism Central deployed.
-
-Run the staging script (http://ntnx.tips/howto), and select the **Development Bootcamp (AOS 5.10+/AHV PC 5.11+) = Development** option.
+Welcome to the Prism Pro Demo Labs.
 
 What's New
 ++++++++++
@@ -35,7 +31,7 @@ What's New
 - Workshop updated for the following software versions:
 
     - Prism Central 5.11
-    - AOS 5.10.x or 5.11
+    - AOS 5.11
 
 Initial Setup
 +++++++++++++
@@ -192,6 +188,6 @@ For RTP:
 Nutanix Version Info
 ++++++++++++++++++++
 
-- **AHV Version** - AHV 20170830.185 (5.9+/5.10+)
-- **AOS Version** - 5.10.X or 5.11
+- **AHV Version** - AHV 20170830.301 (5.11+)
+- **AOS Version** - 5.11
 - **PC Version** - 5.11
