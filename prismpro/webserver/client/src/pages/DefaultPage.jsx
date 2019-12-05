@@ -96,7 +96,7 @@ class DefaultPage extends Component {
     const ip = (ppvm && ppvm.ip) || ppvmIp;
     return (
       <StackingLayout>
-        { ip ? <Title size="h3">Launch the PrismProServer by clicking <Link target="_blank" href={ `http://${ip}/` }>here</Link></Title> : null }
+        { ip ? <Title size="h3">Launch the PrismProServer by clicking <Link target="_blank" href={ `http://${window.location.hostname}/` }>here</Link></Title> : null }
         <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>Return to the lab document and follow the instructions. When the lab instructions tell you to proceed to the next step, click the 'Continue' button.</TextLabel></div>
       </StackingLayout>
     );
