@@ -1,8 +1,17 @@
 [{
   "alert_id":"A120241",
-  "severity": "kInfo"
+  "severity": "kInfo",
+  "alert_message": "Max hourly average memory usage (92.52%) exceeded the threshold (90%) during the last 21 days."
 },
 {
   "alert_id":"A120245",
-  "severity": "kInfo"
+  "severity": "kInfo",
+  "alert_message": "This VM’s IO usage is affecting 1 other VMs for 240 minutes in the last 24 hours."
+},
+{
+  "alert_id":"A120094",
+  "severity": "kCritical",
+  "cluster_name": "Prism-Pro-Cluster",
+  "cluster_uuid": "00057d50-00df-b390-0000-00000000eafd",
+  "data_int": "93"
 }]

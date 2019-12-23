@@ -323,8 +323,8 @@ class DefaultPage extends Component {
       method: 'POST',
       data: JSON.stringify({
         pcIp: pcIp,
-        vmId: vm && vm.uuid,
-        vmName: vm && vm.name,
+        entityId: vm && vm.uuid,
+        entityName: vm && vm.name,
         password
       })
     });

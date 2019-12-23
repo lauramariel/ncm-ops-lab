@@ -41,7 +41,7 @@ class DefaultPage extends Component {
     );
   }
 
-  onVMSearchErr = (e) => {
+  onEntitySearchErr = (e) => {
     if (e && e.message === 'AUTHENTICATION_REQUIRED') {
       this.setState({
         error: 'Failed to authenticate using default password. Please enter your PC Password to continue.'
@@ -54,9 +54,9 @@ class DefaultPage extends Component {
   }
 
   renderEntityPicker() {
-    const { pcIp, vm, password } = this.state;
+    const { pcIp, entity, password } = this.state;
     const isValidPcIp = isValidIP(pcIp);
-    if (!isValidPcIp || !password) {
+    if (!isValidPcIp || !password || this.isClusterAlert()) {
       return null;
     }
     return (
@@ -64,13 +64,14 @@ class DefaultPage extends Component {
         label="Select your VM"
         element={
           <EntitySearch
-            onEntitiesChange={ selectedvm => this.setState({ vm : selectedvm }) }
-            selectedEntities={ vm }
+            onEntitiesChange={ selected => this.setState({ entity : selected }) }
+            selectedEntities={ entity }
             placeholder='Type to search for your VM'
             entityType="vm"
+            nameAttr="vm_name"
             pcIp={ pcIp }
             password={ password }
-            onError={ this.onVMSearchErr }
+            onError={ this.onEntitySearchErr }
           />
         }
         helpText="Choose the VM that you created for this lab"
@@ -85,7 +86,7 @@ class DefaultPage extends Component {
       <StackingLayout padding="20px">
         <StackingLayout itemSpacing="10px">
           <Title size="h3">Simulate an Alert</Title>
-          <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>Select the type of alert to generate, enter the Prism Central information, and select the VM to simulate the alert for to begin.</TextLabel></div>
+          <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>Select the type of alert to generate and enter the requested information to begin.</TextLabel></div>
         </StackingLayout>
         <StackingLayout itemSpacing="20px">
           <Title size="h4">Select the type of alert to simulate</Title>
@@ -102,6 +103,10 @@ class DefaultPage extends Component {
             <Radio
               value="A120245"
               title="VM Bully"
+            />
+            <Radio
+              value="A120094"
+              title="Cluster Memory Low"
             />
           </RadioGroup>
         </StackingLayout>
@@ -160,8 +165,12 @@ class DefaultPage extends Component {
     });
   }
 
+  isClusterAlert() {
+    return this.state.radio === 'A120094';
+  }
+
   simulateAlert(alert_uid) {
-    const { pcIp, vm, password } = this.state;
+    const { pcIp, entity, password } = this.state;
     // initiate script
     this.setState({ loading: true });
     return basicFetch({
@@ -169,16 +178,16 @@ class DefaultPage extends Component {
       method: 'POST',
       data: JSON.stringify({
         pcIp: pcIp,
-        vmId: vm && vm.uuid,
-        vmName: vm && vm.name,
+        entityId: this.isClusterAlert() ? '' : entity && entity.uuid,
+        entityName: this.isClusterAlert() ? '' : entity && entity.name,
         password
       })
     });
   }
 
   getFooter() {
-    const { pcIp, vm } = this.state;
-    const enabled = isValidIP(pcIp) && vm;
+    const { pcIp, entity } = this.state;
+    const enabled = isValidIP(pcIp) && (entity || this.isClusterAlert());
     return (
       <div>
         <Button disabled={ !enabled } type="primary" onClick={ () => this.completeCurrentStep() }>

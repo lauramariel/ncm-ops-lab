@@ -63,16 +63,17 @@ app.get('/error', function(req, res){
 });
 
 // create a GET route
-app.post('/vms/', (req, res) => {
+app.post('/groups/', (req, res) => {
   var body = req.body;
   if (!body) {
     res.send({
-      error: 'Invalid VMs Request. Please send PC IP.'
+      error: 'Invalid Groups Request. Please send PC IP.'
     });
   }
-  console.log('VM request body', body)
+  console.log('Groups request body', body)
+  // take in entity type and entity name attr.
   // Prepare POST body
-  var data = "{\"entity_type\":\"vm\",\"query_name\":\"VM search\",\"grouping_attribute\":\" \",\"group_count\":1,\"group_offset\":0,\"group_attributes\":[],\"group_member_count\":100,\"group_member_offset\":0,\"group_member_sort_attribute\":\"vm_name\",\"group_member_sort_order\":\"ASCENDING\",\"group_member_attributes\":[{\"attribute\":\"vm_name\"},{\"attribute\":\"ip_addresses\"}],\"filter_criteria\":\"" + body.filter + "\"}";
+  var data = "{\"entity_type\":\"" + body.entityType + "\",\"query_name\":\"Groups search\",\"grouping_attribute\":\" \",\"group_count\":1,\"group_offset\":0,\"group_attributes\":[],\"group_member_count\":100,\"group_member_offset\":0,\"group_member_sort_attribute\":\"" + body.nameAttr + "\",\"group_member_sort_order\":\"ASCENDING\",\"group_member_attributes\":[{\"attribute\":\"" + body.nameAttr + "\"},{\"attribute\":\"ip_addresses\"}],\"filter_criteria\":\"" + body.filter + "\"}";
   // Prepare options for the request
   var password = getPassword(body);
   var options = {
@@ -162,7 +163,7 @@ app.post('/generate_alert/:alert_uid', function(req, res) {
   }
   var status = 'SUCCESS';
   var password = getPassword(body);
-  var query = './generate_alert.sh ' + body.pcIp + ' ' + PC_SSH_USER + ' ' + PC_SSH_PASS + ' ' + PC_UI_USER + ' ' + password + ' ' + alert_uid + ' ' + body.vmId + ' ' + body.vmName;
+  var query = './generate_alert.sh ' + body.pcIp + ' ' + PC_SSH_USER + ' ' + PC_SSH_PASS + ' ' + PC_UI_USER + ' ' + password + ' ' + alert_uid + ' ' + body.entityId + ' ' + body.entityName;
   exec(query, {}, function(error, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);

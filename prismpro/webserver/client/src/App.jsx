@@ -24,8 +24,9 @@ class App extends Component {
         return <AlertPage/>;
       case '/bootcamp':
       case '/bootcamp/':
-      default:
         return <DefaultPage />;
+      default:
+        return <AlertPage/>;
     }
   }
 
