@@ -3,11 +3,9 @@
 PC_IP="$1"
 PC_SSH_USER="$2"
 PC_SSH_PASS="$3"
-PC_UI_USER="$4"
-PC_UI_PASS="$5"
-ALERT_UID="$6"
-VM_ID="$7"
-VM_NAME="$8"
+ALERT_UID="$4"
+VM_ID="$5"
+VM_NAME="$6"
 
 echo "Generate Alert for PC $PC_IP and alert ID $ALERT_UID"
 
