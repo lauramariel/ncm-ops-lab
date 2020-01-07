@@ -1,41 +1,29 @@
 import React, { Component } from 'react';
-import axios from "axios";
 
 // Components
 import {
   Table,
   Alert,
-  InputPlusLabel,
   ElementPlusLabel,
   StackingLayout,
-  Button,
   ConfirmModal,
-  Paragraph,
-  Input
-
+  Paragraph
 } from 'prism-reactjs';
 
 
 import EntitySearch from '../components/EntitySearch.jsx';
 // Utils
 import {
-  basicFetch,
-  getErrorMessage
+  basicFetch
 } from '../utils/FetchUtils';
-
-import {
-  isValidIP
-} from '../utils/AppUtil';
-import { Fragment } from 'react';
-
 
 class TicketPage extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.validate = this.validate.bind(this);
-    
+
 
     this.columns = [
       {
@@ -82,7 +70,7 @@ class TicketPage extends Component {
     };
   }
 
-  modalErrorAlert = <Alert type="error" inline={true} message="Oh snap! Change a few things up and try submitting again." />;
+  modalErrorAlert = <Alert type="error" inline={true} message="Please Select a Playbook to proceed." />;
   successAlert = <Alert type="success" inline={false} message="Ticket resolved successfully!" />;
 
   componentDidMount() {
@@ -105,12 +93,12 @@ class TicketPage extends Component {
 
   validate() {
     console.log("in validate", this.state)
-    const { pcIp, ppvmIp, password, selectedPlaybook, rowData } = this.state;
+    const { selectedPlaybook, rowData } = this.state;
 
     // initiate script
     this.setState({ loading: true });
 
-    if (pcIp === null || password === null || ppvmIp === null) {
+    if (selectedPlaybook === null) {
       this.setState({
         error: true,
         showSuccessBanner: false
@@ -119,13 +107,19 @@ class TicketPage extends Component {
     }
     else {
       return basicFetch({
-        url: `/api/nutanix/v3/action_rules/trigger/`,
+        url: `/api/nutanix/v3/action_rules/trigger`,
         method: 'POST',
         data: JSON.stringify({
-          ppvmIp: ppvmIp,
-          selectedPlaybookUUID: selectedPlaybook.uuid,
-          vm_id: rowData.vm_id,
-          password: password
+          trigger_type: "manual_trigger",
+          trigger_instance_list: [
+            {
+              action_rule_uuid: selectedPlaybook.uuid,
+              source_entity_info: JSON.stringify({
+                type: "vm",
+                uuid: rowData.vm_id
+              })
+            }
+          ]
         })
       }).then(resp => {
         if (resp && resp.stderr) {
@@ -145,14 +139,7 @@ class TicketPage extends Component {
 
   }
 
-
-  renderEntityPicker(label, helpText, isPPVM) {
-    const { pcIp, password } = this.state;
-    const isValidPcIp = isValidIP(pcIp);
-    const attr = isPPVM ? 'ppvm' : 'vm';
-    if (!isValidPcIp || !password) {
-      return null;
-    }
+  renderEntityPicker() {
     return (
       <ElementPlusLabel
         label={'Select the Playbook to Trigger'}
@@ -168,8 +155,6 @@ class TicketPage extends Component {
             placeholder='Type to search for a Playbook'
             entityType="action_rule"
             nameAttr="name"
-            pcIp={pcIp}
-            password={password}
             onError={() => console.error('TODO do something if there is an error')}
           />
         }
@@ -186,9 +171,6 @@ class TicketPage extends Component {
 
 
   renderTicketsInTable() {
-    const { pcIp, ppvmIp, password } = this.state;
-    const isValidPcIp = isValidIP(pcIp);
-
     return (
       <div>
         <StackingLayout>
@@ -202,38 +184,12 @@ class TicketPage extends Component {
             confirmText={
               <StackingLayout>
                 {this.state.error ? this.modalErrorAlert : null}
-  
-                <InputPlusLabel
-                  error={pcIp && !isValidPcIp}
-                  onChange={e => this.setState({ pcIp: e.target.value })}
-                  value={pcIp}
-                  id="pcIP3"
-                  label="Prism Central IP Address"
-                  placeholder="Enter your Prism Central IP Address"
-                  helpText={pcIp && !isValidPcIp ? 'Enter a Valid IP Address' : ''}
-                />
-                <InputPlusLabel
-                  onChange={e => this.setState({ password: e.target.value })}
-                  id="password"
-                  value={password}
-                  label="Prism Central Password"
-                  placeholder="Enter your Prism Central Password"
-                  type="password"
-                />
-                {this.renderEntityPicker()}
-                <InputPlusLabel
-                  error={ppvmIp && !isValidIP(ppvmIp)}
-                  onChange={e => this.setState({ ppvmIp: e.target.value })}
-                  id="ppvmIP"
-                  label="PrismProServer IP Address"
-                  placeholder="Enter the IP Address of the PrismProServer VM"
-                  helpText={ppvmIp && !isValidIP(ppvmIp) ? 'Enter a Valid IP Address' : ''}
-                />
+                { this.renderEntityPicker() }
               </StackingLayout>
             }
           />
         </StackingLayout>
-     
+
       <Table oldTable={false} loading={false} dataSource={this.state.ticketData} columns={this.columns}
         rowAction={{
           actions: (rowData) => {

@@ -465,30 +465,6 @@ app.post('/generate_alert/:alert_uid', function(req, res) {
   });
 });
 
-// create a POST route
-app.post('/api/nutanix/v3/action_rules/trigger/', (req, res) => {
-
-  const  request_body = {
-    ip: req.body.ppvmIp,
-    username: 'admin',
-    password: req.body.password,
-    body: {
-        trigger_type: "manual_trigger",
-        trigger_instance_list: [
-          {
-            action_rule_uuid: req.body.selectedPlaybookUUID,
-            source_entity_info: {
-              type:"vm",
-              uuid:req.body.vm_id
-            }
-          }
-        ]
-      }
-  }
-
-  res.send(request_body);
-});
-
 // TicketSystem
 //-------------
 app.get('/gettickets', function (req, res) {
@@ -541,7 +517,7 @@ app.put('/updateticket/', (req, res) =>{
       console.log("req.body",req.body)
       for(tick in arrayOfObjects.tickets){
         console.log("tick",tick)
-        if(arrayOfObjects.tickets[tick]['alert_id'] === req.body.alert_id){
+        if(arrayOfObjects.tickets[tick]['vm_id'] === req.body.vm_id){
           arrayOfObjects.tickets[tick]['task_status'] = 'Resolved'
           temp = arrayOfObjects.tickets[tick]
           console.log("temp",temp)
