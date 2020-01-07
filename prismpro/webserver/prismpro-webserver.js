@@ -357,24 +357,28 @@ app.get(staticUrl + 'swagger.json', function(req, res) {
 
 // Webserver Client
 //----------------------
-app.get('/alerts', function(req, res){
+app.get('/alerts', function (req, res){
   res.sendfile('public/index.html');
 });
 
-app.get(/\/public\/(.*)/ , function(req, res) {
+app.get('/ticketsystem', function (req, res) {
+  res.sendfile('public/index.html');
+});
+
+app.get(/\/public\/(.*)/, function (req, res) {
   res.sendfile('.' + req.path);
 });
 
-app.get(/\/build\/(.*)/ , function(req, res) {
+app.get(/\/build\/(.*)/, function (req, res) {
   res.sendfile('.' + req.path);
 });
 
-app.get('/log', function(req, res){
+app.get('/log', function (req, res){
   // Return the log.
   res.sendfile('out.log');
 });
 
-app.get('/error', function(req, res){
+app.get('/error', function (req, res){
   // Return the error log.
   res.sendfile('err.log');
 });
@@ -460,6 +464,100 @@ app.post('/generate_alert/:alert_uid', function(req, res) {
     });
   });
 });
+
+// create a POST route
+app.post('/api/nutanix/v3/action_rules/trigger/', (req, res) => {
+
+  const  request_body = {
+    ip: req.body.ppvmIp,
+    username: 'admin',
+    password: req.body.password,
+    body: {
+        trigger_type: "manual_trigger",
+        trigger_instance_list: [
+          {
+            action_rule_uuid: req.body.selectedPlaybookUUID,
+            source_entity_info: {
+              type:"vm",
+              uuid:req.body.vm_id
+            }
+          }
+        ]
+      }
+  }
+
+  res.send(request_body);
+});
+
+// TicketSystem
+//-------------
+app.get('/gettickets', function (req, res) {
+  try {
+    fs.readFile('./ticket-raised.json', 'utf-8', (err, data) => {
+      var arrayOfObjects = JSON.parse(data);
+      res.send(arrayOfObjects)
+    })
+  } catch (err) {
+
+  }
+});
+
+app.post('/generate_ticket/', (req, res) => {
+  const creation_time = new Date();
+  const key = Math.floor(Math.random() * 100000) + 1;
+  const task_status = "Open";
+
+   const  request_body = {
+      creation_time,
+      key,
+      task_status,
+      alert_name: req.body.alert_name,
+      alert_id: req.body.alert_id,
+      vm_name: req.body.vm_name,
+      vm_id: req.body.vm_id
+    }
+  try {
+    fs.readFile('./ticket-raised.json', 'utf-8', (err, data) => {
+      var arrayOfObjects = JSON.parse(data);
+
+      arrayOfObjects.tickets.push(request_body)
+      console.log(arrayOfObjects);
+
+      fs.writeFile('./ticket-raised.json', JSON.stringify(arrayOfObjects), 'utf-8', function (err) {
+        if (err) throw err
+        res.send(request_body)
+      })
+    })
+  } catch (err) {
+
+  }
+});
+
+app.put('/updateticket/', (req, res) =>{
+  try {
+    fs.readFile('./ticket-raised.json', 'utf-8', (err, data) => {
+      var arrayOfObjects = JSON.parse(data);
+      var temp= null;
+      console.log("req.body",req.body)
+      for(tick in arrayOfObjects.tickets){
+        console.log("tick",tick)
+        if(arrayOfObjects.tickets[tick]['alert_id'] === req.body.alert_id){
+          arrayOfObjects.tickets[tick]['task_status'] = 'Resolved'
+          temp = arrayOfObjects.tickets[tick]
+          console.log("temp",temp)
+          break
+        }
+      }
+      fs.writeFile('./ticket-raised.json', JSON.stringify(arrayOfObjects), 'utf-8', function (err) {
+        if (err) throw err
+        res.send(temp)
+      })
+    })
+  } catch (err) {
+
+  }
+});
+
 // Webserver Client (End)
 //----------------------
 

@@ -8,10 +8,10 @@
   },
   "dependencies": {
     "cookie-parser": "^1.4.3",
-    "cors": "^2.8.4",
+    "cors": "^2.8.5",
     "express": "4.17.0",
     "http-proxy": "^1.11.1",
-    "request": "2.88"
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "ws": "^5.1.1"
