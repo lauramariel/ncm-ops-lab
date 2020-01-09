@@ -41,8 +41,8 @@ var app = express();
 app.set('port', process.env.PORT || env.listenerPort);
 app.use(cors());
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: false, parameterLimit: 50000 }))
+app.use(bodyParser.json({ limit: "50mb" }))
 
 // Customization (Start)
 //----------------------
