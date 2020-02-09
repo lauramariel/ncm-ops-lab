@@ -46,6 +46,28 @@ app.use(bodyParser.json({ limit: "50mb" }))
 
 // Customization (Start)
 //----------------------
+var DEMO_VM_UUID = 'DEMO_VM';
+var ALERT_REPLACE_TITLE = 'VM has non-ASCII name.';
+var ALERT_NEW_TITLE = 'SQL server query average latency high';
+if (env.simulateBlueMedora) {
+  app.get('/api/nutanix/v3/alerts/:alert_uuid', function(req, res) {
+      var origHostPortUrl = env.proxyProtocol +'://' + PC_IP +
+        (env.proxyPort ? ':' + env.proxyPort : '');
+      var fwdURL = origHostPortUrl + req.url;
+      r.get(fwdURL, function(error, response, body) {
+        var result = JSON.parse(body);
+        if (result && result.status && result.status.resources && result.status.resources.title === ALERT_REPLACE_TITLE) {
+          var data = fs.readFileSync(sampleData + "/bluemedora/alert_details.json", 'utf8');
+          var date = Date.now() - (3600000 * 10);
+          data = data.replace(/XXXXXXXX/gi, date);
+          data = JSON.parse(data);
+          result.status.resources = Object.assign({}, result.status.resources, data.resources);
+        }
+        res.json(result);
+      });
+  });
+}
+
 if (env.simulatePrismPro) {
   var VM_TYPES = ['bootcamp_inactive', 'bootcamp_constrained', 'bootcamp_good', 'bootcamp_overprovisioned', 'bootcamp_op_constrained'];
   var getVmType = function(list) {
@@ -145,8 +167,40 @@ if (env.simulatePrismPro) {
       next();
       return;
     }
-
     switch(body.entity_type) {
+      case 'alert':
+        if (env.simulateBlueMedora) {
+          const body = req.body;
+          var origHostPortUrl = env.proxyProtocol +'://' + PC_IP +
+            (env.proxyPort ? ':' + env.proxyPort : '');
+          var payload = JSON.stringify(body);
+          var fwdURL = origHostPortUrl + req.url;
+          r.post(fwdURL, { 'body' : payload }, function(error, response, body) {
+            var result = JSON.parse(body);
+            if (result && result.group_results && result.group_results[0] && result.group_results[0].entity_results) {
+              result.group_results[0].entity_results.map(function(alert) {
+                if (alert && alert.data) {
+                  alert.data.map(function(d) {
+                    if (d.name === 'title' && d.values && d.values[0] && d.values[0].values && d.values[0].values[0] === ALERT_REPLACE_TITLE) {
+                      d.values[0].values = [ALERT_NEW_TITLE];
+                      // Loop through find the impact type and set it to performance
+                      alert.data.map(function(d2) {
+                        if (d2.name === 'impact_type' && d2.values && d2.values[0] && d2.values[0].values) {
+                          d2.values[0].values = ['Performance'];
+                        }
+                      });
+                    }
+
+                  })
+                }
+              })
+            }
+            res.json(result);
+          });
+          return;
+        }
+        next();
+        break;
       case 'event':
         if(body.query_name === 'prism:EntityEventQueryModel' && body.filter_criteria && body.filter_criteria.indexOf('vm=cs=bootcamp_good') >= 0) {
           var date = Date.now() - 13300000;
@@ -156,9 +210,175 @@ if (env.simulatePrismPro) {
           res.json(data);
           return;
         }
+        if (env.simulateBlueMedora) {
+          if (req.body.filter_criteria &&
+            req.body.filter_criteria.indexOf('vm=cs=' + DEMO_VM_UUID) > -1) {
+            var data = fs.readFileSync(sampleData + "/bluemedora/anomaly_cpu_usage.json", 'utf8');
+            var date = Date.now() - (3600000 * 10);
+            var cpu_date = Date.now() - (3600000 * 13);
+            data = data.replace(/XXXXXXXX/mgi, date * 1000);
+            data = data.replace(/YYYYYYYY/mgi, cpu_date * 1000);
+            res.json(JSON.parse(data));
+            return;
+          }
+        }
         next();
         break;
       case 'mh_vm':
+        if (env.simulateBlueMedora) {
+          if(req.body.group_member_attributes && req.body.group_member_attributes.length) {
+          const attribute = req.body.group_member_attributes[0].attribute;
+            if (attribute.indexOf('cache_hit_ratio') > -1) {
+              var data = fs.readFileSync(sampleData + "/bluemedora/cache_hit_ratio.json", 'utf8');
+              data = JSON.parse(data);
+              var items = data.group_results[0].entity_results[0].data;
+              var now = Date.now() * 1000;
+              items.forEach(function(item) {
+                var start = now;
+                item.values.forEach(function(value) {
+                  value.time = start;
+                  start = start - 300000000
+                });
+              });
+              res.json(data);
+              return;
+            }
+            if (attribute.indexOf('query_io_latency') > -1) {
+              var data = fs.readFileSync(sampleData + "/bluemedora/query_io_latency.json", 'utf8');
+              data = JSON.parse(data);
+              var items = data.group_results[0].entity_results[0].data;
+              var now = Date.now() * 1000;
+              items.forEach(function(item) {
+                var start = now;
+                var unitvalue;
+                var midvalue = (Date.now() - (3600000 * 10)) * 1000;
+                var metricName = item.name;
+                item.values.forEach(function(value) {
+                  value.time = start;
+                  start = start - 300000000
+                });
+              });
+              res.json(data);
+              return;
+            }
+
+            if (attribute.indexOf('disk_byte_usage') > -1) {
+              var data = fs.readFileSync(sampleData + "/bluemedora/disk_byte_usage.json", 'utf8');
+              data = JSON.parse(data);
+              var items = data.group_results[0].entity_results[0].data;
+              var now = Date.now() * 1000;
+              items.forEach(function(item) {
+                var start = now;
+                var midvalue = (Date.now() - (3600000 * 10)) * 1000;
+                var unitvalue;
+                var metricName = item.name;
+                item.values.forEach(function(value) {
+                  value.time = start;
+                  if(metricName === 'disk_byte_usage') {
+                    if(start > midvalue) {
+                      unitvalue = 4000000000 + (Math.random() * (100000000 + 0) - 0);
+                    } else {
+                      unitvalue = 2000000000 + (Math.random() * (100000000 + 0) - 0);
+                    }
+                  } else if(metricName === 'capacity.disk_byte_usage.upper_buff') {
+                    unitvalue = 3000000000;
+                  } else {
+                    unitvalue = 1000000000;
+                  }
+                  value.values = [unitvalue];
+                  start = start - 300000000
+                });
+              });
+              res.json(data);
+              return;
+            }
+
+            if (attribute.indexOf('number_of_queries') > -1) {
+              var data = fs.readFileSync(sampleData + "/bluemedora/number_of_queries.json", 'utf8');
+              data = JSON.parse(data);
+              var items = data.group_results[0].entity_results[0].data;
+              var now = Date.now() * 1000;
+              items.forEach(function(item) {
+                var start = now;
+                var midvalue = (Date.now() - (86400000 / 2)) * 1000;
+                var unitvalue;
+                var metricName = item.name;
+                item.values.forEach(function(value) {
+                  value.time = start;
+                  if(metricName === 'number_of_queries') {
+                    unitvalue = 50 + (Math.random() * (10 + 10) -10);
+                  } else if(metricName === 'capacity.number_of_queries.upper_buff') {
+                    unitvalue = 80;
+                  } else {
+                    unitvalue = 30;
+                  }
+                  value.values = [unitvalue];
+                  start = start - 300000000
+                });
+              });
+              res.json(data);
+              return;
+            }
+
+            if (attribute === 'cpu_usage' || attribute === 'capacity.cpu_usage.upper_buff' || attribute === 'capacity.cpu_usage.lower_buff') {
+              var data = fs.readFileSync(sampleData + "/bluemedora/cpu_usage_ppm.json", 'utf8');
+              data = JSON.parse(data);
+              var items = data.group_results[0].entity_results[0].data;
+              var now = Date.now() * 1000;
+              items.forEach(function(item) {
+                var start = now;
+                var midvalue = (Date.now() - ((86400000 / 24) * 14)) * 1000;
+                var unitvalue;
+                var metricName = item.name;
+                item.values.forEach(function(value) {
+                  value.time = start;
+                  if(metricName === 'cpu_usage') {
+                    if(start > midvalue) {
+                      unitvalue = 700000 + (Math.random() * (50000 + 50000) - 50000);
+                    } else {
+                      unitvalue = 400000 + (Math.random() * (50000 + 50000) - 50000);
+                    }
+                  } else if(metricName === 'capacity.cpu_usage.upper_buff') {
+                    unitvalue = 600000;
+                  } else {
+                    unitvalue = 300000;
+                  }
+                  value.values = [unitvalue];
+                  start = start - 300000000
+                });
+              });
+              res.json(data);
+              return;
+            }
+
+            if (attribute.indexOf('number_of_connections') > -1) {
+              var data = fs.readFileSync(sampleData + "/bluemedora/number_of_connections.json", 'utf8');
+              data = JSON.parse(data);
+              var items = data.group_results[0].entity_results[0].data;
+              var now = Date.now() * 1000;
+              items.forEach(function(item) {
+                var start = now;
+                var midvalue = (Date.now() - (86400000 / 2)) * 1000;
+                var unitvalue;
+                var metricName = item.name;
+                item.values.forEach(function(value) {
+                  value.time = start;
+                  if(metricName === 'number_of_connections') {
+                    unitvalue = 30 + (Math.random() * (5 + 5) - 5);
+                  } else if(metricName === 'capacity.number_of_connections.upper_buff') {
+                    unitvalue = 40;
+                  } else {
+                    unitvalue = 10;
+                  }
+                  value.values = [unitvalue];
+                  start = start - 300000000
+                });
+              });
+              res.json(data);
+              return;
+            }
+          }
+        }
         var type = getVmType(body.entity_ids);
         if (isStatsQuery(body) && type) {
           try {
@@ -244,6 +464,7 @@ if (env.simulatePrismPro) {
   });
 }
 
+
 // Customization (End)
 //--------------------
 
@@ -306,6 +527,10 @@ var proxyFunction = function(req, resp) {
   }
 };
 
+if (env.simulateBlueMedora) {
+  app.use(express['static']('ntnx_cloud'));
+}
+
 // Prism Central Routing
 //----------------------
 // Redirect to console always.
@@ -313,6 +538,9 @@ app.get('/', function(req, resp) {
   if (!PC_IP || !PC_UI_PASS || !PC_UI_USER) {
     // Take the user to enter their credentials.
     resp.sendfile('public/index.html');
+  } else if (env.simulateBlueMedora) {
+    // Send the local build
+    resp.sendfile('ntnx_cloud/index.html');
   } else {
     // Redirect to console to serve up the static UI files.
     resp.redirect('/console/');
@@ -351,8 +579,19 @@ app.get(/console/, function(req, resp) {
     } else {
       proxyFunction(req, resp);
     }
+  } else if (env.simulateBlueMedora) {
+    resp.redirect('/');
   } else {
     proxyFunction(req, resp);
+  }
+});
+app.get(/\/app-extension\/scripts\/(.*)/ , function(req, res) {
+  var path = req.path.replace('/ssp/', '/');
+  if (env.simulateBlueMedora) {
+    // Send the local build
+    res.sendfile('ntnx_cloud' + path);
+  } else {
+    proxyFunction(req, res);
   }
 });
 // For calm to work
@@ -381,12 +620,12 @@ app.get('/ticketsystem', function (req, res) {
   res.sendfile('public/index.html');
 });
 
-app.get('/createplaybook', function (req, res) {
+app.get('/databases', function (req, res) {
   res.sendfile('public/index.html');
 });
 
-app.get('/createplaybook/', function (req, res) {
-  resp.redirect('/createplaybook');
+app.get('/databases/', function (req, res) {
+  resp.redirect('/databases');
 });
 
 app.get('/ticketsystem/', function (req, res) {
@@ -411,7 +650,7 @@ app.get('/error', function (req, res){
   res.sendfile('err.log');
 });
 
-app.get('/login/', (req, res) => {
+app.get('/login/', function (req, res) {
   console.log("in login get",PC_IP ,"ip", PC_UI_PASS, PC_UI_USER)
   if (!PC_IP || !PC_UI_PASS || !PC_UI_USER) {
     res.status(500).send({
@@ -429,21 +668,44 @@ app.post('/login/', function(req, res) {
       error: 'Invalid Request. PC IP, username and password are required.'
     });
   }
-  var status = 'SUCCESS';
-  var url = './restart.sh ' + body.pc_ip+ ' ' + body.user + ' ' + body.pass;
-  console.log(url);
-  exec(url, {}, function(error, stdout, stderr) {
-    console.log(stdout);
-    console.log(stderr);
-    if (error !== null) {
-      console.log('exec error:', error);
-      status = 'FAILED';
+    // Authentication Setup
+  var auth = new Buffer.from(body.user + ':' + body.pass).toString('base64');
+
+  // Set up options for the request handler.
+  var opt = {
+    'strictSSL': false,
+    'jar': true, // embedded cookies management to maintain authentified session
+    'headers': {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    'timeout': 1500
+  };
+  opt.headers.Authorization = 'Basic ' + auth;
+  request.defaults(opt).get( env.proxyProtocol +'://' + body.pc_ip +
+  (env.proxyPort ? ':' + env.proxyPort : '') + '/api/nutanix/v3/users/me', function(error, resp, bd) {
+    var result = bd && JSON.parse(bd);
+    if (error || (result && result.state === 'ERROR')) {
+      res.status(500).send({
+        message: 'LOGIN_FAILED'
+      });
+      return;
     }
-    res.send({
-      stdout: stdout,
-      stderr: stderr,
-      error: error,
-      status: status
+    var status = 'SUCCESS';
+    var url = './restart.sh ' + body.pc_ip+ ' ' + body.user + ' ' + body.pass;
+    console.log(url);
+    exec(url, {}, function(error, stdout, stderr) {
+      console.log(stdout);
+      console.log(stderr);
+      if (error !== null) {
+        console.log('exec error:', error);
+        status = 'FAILED';
+      }
+      res.send({
+        stdout: stdout,
+        stderr: stderr,
+        error: error,
+        status: status
+      });
     });
   });
 });
@@ -477,7 +739,11 @@ app.post('/generate_alert/:alert_uid', function(req, res) {
     });
   }
   var status = 'SUCCESS';
-  var query = './generate_alert.sh ' + PC_IP + ' ' + PC_SSH_USER + ' ' + PC_SSH_PASS + ' ' + alert_uid + ' ' + body.entityId + ' ' + body.entityName;
+  var configFileDir = '/home/nutanix/neuron/plugin_config';
+  if (alert_uid === 'A106472') {
+    configFileDir = '/home/nutanix/ncc/plugin_config';
+  }
+  var query = './generate_alert.sh ' + PC_IP + ' ' + PC_SSH_USER + ' ' + PC_SSH_PASS + ' ' + alert_uid + ' ' + body.entityId + ' "' + body.entityName + '" ' + configFileDir;
   exec(query, {}, function(error, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
@@ -498,7 +764,7 @@ app.post('/generate_alert/:alert_uid', function(req, res) {
 //-------------
 app.get('/gettickets', function (req, res) {
   try {
-    fs.readFile('./ticket-raised.json', 'utf-8', (err, data) => {
+    fs.readFile('./ticket-raised.json', 'utf-8', function (err, data) {
       var arrayOfObjects = JSON.parse(data);
       res.send(arrayOfObjects)
     })
@@ -507,23 +773,22 @@ app.get('/gettickets', function (req, res) {
   }
 });
 
-app.post('/generate_ticket/', (req, res) => {
+app.post('/generate_ticket/', function (req, res) {
   const creation_time = new Date();
   const key = Math.floor(Math.random() * 100000) + 1;
   const task_status = "Open";
-
-   const  request_body = {
-      creation_time,
-      key,
-      task_status,
-      alert_name: req.body.alert_name,
-      alert_id: req.body.alert_id,
-      vm_name: req.body.vm_name,
-      vm_id: req.body.vm_id,
-      url: req.body.url
-    }
+  const request_body = {
+    creation_time,
+    key,
+    task_status,
+    alert_name: req.body.alert_name,
+    alert_id: req.body.alert_id,
+    vm_name: req.body.vm_name,
+    vm_id: req.body.vm_id,
+    url: req.body.url
+  };
   try {
-    fs.readFile('./ticket-raised.json', 'utf-8', (err, data) => {
+    fs.readFile('./ticket-raised.json', 'utf-8', function (err, data) {
       var arrayOfObjects = JSON.parse(data);
 
       arrayOfObjects.tickets.push(request_body)
@@ -539,40 +804,30 @@ app.post('/generate_ticket/', (req, res) => {
   }
 });
 
-app.put('/updateticket/', (req, res) =>{
+app.put('/resolve_ticket/', function (req, res) {
+  var vmId = req && req.body && req.body.vm_id;
+  console.log(vmId)
   try {
-    fs.readFile('./ticket-raised.json', 'utf-8', (err, data) => {
+    fs.readFile('./ticket-raised.json', 'utf-8', function(err, data) {
       var arrayOfObjects = JSON.parse(data);
-      var temp= null;
-      console.log("req.body",req.body)
-      for(tick in arrayOfObjects.tickets){
-        console.log("tick",tick)
-        if(arrayOfObjects.tickets[tick]['vm_id'] === req.body.vm_id){
-          arrayOfObjects.tickets[tick]['task_status'] = 'Resolved'
-          temp = arrayOfObjects.tickets[tick]
-          console.log("temp",temp)
-          break
+      var tickets = arrayOfObjects && arrayOfObjects.tickets;
+      tickets && tickets.map(function(ticket) {
+        if (ticket.vm_id === vmId){
+          ticket.task_status = 'Resolved';
         }
-      }
+      });
       fs.writeFile('./ticket-raised.json', JSON.stringify(arrayOfObjects), 'utf-8', function (err) {
-        if (err) throw err
-        res.send(temp)
-      })
+        if (err) {
+          console.log(err)
+        }
+        res.send('Successfully updated ticket');
+      });
     })
   } catch (err) {
-
+    console.log(err)
+    res.send({});
   }
 });
-
-
-app.post('/create_playbook/', (req, res) => {  
-  const playbook_name = req.body.playbook_name
-  
-  
-
-  res.send(req.body)
-});
-
 
 // Webserver Client (End)
 //----------------------

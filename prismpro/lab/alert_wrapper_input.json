@@ -9,6 +9,10 @@
   "alert_message": "This VM’s IO usage is affecting 1 other VMs for 240 minutes in the last 24 hours."
 },
 {
+  "alert_id":"A106472",
+  "severity": "kCritical"
+},
+{
   "alert_id":"A120094",
   "severity": "kCritical",
   "cluster_name": "Prism-Pro-Cluster",

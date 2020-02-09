@@ -1,80 +1,22 @@
 {
-	"status": {
-		"state": "COMPLETE",
-		"resources": {
-			"last_update_time": "2019-05-08T16:35:46Z",
-			"source_entity": {
-				"cluster_uuid": "1023dcdb-1d3a-46a0-b9e2-507ad96759a6",
-				"entity": {
-					"type": "vm",
-					"name": "OnlineStore_SQL_Server1",
-					"uuid": "71227951-3639-40f7-9fa7-38073cf927a3"
-				}
-			},
-			"affected_entity_list": [{
-				"type": "cluster",
-				"name": "Prism Central",
-				"uuid": "1023dcdb-1d3a-46a0-b9e2-507ad96759a5"
-			}],
-			"severity": "critical",
-			"title": "SQL server query average latency high",
-			"default_message": "SQL server query average latency high",
-			"creation_time": "2019-05-08T16:15:53Z",
-			"resolution_status": {
-				"is_true": false
-			},
-			"indicator_list": [{
-				"entity_id":"71227951-3639-40f7-9fa7-38073cf927a3",
-				  "entity_type":"vm",
-				  "metric_display_name":"Avg Query latency",
-				  "metric_name":"query_io_latency",
-				  "trigger_time": XXXXXXXX,
-				  "comparison_operator":"kEqualTo"
-		       }],
-			"acknowledged_status": {
-				"is_true": false
-			},
-			"is_user_defined": true,
-			"severity_trail_list": [{
-				"severity_change_time": "2019-04-11T11:15:53Z",
-				"severity": "critical"
-			}],
-			"classification_list": [],
-			"possible_cause_list": [{
-				"resolution_list": ["Make sure nucalm internal service is up and running.", "Resolve the issue. If you cannot resolve the issue, contact Nutanix support."],
-				"cause_list": ["Nucalm internal service may have stopped working"]
-			}],
-			"impact_type_list": ["Availability"],
-			"parameters": {
-				"": {
-					"string_value": "hercules_1"
-				},
-				"arithmos_id": {
-					"string_value": "1023dcdb-1d3a-46a0-b9e2-507ad96759a5"
-				},
-				"service_names": {
-					"string_value": "hercules_1"
-				},
-				"nos_version": {
-					"string_value": "5.11"
-				},
-				"ncc_version": {
-					"string_value": "3.7.1-934dafd6"
-				},
-				"cluster_uuid": {
-					"string_value": "1023dcdb-1d3a-46a0-b9e2-507ad96759a5"
-				}
-			},
-			"type": "A400101",
-			"latest_occurrence_time": "2019-05-08T16:35:46Z"
-		}
-	},
-	"spec": {},
-	"api_version": "3.1",
-	"metadata": {
-		"kind": "alert",
-		"spec_version": 0,
-		"uuid": "ee8d3fd8-9b23-446e-a7df-e7f4b750bbfc",
-		"categories": {}
+	"resources": {
+		"severity": "critical",
+		"title": "SQL server query average latency high",
+		"default_message": "SQL server query average latency high",
+		"indicator_list": [{
+			"entity_id":"71227951-3639-40f7-9fa7-38073cf927a3",
+				"entity_type":"vm",
+				"metric_display_name":"Avg Query Latency",
+				"metric_name":"query_io_latency",
+				"trigger_time": XXXXXXXX,
+				"comparison_operator":"kEqualTo"
+					}],
+		"is_user_defined": true,
+		"severity_trail_list": [{
+			"severity_change_time": "2019-04-11T11:15:53Z",
+			"severity": "critical"
+		}],
+		"impact_type_list": ["Performance"],
+		"type": "1023dcdb-1d3a-46a0-b9e2-507ad96759a5"
 	}
 }

@@ -27,7 +27,7 @@ class DefaultPage extends Component {
   renderModalHeader() {
     return (
       <div className="modal-title-container">
-      <Title size="h3">Prism Pro Lab</Title>
+        <Title size="h3">Prism Pro Lab</Title>
       </div>
     );
   }
@@ -40,7 +40,7 @@ class DefaultPage extends Component {
         <Title size="h3">Provide Your Prism Central Login Information</Title>
         <InputPlusLabel
           error={ pcIp && !isValidPcIp }
-          onChange={e => this.setState({ pcIp : e.target.value }) }
+          onChange={ e => this.setState({ pcIp : e.target.value }) }
           id="pcIP"
           value={ pcIp }
           label="Prism Central IP Address"
@@ -48,14 +48,14 @@ class DefaultPage extends Component {
           helpText={ pcIp && !isValidPcIp ? 'Enter a Valid IP Address' : '' }
         />
         <InputPlusLabel
-          onChange={e => this.setState({ username : e.target.value }) }
+          onChange={ e => this.setState({ username : e.target.value }) }
           id="username"
           value={ username }
           label="Prism Central Username"
           placeholder="Enter your Prism Central Username"
         />
         <InputPlusLabel
-          onChange={e => this.setState({ password : e.target.value }) }
+          onChange={ e => this.setState({ password : e.target.value }) }
           id="password"
           value={ password }
           label="Prism Central Password"
@@ -69,9 +69,10 @@ class DefaultPage extends Component {
   login() {
     const { pcIp, username, password } = this.state;
     // initiate script
-    this.setState({ loading: true });
+    this.setState({ loading: true,
+      loginFailed: false });
     basicFetch({
-      url: `login/`,
+      url: 'login/',
       method: 'POST',
       data: JSON.stringify({
         pc_ip: pcIp,
@@ -84,6 +85,11 @@ class DefaultPage extends Component {
         window.location.reload();
       }), 3000);
     }).catch(e => {
+      if (e && e.response && e.response.data && e.response.data.message === 'LOGIN_FAILED') {
+        this.setState({ loginFailed: true,
+          loading: false });
+        return;
+      }
       // Since the server is forced to restart when this action is performed - we will lose our connection,
       // so this API query will never be successful.
       // Reload to make it past the login page...
@@ -91,12 +97,11 @@ class DefaultPage extends Component {
         window.location.reload();
       }), 3000);
     });
-    return;
   }
 
   getFooter() {
     const { pcIp, username, password } = this.state;
-    let enabled = isValidIP(pcIp) && username && password;
+    const enabled = isValidIP(pcIp) && username && password;
     return (
       <div>
         <Button disabled={ !enabled } type="primary" onClick={ () => this.login() }>Login</Button>
@@ -105,7 +110,15 @@ class DefaultPage extends Component {
   }
 
   renderAlerts() {
-    if (this.state.error) {
+    if (this.state.loginFailed) {
+      return (
+        <Alert
+          type={ Alert.TYPE.ERROR }
+          message={ getErrorMessage(this.state.error) ||
+            'Login Failed, make sure you are using the correct credentials.' }
+        />
+      );
+    } else if (this.state.error) {
       return (
         <Alert
           type={ Alert.TYPE.ERROR }
@@ -143,6 +156,7 @@ class DefaultPage extends Component {
       </Modal>
     );
   }
+
 }
 
 export default DefaultPage;

@@ -9,16 +9,16 @@ import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-// Utils
-import {
-  basicFetch
-} from '../utils/FetchUtils';
-
 // Components
 import {
   Select,
   Loader
 } from 'prism-reactjs';
+
+// Utils
+import {
+  basicFetch
+} from '../utils/FetchUtils';
 
 // From the docs
 // Note that a "search.decode.values" property can be used to have the
@@ -39,6 +39,16 @@ const reservedCharMap = {
   // DO NOT add '*' here. Why?
   // Because if the user types in gold*vm, then then it will
   // search for the embedded wildcard
+};
+
+/**
+ * Escape FIQL characters found within a string
+ * @private
+ * @param {String} ch - the character to escape
+ * @returns {String} the escaped character
+ */
+const _escapeCharForFIQL = (ch) => {
+  return reservedCharMap[ch] || ch;
 };
 
 /**
@@ -65,17 +75,7 @@ const caseInsensitiveRegex = (str) => {
     }
   }
   return ret;
-}
-
-/**
- * Escape FIQL characters found within a string
- * @private
- * @param {String} ch - the character to escape
- * @returns {String} the escaped character
- */
-const _escapeCharForFIQL = (ch) => {
-  return reservedCharMap[ch] || ch;
-}
+};
 
 /**
  * Extracts Data from a Group Member Item returned from the groups API.
@@ -97,7 +97,7 @@ const extractGroupsData = (item) => {
     }
   });
   return data;
-}
+};
 
 
 export default class EntitySearch extends React.Component {
@@ -144,6 +144,7 @@ export default class EntitySearch extends React.Component {
      * Optional string to display when content is not found.
      */
     notFoundContent: PropTypes.string,
+    onError: PropTypes.func,
     /**
      * An optional data test attribute for testing to wrap this component.
      */
@@ -251,43 +252,50 @@ export default class EntitySearch extends React.Component {
   fetchResults(query) {
     const { nameAttr, entityType } = this.props;
     const nameAttribute = nameAttr || 'vm_name';
-    let filter = query ? `${ nameAttribute }==.*${caseInsensitiveRegex(query)}.*` : '';
+    const filter = query ? `${nameAttribute}==.*${caseInsensitiveRegex(query)}.*` : '';
     return basicFetch({
-      url: `/api/nutanix/v3/groups`,
+      url: '/api/nutanix/v3/groups',
       method: 'POST',
       data: JSON.stringify({
-        "entity_type": entityType,
-        "query_name": "Groups search",
-        "grouping_attribute": " ",
-        "group_count": 1,
-        "group_offset": 0,
-        "group_attributes": [],
-        "group_member_count": 100,
-        "group_member_offset": 0,
-        "group_member_sort_attribute": nameAttribute,
-        "group_member_sort_order": "ASCENDING",
-        "group_member_attributes": [
+        entity_type: entityType,
+        query_name: 'Groups search',
+        grouping_attribute: ' ',
+        group_count: 1,
+        group_offset: 0,
+        group_attributes: [],
+        group_member_count: 100,
+        group_member_offset: 0,
+        group_member_sort_attribute: nameAttribute,
+        group_member_sort_order: 'ASCENDING',
+        group_member_attributes: [
           {
-            "attribute": nameAttribute
+            attribute: nameAttribute
           },
           {
-            "attribute": "ip_addresses"
+            attribute: 'ip_addresses'
           }
         ],
-        "filter_criteria": filter
+        filter_criteria: filter
       })
     }).then(resp => {
       if (resp && resp.data && resp.data.error) {
-        this.props.onError({
-          message: resp.data.error
-        });
+        if (this.props.onError) {
+          this.props.onError({
+            message: resp.data.error
+          });
+        }
       } else if (!resp || !resp.data) {
-        this.props.onError({ message: 'There was an error making the request' });
+        if (this.props.onError) {
+          this.props.onError({ message: 'There was an error making the request' });
+        }
       }
       return Promise.resolve(resp);
     }).catch(e => {
-      console.log(e)
-      this.props.onError(errorMsg);
+      // eslint-disable-next-line no-console
+      console.log(e);
+      if (this.props.onError) {
+        this.props.onError({ message: 'There was an error making the request' });
+      }
     });
   }
 
@@ -320,7 +328,7 @@ export default class EntitySearch extends React.Component {
 
   render() {
     const { results } = this.state;
-    const { entityType, disableSearchOnFocus, onSelect, placeholder, notFoundContent, ...props } = this.props;
+    const { disableSearchOnFocus, onSelect, placeholder, notFoundContent, ...props } = this.props;
     // Get the current selections and default values to pass to the select.
     const selections = this.getSelections();
     const options = results || [];

@@ -12,170 +12,96 @@
 .. _xplay:
 
 ------------------------
-Prism Pro
+Prism Pro MSSQL with Blue Medora
 ------------------------
-
-*The estimated time to complete this lab is 60 minutes.*
-
-Overview
-++++++++
-
-Prism Pro is a product designed to make our customer IT operations smart and automated. Today, there is no solution that is specifically designed for data center IT operations built around HCI. The infrastructure in this type of data center is dynamic, scalable, and highly performed. Traditional performance monitoring and IT OPS tools are built for static infrastructure. When IT admins use the traditional tools to manage HCI environments, they are overwhelmed by the complexity and noisy signals the tool brings. This decreases the productivity of the operations and reduces the ROI from adopting HCI.
-
-Prism Pro takes a unique approach that maximizes the operation efficiency of an HCI based data center. First, Prism Pro uses purpose-built machine learning (X-FIT) to extract the insights from the mass amount of operations data the HCI produces. The first three use cases Prism Pro shipped are capacity forecast and planning, VM right sizing, and anomaly detection. These use cases help our customers detect problems and waste with the actionable signal. Second, Prism Pro delivers an automation mechanism (X-Play) that enables customers to automate their operations tasks confidently to respond to the signal X-FIT detects.
-
-X-Play is designed to address the number 1 pain point when customers deal with automation - the fear of amplified impact because of the complexity of the automation. Not like the solution, such as Calm, for the application lifecycle automation, X-Play’s goal is to automate the simple tasks that admins face daily. To eliminate the fear and give the control back to the admin, X-Play takes the codeless approach which has been proven in the companies such as IFTTT and Zapier that it is easy to adopt and extremely versatile.
-
-There are no other tools in the market taking this approach and has the power to combine intelligence and codeless automation. The power of X-FIT and X-Play allows the customer to truly leverage the machine data the HCI infrastructure produces and operate it efficiently, confidently, and intelligently.
-
 
 Lab Setup
 +++++++++
 
-This lab requires a VM to be provisioned and powered on for the X-Play portion.
+Please be sure to complete the `Deploying MS SQL` lab as you will need to use the MSSQL server to complete this lab.
 
-Applications provisioned as part of the  :ref:`linux_tools_vm` will be used to accomplish this.
+#. Open your Prism Central and navigate to the VMs page. Note down the IP Address of the `GTSPrismOpsLabUtilityServer`.
 
-#. Please follow the instructions to deploy the :ref:`linux_tools_vm` and power it on before moving on with this lab.
+   .. figure:: images/init1.png
 
+#. Open a new tab in the browser, and navigate to `http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/databases` [ex. http://1.1.1.1/databases]. It is possible you may need to log into the VM if you are the first one to use it. Just fill out the PC IP, username and password and click login.
 
-#. Right click the following URL to open a new tab and navigate to the webpage at http://10.42.247.70 and enter the details in the Setup portion of the form. Then click 'Begin Setup' once you have filled in all the fields. This will get your environment ready for this lab. **Keep this tab open during entire Prism Pro lab to return to as directed in later portions.**
+   .. figure:: images/init2.png
 
-   .. figure:: images/ppro_08.png
+#. Now fill in the details, including your initials, email and select the VM you created in the `Deploying MS SQL` and click begin to begin the Blue Medora lab.
 
-#. Once step 1 completes, launch the PrismProServer by clicking the provided link. This should load the Prism Central UI. Use this version of the UI to go through the lab. If the link does not work on the first try, it is possible the PrismProServer might still be starting. Wait a few seconds and refresh the page.
+   .. figure:: images/initbm.png
 
-   .. figure:: images/ppro_08b.png
+#. Now navigate to `http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/` to complete the lab from. Use the UI at this URL to complete the lab.
 
+   .. figure:: images/init3.png
 
-BM Setup...
+Overview
+++++++++
+
+.. figure:: images/operationstriangle.png
+
+The above graphic is what we like to refer to as the Operations Triangle, which shows the typical operations flow in any environment, a continuous cycle of monitoring, analyzing and then taking action where necessary. With Prism Pro the customer is able to leverage insights from machine data to automate this typical flow.
+
+Monitoring MSSQL with Blue Medora
 +++++++++++++++++++++++++++++++
 
-Anomaly Detection ??
-+++++++++++++++++++++++++++++++
+We have partnered with Blue Medora to collect metrics and data that Blue Medora monitors and surface it in Prism Central.
 
-In this lab story you will take a look at VMs with an anomaly. An anomaly is a deviation from the normal learned behavior of a VM. The X-FIT alogrithms learn the normal behavior of VMs and represent that as a baseline range on the different charts for each VM.
+#. Navigate to the Alerts page by clicking the bell icon in the top of the navigation bar. Notice you have an alert claiming SQL server query average latency high. Click on the alert to take a closer look.
 
-#. Now let's take a take a look at a VM by searching for ‘bootcamp_good’ and selecting ‘bootcamp_good_1’.
+   .. figure:: images/bm1.png
 
-   .. figure:: images/ppro_61.png
+#. From the alert details we can see that the query latency shot up recently and is now much higher than it had been previously. Click on the View Details link so we can investigate a bit further.
 
-#. Go to Metrics > CPU Usage. Notice a dark blue line, and a lighter blue area around it. The dark blue line is the CPU Usage. The light blue area is the expected CPU Usage range for this VM. This range is calculated using Prism Pro’s X-FIT machine learning engine. This particular VM is running an application that is upgraded at the same time each day, which explains the usage pattern. Notice that X-FIT detects the seasonality in this usage pattern and has adjusted the expected range accordingly. In this case, an anomaly has been raised for this VM, because the Usage is far above the expected range. You can also reduce the time range “Last 24 hours” to examine the chart more closely.
+   .. figure:: images/bm2.png
 
-   .. figure:: images/ppro_60.png
+#. In this view you can see the metrics that we are collecting from Blue Medora. From this view we can see that while number of queries and connections have remained constant, the CPU usage and query latency have shot up and anomalous data points have been identified. To investigate further click the Queries menu item in the left side of the view.
 
-#. Click **“Alert Setting”** to set an alert policy for this kind of situation.
+   .. figure:: images/bm3.png
 
-#. In the right hand side, you can change some of the configurations however you would like. In this example I have changed the Behavioral Anomaly threshold to ignore anomalies between 10% and 70%. All other anomalies will generate a Warning alert. I have also adjusted the Static threshold to Alert Critical if the CPU Usage on this VM exceeds 95%.
+#. From this view, we can see that a new query type has been flagged and it appears that this query is taking much longer to execute (208 seconds). Now that we have identified the cause of the issue, lets use X-Play to remediate the situation. The MSSQL server needs it's memory increased to handle the memory consumption of the new query. We will run a Manual playbook to increase the MSSQL instance memory.
 
-   .. figure:: images/ppro_25.png
+   .. figure:: images/bm4.png
 
-#. Hit **Cancel** to exit the policy creation workflow.
+#. From the More menu at the top of the screen, open the dropdown and select the Run Playbook option.
 
+   .. figure:: images/bm5.png
 
-Increase Constrained VM Memory with X-Play
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#. Select the Playbook with your initials in it and click 'Run'. This will execute a powershell script to increase the MSSQL instance memory, and it will also send you an email notifying you of the update.
 
-In this lab story we will now use X-Play to create a Playbook to automatically add memory to the lab VM that was created earlier, when a memory constraint is detected.
+   .. figure:: images/bm6.png
 
-#. Use the search bar to navigate to the **Playbooks** page.
+#. Navigate to the Playbooks view using the search bar.
 
-   .. figure:: images/ppro_26.png
+   .. figure:: images/bm7.png
 
-#. We will start by creating a Playbook. Click **Create Playbook** at the top of the table view
+#. Open the playbook with your initials in it.
 
-   .. figure:: images/ppro_27.png
+   .. figure:: images/bm9.png
 
-#. Select Alert as a trigger
+#. From this popup, click the Plays tab. You can see that the playbook did run successfully. If you want you can click on the Play to take a deeper look into the details. Now lets see how we can automate this workflow. In the upper right corner of the popup, click the Update button.
 
-   .. figure:: images/ppro_28.png
+   .. figure:: images/bm10.png
 
-#. Search and select **VM {vm_name} Memory Constrained** as the alert policy, since this is the issue we are looking to take automated steps to remediate.
+#. Click the change trigger link, so we can go ahead and swap out the manual trigger with an alert trigger.
 
-   .. figure:: images/ppro_29.png
+   .. figure:: images/bm11.png
 
-#. Select the *Specify VMs* radio button and choose the VM you created for the lab. This will make it so only alerts raised on your VM will trigger this Playbook.
+#. Select the alert trigger tile.
 
-   .. figure:: images/ppro_29b.png
+   .. figure:: images/bm12.png
 
-#. We will first need to snapshot the VM. Click **Add Action** on the left side and select the **VM Snapshot** action.
+#. Search for `SQL Server Avg Query Latency high`. We will use this alert policy as the triggering criteria for the alert trigger.
+   .. figure:: images/bm13.png
 
-   .. figure:: images/ppro_30.png
+#. Go ahead and save the update, and be sure to click enable. Now if an alert is ever generated for SQL Server Avg Query Latency high, this playbook will automatically execute.
 
-#. The Target VM is auto filled with the source entity from the Alert trigger. To finish filling the details for this action, enter a value, such as **1**, in the Time to Live field.
+   .. figure:: images/bm14.png
 
-   .. figure:: images/ppro_32.png
-
-#. Next we would like to remediate the constrained memory by adding more memory to the VM. Click **Add Action** to add the **VM Add Memory** action
-
-   .. figure:: images/ppro_33.png
-
-#. Set the empty fields according to the screen below.
-
-   .. figure:: images/ppro_34.png
-
-
-#. Next we would like to notify someone that an automated action was taken. Click **Add Action** to add the email action
-
-   .. figure:: images/ppro_35.png
-
-#. Fill in the field in the email action. Here are the examples
-
-**Recipient:** Fill in your email address.
-
-**Subject :**
-``Playbook {{playbook.playbook_name}} addressed alert {{trigger[0].alert_entity_info.name}}``
-
-**Message:**
-``Prism Pro X-FIT detected  {{trigger[0].alert_entity_info.name}} in {{trigger[0].source_entity_info.name}}.  Prism Pro X-Play has run the playbook of "{{playbook.playbook_name}}". As a result, Prism Pro increased 1GB memory in {{trigger[0].source_entity_info.name}}.``
-
-You are welcome to compose your own subject message. The above is just an example. You could use the “parameters” to enrich the message.
-
-   .. figure:: images/ppro_36.png
-
-#. Click **Add Action** to add the **Resolve Alert** action.
-
-   .. figure:: images/ppro_37.png
-
-#. Click **Save & Close** button and save it with a name “*Initials* - Auto Increase Constrained VM Memory”. **Be sure to enable the ‘Enabled’ toggle.**
-
-   .. figure:: images/ppro_39.png
-
-#. You should see a new playbook in the “Playbooks” list page.
-
-   .. figure:: images/ppro_40.png
-
-#. Search for your VM and record the current memory capacity. You can scroll down in the properties widget to see the configured memory.
-
-   .. figure:: images/ppro_41.png
-
-#. **Switch tabs back to** the http://10.42.247.70 page and press Continue from the Story 1-3 Step, if you have not already.
-
-   .. figure:: images/ppro_08b.png
-
-#. Now we will simulate an alert for ‘VM Memory Constrained’ which will trigger the Playbook we just created. Select your VM from the dropdown and click the ‘Simulate Alert’ button to create the alert.
-
-   .. figure:: images/ppro_64.png
-
-#. Go back to Prism page and check your VMs page again, you should now see the memory capacity is increased by 1GB. If the memory does not show updated you can refresh the browser page to speedup the process.
-
-#. You should also receive an email. Check the email to see that its subject and email body have filled the real value for the parameters you set up.
-
-#. Go to the **Playbook** page, click the playbook you just created.
-
-   .. figure:: images/ppro_44.png
-
-#. Click the **Plays** tab, you should see that a play has just completed.
-
-   .. figure:: images/ppro_45.png
-
-#. Click the “Play” to examine the details
-
-   .. figure:: images/ppro_46.png
 
 Takeaways
 .........
-
 - Prism Pro is our solution to make IT OPS smarter and automated. It covers the IT OPS process ranging from intelligent detection to automated remediation.
 - X-FIT is our machine learning engine to support smart IT OPS, including forecast, anomaly detection, and inefficiency detection.
 - X-Play, the IFTTT for the enterprise, is our engine to enable the automation of daily operations tasks.

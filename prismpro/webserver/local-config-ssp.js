@@ -18,7 +18,7 @@ var env = {
     // Listener port #
     listenerPort: 80,
 
-    proxyHost: 'localhost',
+    proxyHost: '',
 
     // Port to proxy to
     proxyPort: 9440,
@@ -29,6 +29,8 @@ var env = {
     autoLogin: true,
 
     simulatePrismPro: true,
+
+    simulateBlueMedora: true,
 
     webserver: true,
 

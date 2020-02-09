@@ -7,7 +7,8 @@ import App from './App.jsx';
  */
 function handleNewHash() {
   const path = window.location.pathname;
-  ReactDOM.render(<App path={ path }/>, document.getElementById('root'));
+  // eslint-disable-next-line react/jsx-filename-extension
+  ReactDOM.render(<App path={ path } />, document.getElementById('root'));
 }
 
 // Handle the initial route and browser navigation events

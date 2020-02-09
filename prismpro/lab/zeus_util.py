@@ -39,7 +39,7 @@ rackable_unit_list {
 node_list {
   service_vm_id: 5
   node_status: kNormal
-  service_vm_external_ip: ""
+  service_vm_external_ip: "10.1.1.2"
   cassandra_token_id: "FV000000oxDzDNIwiRf60E7wT0NJJxWgpdDH7DFjxZ9q2Lqx5sdXYyAnhTaq"
   zookeeper_myid: 2
   uuid: "825a0ffc-0dfa-499c-b49e-143102a4bc31"
@@ -62,7 +62,7 @@ node_list {
 node_list {
   service_vm_id: 6
   node_status: kNormal
-  service_vm_external_ip: ""
+  service_vm_external_ip: "10.1.1.3"
   cassandra_token_id: "FV000000oxDzDNIwiRf60E7wT0NJJxWgpdDH7DFjxZ9q2Lqx5sdXYyAnhTaq"
   zookeeper_myid: 2
   uuid: "825a0ffc-0dfa-499c-b49e-143102a4bc32"
@@ -85,7 +85,7 @@ node_list {
 node_list {
   service_vm_id: 7
   node_status: kNormal
-  service_vm_external_ip: ""
+  service_vm_external_ip: "10.1.1.4"
   cassandra_token_id: "FV000000oxDzDNIwiRf60E7wT0NJJxWgpdDH7DFjxZ9q2Lqx5sdXYyAnhTaq"
   zookeeper_myid: 2
   uuid: "825a0ffc-0dfa-499c-b49e-143102a4bc33"
@@ -108,7 +108,7 @@ node_list {
 node_list {
   service_vm_id: 8
   node_status: kNormal
-  service_vm_external_ip: ""
+  service_vm_external_ip: "10.1.1.5"
   cassandra_token_id: "FV000000oxDzDNIwiRf60E7wT0NJJxWgpdDH7DFjxZ9q2Lqx5sdXYyAnhTaq"
   zookeeper_myid: 2
   uuid: "825a0ffc-0dfa-499c-b49e-143102a4bc34"

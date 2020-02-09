@@ -32,7 +32,7 @@ class DefaultPage extends Component {
   renderModalHeader() {
     return (
       <div className="modal-title-container">
-      <Title size="h3">Prism Pro Lab</Title>
+        <Title size="h3">Prism Pro Lab</Title>
       </div>
     );
   }
@@ -58,7 +58,7 @@ class DefaultPage extends Component {
           <EntitySearch
             onEntitiesChange={ selected => this.setState({ entity : selected }) }
             selectedEntities={ entity }
-            placeholder='Type to search for your VM'
+            placeholder="Type to search for your VM"
             entityType="vm"
             nameAttr="vm_name"
             onError={ this.onEntitySearchErr }
@@ -74,7 +74,9 @@ class DefaultPage extends Component {
       <StackingLayout padding="20px">
         <StackingLayout itemSpacing="10px">
           <Title size="h3">Simulate an Alert</Title>
-          <div><TextLabel type={TextLabel.TEXT_LABEL_TYPE.SECONDARY}>Select the type of alert to begin.</TextLabel></div>
+          <div><TextLabel type={ TextLabel.TEXT_LABEL_TYPE.SECONDARY }>
+            Select the type of alert to begin.
+          </TextLabel></div>
         </StackingLayout>
         <StackingLayout itemSpacing="20px">
           <Title size="h4">Select the type of alert to simulate</Title>
@@ -94,7 +96,7 @@ class DefaultPage extends Component {
             />
             <Radio
               value="A120094"
-              title="Cluster Memory Low"
+              title="Memory Runway is Short"
             />
           </RadioGroup>
         </StackingLayout>
@@ -128,7 +130,8 @@ class DefaultPage extends Component {
         });
       }
     }).catch(e => {
-      console.log(e)
+      // eslint-disable-next-line no-console
+      console.log(e);
       this.setState({
         error: e,
         loading: false
@@ -205,6 +208,7 @@ class DefaultPage extends Component {
       </Modal>
     );
   }
+
 }
 
 export default DefaultPage;

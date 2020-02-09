@@ -2,3 +2,4 @@ node_modules
 my_local_config.js
 package-lock.json
 build
+ntnx_cloud

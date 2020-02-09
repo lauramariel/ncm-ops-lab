@@ -4,7 +4,11 @@
 // Common app utility functions
 //
 
-
+/**
+ * Checks if an IP addr is valid
+ * @param {String} ipAddress - ip addr
+ * @returns {Bool} true if the address is valid
+ */
 export function isValidIP(ipAddress) {
   if (!ipAddress) {
     return false;
