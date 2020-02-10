@@ -57,6 +57,10 @@ class TicketPage extends Component {
       {
         title: 'VM ID',
         key: 'vm_id'
+      },
+      {
+        title: 'URL',
+        key: 'url'
       }
     ];
 
