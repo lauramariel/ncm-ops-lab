@@ -1,7 +1,7 @@
 // We are using node's native package 'path'
 // https://nodejs.org/api/path.html
 const path = require('path');
-const config = require('./webpack.common.js.js');
+const config = require('./webpack.common.js');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -10,9 +10,9 @@ const devServerConfig = Object.assign({}, config, {
   devServer: {
     https: false,
     proxy: {
-      // "/": "http://localhost:80"
+      "/": "http://localhost:80"
       // "/": "http://10.45.32.162:8080"
-      "/": "http://localhost:8080"
+      //"/": "http://localhost:8080"
     },
     port: 3005
   },

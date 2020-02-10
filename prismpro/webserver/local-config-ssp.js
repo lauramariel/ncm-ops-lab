@@ -18,7 +18,7 @@ var env = {
     // Listener port #
     listenerPort: 80,
 
-    proxyHost: '',
+    proxyHost: 'localhost',
 
     // Port to proxy to
     proxyPort: 9440,

@@ -318,6 +318,7 @@ app.get('/', function(req, resp) {
     resp.redirect('/console/');
   }
 });
+
 var walkmeScript = '<script>!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t,e){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="https://cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);analytics._loadOptions=e};analytics.SNIPPET_VERSION="4.1.0";analytics.load("SQBKbPgLzflz5eUSkuu0ePSAwKYmiKZ1");analytics.page();}}();</script>'
 var localStorageScript = '<script>if (localStorage) { localStorage.setItem("nutanix_show_search_tutorial", false); localStorage.setItem("FirstTimeExpAutoShown", true) }</script>'
 
@@ -372,8 +373,24 @@ app.get('/alerts', function (req, res){
   res.sendfile('public/index.html');
 });
 
+app.get('/alerts/', function (req, res){
+  resp.redirect('/alerts');
+});
+
 app.get('/ticketsystem', function (req, res) {
   res.sendfile('public/index.html');
+});
+
+app.get('/createplaybook', function (req, res) {
+  res.sendfile('public/index.html');
+});
+
+app.get('/createplaybook/', function (req, res) {
+  resp.redirect('/createplaybook');
+});
+
+app.get('/ticketsystem/', function (req, res) {
+  resp.redirect('/ticketsystem');
 });
 
 app.get(/\/public\/(.*)/, function (req, res) {
@@ -395,6 +412,7 @@ app.get('/error', function (req, res){
 });
 
 app.get('/login/', (req, res) => {
+  console.log("in login get",PC_IP ,"ip", PC_UI_PASS, PC_UI_USER)
   if (!PC_IP || !PC_UI_PASS || !PC_UI_USER) {
     res.status(500).send({
       message: 'AUTHENTICATION_REQUIRED'
@@ -501,7 +519,8 @@ app.post('/generate_ticket/', (req, res) => {
       alert_name: req.body.alert_name,
       alert_id: req.body.alert_id,
       vm_name: req.body.vm_name,
-      vm_id: req.body.vm_id
+      vm_id: req.body.vm_id,
+      url: req.body.url
     }
   try {
     fs.readFile('./ticket-raised.json', 'utf-8', (err, data) => {
@@ -544,6 +563,16 @@ app.put('/updateticket/', (req, res) =>{
 
   }
 });
+
+
+app.post('/create_playbook/', (req, res) => {  
+  const playbook_name = req.body.playbook_name
+  
+  
+
+  res.send(req.body)
+});
+
 
 // Webserver Client (End)
 //----------------------
