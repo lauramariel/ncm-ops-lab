@@ -18,7 +18,7 @@ Prism Pro VM Right Sizing
 Lab Setup
 +++++++++
 
-PREQUISITE - Depending on which track this is in (once we are ready to copy this file over for EUC track) This should list that either a Linux Tools VM must be created, or for EUC - BUILDING & OPTIMIZING THE GOLD IMAGE lab should be completed first and that VM created will be used here.
+Please be sure to complete the `Building & Optimizing the Gold Image` lab as you will need to use the VM created there to complete this lab.
 
 #. Open your Prism Central and navigate to the VMs page. Note down the IP Address of the `GTSPrismOpsLabUtilityServer`.
 
@@ -91,7 +91,7 @@ Increase Constrained VM Memory with X-Play
 
 Now let's look at how we can take automated action to resolve some of these inefficiencies. For this lab we will assume that this VM is constrained for memory and will show how we can automatically remediate the right sizing of this VM.
 
-#. Navigate to your VM for this lab. The examples will use a VM called ABC - VM.
+#. Navigate to your VM for this lab. The examples will use a VM called ABC - VM, you should plan to use your Initials-GoldImage VM.
 
    .. figure:: images/rs1.png
 
