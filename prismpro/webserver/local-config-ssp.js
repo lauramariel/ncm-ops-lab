@@ -25,7 +25,7 @@ var env = {
 
     proxyProtocol: 'https',
 
-    isHttps: true,
+    isHttps: false,
 
     // Automatically login
     autoLogin: true,
@@ -33,8 +33,6 @@ var env = {
     simulatePrismPro: true,
 
     simulateBlueMedora: true,
-
-    webserver: true,
 
     // User/Pass for auto login
     userName: 'admin',

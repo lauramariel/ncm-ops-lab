@@ -13,6 +13,7 @@ var request = require('request'),
     express = require('express'),
     bodyParser = require('body-parser'),
     http = require('http'),
+    https = require('https'),
     path = require('path'),
     cookieParser = require('cookie-parser'),
     exec = require('child_process').exec,
@@ -24,6 +25,7 @@ var env = require(path.join(__dirname, 'local-config-ssp')).app;
 
 // Initialize directory variables.
 var sampleData = path.join(__dirname, '/sample_data');
+var config =  path.join(__dirname, '/config');
 
 // Extract these variables for using in necessary scripts.
 var PC_IP = env.proxyHost;
@@ -832,7 +834,17 @@ app.put('/resolve_ticket/', function (req, res) {
 //----------------------
 
 // Kick off the server.
-var server = http.createServer(app);
+var server;
+if (env.isHttps) {
+  const options = {
+    key: fs.readFileSync(config + '/server.key', 'utf8'),
+    cert: fs.readFileSync(config + '/server.crt', 'utf8')
+  }
+  server = https.createServer(options, app);
+} else {
+  server = http.createServer(app);
+}
+
 
 // Websocket for VNC
 function getSecurityCookie(fail, success) {
@@ -873,7 +885,7 @@ var wsProxy = new require('http-proxy').createProxyServer({
     port: env.proxyPort,
     protocol: 'https'
   },
-  secure: false
+  secure: !!env.isHttps
 });
 
 // Set up proxy on websocket protocol upgrade event
@@ -893,7 +905,11 @@ server.on('upgrade', function(req, socket, head) {
       req.headers.cookie = newCookie.join(';');
 
       // Do proxying
-      wsProxy.ws(req, socket, head);
+      if (env.isHttps) {
+        wsProxy.wss(req, socket, head);
+      } else {
+        wsProxy.ws(req, socket, head);
+      }
     });
 });
 
