@@ -25,6 +25,8 @@ var env = {
 
     proxyProtocol: 'https',
 
+    isHttps: true,
+
     // Automatically login
     autoLogin: true,
 

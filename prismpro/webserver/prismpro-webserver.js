@@ -579,7 +579,7 @@ app.get(/console/, function(req, resp) {
     } else {
       proxyFunction(req, resp);
     }
-  } else if (env.simulateBlueMedora) {
+  } else if (env.simulateBlueMedora && req.path.indexOf('console/lib') === -1) {
     resp.redirect('/');
   } else {
     proxyFunction(req, resp);
@@ -806,7 +806,6 @@ app.post('/generate_ticket/', function (req, res) {
 
 app.put('/resolve_ticket/', function (req, res) {
   var vmId = req && req.body && req.body.vm_id;
-  console.log(vmId)
   try {
     fs.readFile('./ticket-raised.json', 'utf-8', function(err, data) {
       var arrayOfObjects = JSON.parse(data);
