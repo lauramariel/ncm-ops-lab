@@ -720,8 +720,9 @@ app.post('/repair/', function(req, res) {
     console.log(stdout);
     console.log(stderr);
     if (error !== null) {
-      console.log('exec error:', error);
-      status = 'FAILED';
+      res.status(500).send({
+        message: 'There was an error'
+      });
     }
     res.send({
       stdout: stdout,
@@ -745,7 +746,8 @@ app.post('/generate_alert/:alert_uid', function(req, res) {
   if (alert_uid === 'A106472') {
     configFileDir = '/home/nutanix/ncc/plugin_config';
   }
-  var query = './generate_alert.sh ' + PC_IP + ' ' + PC_SSH_USER + ' ' + PC_SSH_PASS + ' ' + alert_uid + ' ' + body.entityId + ' "' + body.entityName + '" ' + configFileDir;
+  var query = './generate_alert.sh ' + PC_IP + ' ' + PC_SSH_USER + ' ' + PC_SSH_PASS + ' ' + alert_uid + ' ' + configFileDir + ' ' + body.entityId + ' "' + body.entityName + '"';
+  console.log(query)
   exec(query, {}, function(error, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
