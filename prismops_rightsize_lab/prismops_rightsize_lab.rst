@@ -15,34 +15,37 @@
 Prism Pro VM Right Sizing
 ------------------------
 
+.. figure:: images/operationstriangle.png
+
+The above graphic is what we like to refer to as the Operations Triangle, which shows the typical operations flow in any environment, a continuous cycle of monitoring, analyzing and then taking action where necessary. With Prism Pro, IT Admins are able to leverage insights from machine data to automate this typical flow.
+
+In this lab you will learn how Prism Pro can help IT Admins monitor, analyze and automatically act when a VM's memory resource is constrained.
+
 Lab Setup
 +++++++++
 
 PREQUISITE - Please follow the steps to create the LinuxToolsVM.
 
-#. Open your Prism Central and navigate to the VMs page. Note down the IP Address of the `GTSPrismOpsLabUtilityServer`.
+#. Open your **Prism Central** and navigate to the **VMs** page. Note down the IP Address of the **GTSPrismOpsLabUtilityServer**. You will need to access this IP Address throughout this lab.
 
    .. figure:: images/init1.png
 
-#. Open a new tab in the browser, and navigate to `http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/alerts` [ex. http://1.1.1.1/alerts]. It is possible you may need to log into the VM if you are the first one to use it. Just fill out the PC IP, username and password and click login. Leave this tab open, it will be used in a later portion of this lab.
+#. Open a new tab in the browser, and navigate to http://`<GTSPrismOpsLabUtilityServer_IP_ADDRESS>`/alerts [example http://10.42.113.52/alerts]. It is possible you may need to log into the VM if you are the first one to use it. Just fill out the **Prism Central IP**, **Username** and **Password** and click **Login**.
 
    .. figure:: images/init2.png
 
-#. In a separate tab, navigate to `http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/` to complete the lab from. Use the UI at this URL to complete the lab.
+#. Once you have landed on the alerts page, leave the tab open. It will be used in a later portion of this lab.
+
+   .. figure:: images/init2b.png
+
+#. In a separate tab, navigate to http://`<GTSPrismOpsLabUtilityServer_IP_ADDRESS>`/ to complete the lab from [example http://10.42.113.52/]. Use the UI at this URL to complete the lab.
 
    .. figure:: images/init3.png
 
-Overview
-++++++++
-
-.. figure:: images/operationstriangle.png
-
-The above graphic is what we like to refer to as the Operations Triangle, which shows the typical operations flow in any environment, a continuous cycle of monitoring, analyzing and then taking action where necessary. With Prism Pro the customer is able to leverage insights from machine data to automate this typical flow.
-
-Monitoring and Analysis with Prism Pro X-FIT
+Inefficiency Detection with Prism Pro X-FIT
 +++++++++++++++++++++++++++
 
-Prism Pro uses X-Fit machine learning to detect and monitor the behaviors of VMs running within the managed clusters.
+Prism Pro uses X-FIT machine learning to detect and monitor the behaviors of VMs running within the managed clusters.
 
 Using machine learning, Prism Pro then analyzes the data and applies a classification to VMs that are learned to be inefficient. The following are short descriptions of the different classifications:
 
@@ -86,47 +89,52 @@ Using this machine learning data, Prism Pro is also able to generate baselines, 
 
 #. Hit **Cancel** to exit the policy creation workflow.
 
-Increase Constrained VM Memory with X-Play
+Automatically Increase Constrained VM Memory with X-Play
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Now let's look at how we can take automated action to resolve some of these inefficiencies. For this lab we will assume that this VM is constrained for memory and will show how we can automatically remediate the right sizing of this VM.
+Now let's look at how we can take automated action to resolve some of these inefficiencies. For this lab we will assume that this VM is constrained for memory and will show how we can automatically remediate the right sizing of this VM. We will also use a custom Ticket system to give an idea of how this typical workflow could integrate with ticketing system such as Service Now.
 
-#. Navigate to your VM for this lab. The examples will use a VM called ABC - VM, you should plan to use your Initials-LinuxToolsVM VM.
+#. Navigate to your **`Initials`-LinuxToolsVM**. The examples will use a VM called **ABC - VM**.
 
    .. figure:: images/rs1.png
 
-#. Note the current Memory Capacity of the VM, as we will later increase it with X-Play.
+#. Note the current **Memory Capacity** of the VM, as we will later increase it with X-Play.
 
    .. figure:: images/rs2.png
 
-#. Navigate to the Action Gallery using the search bar.
+#. Navigate to the **Action Gallery** using the search bar.
 
    .. figure:: images/rs3.png
 
-#. Select the REST API action and choose the Clone action.
+#. Select the **REST API** action and choose the **Clone** operation from the actions menu.
 
    .. figure:: images/rs4.png
 
-#. We will make a reusable Action for Generating a Service Ticket in a small ticket system we have created for this lab.
-Here are the values to fill in to the fields.
+#. We are creating an Action that we can later use in our playbook to Generate a Service Ticket. Fill in the following values replacing your initials in the *Initials* part, and the <GTSPrismOpsLabUtilityServer_IP_ADDRESS> in the URL field.
 
-Name: <Initials> - Generate Service Ticket
-Method: POST
-URL: http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/generate_ticket/
-Request Body: {"vm_name":"{{trigger[0].source_entity_info.name}}","vm_id":"{{trigger[0].source_entity_info.uuid}}","alert_name":"{{trigger[0].alert_entity_info.name}}","alert_id":"{{trigger[0].alert_entity_info.uuid}}"}
-Request Headers: Content-Type:application/json;charset=utf-8
+**Name:** *Initials* - Generate Service Ticket
+
+**Method:** POST
+
+**URL:** http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/generate_ticket/
+
+**Request Body:** ``{"vm_name":"{{trigger[0].source_entity_info.name}}","vm_id":"{{trigger[0].source_entity_info.uuid}}","alert_name":"{{trigger[0].alert_entity_info.name}}","alert_id":"{{trigger[0].alert_entity_info.uuid}}"}``
+
+**Request Header:**
+
+| Content-Type:application/json;charset=utf-8
 
    .. figure:: images/rs5.png
 
-#. Use the search bar to navigate to Playbooks.
+#. Use the search bar to navigate to **Playbooks**.
 
    .. figure:: images/rs6.png
 
-#. Now we will create a Playbook to automate the generation of a Service Ticket. Click **Create Playbook** at the top of the table view.
+#. Now we will create a Playbook to automate the generation of a service ticket. Click **Create Playbook** at the top of the table view.
 
    .. figure:: images/rs7.png
 
-#. Select Alert as a trigger
+#. Select **Alert** as a trigger
 
    .. figure:: images/rs8.png
 
@@ -138,7 +146,7 @@ Request Headers: Content-Type:application/json;charset=utf-8
 
    .. figure:: images/rs10.png
 
-#. First, we would like to Generate a Service Ticket for this alert. Click **Add Action** on the left side and select the **Generate Service Ticket** action you created. Note: For the lab we set up our own ticketing sytem to illustrate the full workflow, but you can see there is also an out of box Service Now action which can achieve the same worfklow, specifically for Service Now.
+#. First, we would like to generate a ticket for this alert. Click **Add Action** on the left side and select the **Generate Service Ticket** action you created. Note: For the lab we set up our own ticketing sytem to illustrate the full workflow, but you can see there is also an out of box Service Now action which can achieve the same worfklow, specifically for Service Now.
 
    .. figure:: images/rs11.png
 
@@ -156,23 +164,21 @@ Request Headers: Content-Type:application/json;charset=utf-8
 **Message:**
 ``The alert {{trigger[0].alert_entity_info.name}} triggered Playbook {{playbook.playbook_name}} and has generated a Service ticket for the VM: {{trigger[0].source_entity_info.name}} which is now pending your approval. A ticket has been generated for you to take action on at http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/ticketsystem``
 
-You are welcome to compose your own subject message, just be sure to include http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/ticketsystem URL so that you can launch to the ticketsystem when you recieve the email. The above is just an example. You could use the “parameters” to enrich the message.
-
    .. figure:: images/rs13.png
 
 #. Click **Save & Close** button and save it with a name “*Initials* - Generate Service Ticket for Constrained VM”. **Be sure to enable the ‘Enabled’ toggle.**
 
    .. figure:: images/rs14.png
 
-#. Now we will create one more Playbook. This one will be what we call when we resolve the service ticket, which should Add Memory to the affected VM and send an email. Click **Create Playbook** at the top of the table view.
+#. Now we will create one more Playbook. This one will be what we call when we resolve the service ticket, which should add memory to the affected VM and send an email. Click **Create Playbook** at the top of the table view.
 
    .. figure:: images/rs15.png
 
-#. Select Manual as the trigger. Note: The ticket system we have constructed for this lab will call the trigger API provided by manual trigger, however this API is not public. In 5.17 we are introducing a Webhook Trigger, which will expose a public API that allows achieving this same behavior. Tools like Service Now, can use this Webhook to call back into Prism Central and trigger a playbook.
+#. Select **Manual** as the trigger. Note: The ticket system we have constructed for this lab will call the trigger API provided by manual trigger, however this API is not public. In 5.17, we are introducing a Webhook Trigger which will expose a public API that allows achieving this same behavior. Tools like Service Now, can use this Webhook to call back into Prism Central and trigger a playbook.
 
    .. figure:: images/rs16.png
 
-#. Select the VM entity type from the dropdown, as this playbook will be applied to VMs.
+#. Select the **VM** entity type from the dropdown, as this playbook will be applied to VMs.
 
    .. figure:: images/rs17.png
 
@@ -184,7 +190,7 @@ You are welcome to compose your own subject message, just be sure to include htt
 
    .. figure:: images/rs19.png
 
-#. Fill in the field in the email action. Here are the examples. Be sure to replace <GTSPrismOpsLabUtilityServer_IP_ADDRESS> in the message with it's IP Address.
+#. Fill in the field in the email action. Here are the examples.
 
 **Recipient:** Fill in your email address.
 
@@ -194,15 +200,21 @@ You are welcome to compose your own subject message, just be sure to include htt
 **Message:**
 ``{{playbook.playbook_name}} has run and has added 1GiB of Memory to the VM {{trigger[0].source_entity_info.name}}.``
 
+You are welcome to compose your own subject message. The above is just an example. You could use the “parameters” to enrich the message.
+
    .. figure:: images/rs20.png
 
-#. Last, we would like to call back to the ticket service to resolve the ticket in the ticket service. Click **Add Action** to add the REST API action.
-You can fill in the following values.
+#. Last, we would like to call back to the ticket service to resolve the ticket in the ticket service. Click **Add Action** to add the REST API action. Fill in the following values replacing the <GTSPrismOpsLabUtilityServer_IP_ADDRESS> in the URL field.
 
-method: "PUT"
-url: ``http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/resolve_ticket``
-Request Body: ``{"vm_id":"{{trigger[0].source_entity_info.uuid}}"}``
-Request Headers: ``Content-Type:application/json;charset=utf-8``
+**Method:** PUT
+
+**URL:** http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/resolve_ticket
+
+**Request Body:** ``{"vm_id":"{{trigger[0].source_entity_info.uuid}}"}``
+
+**Request Header:**
+
+| Content-Type:application/json;charset=utf-8
 
    .. figure:: images/rs21.png
 
@@ -210,15 +222,15 @@ Request Headers: ``Content-Type:application/json;charset=utf-8``
 
    .. figure:: images/rs22.png
 
-#. Now let's trigger the workflow. Navigate to the tab you opened in the setup with the /alerts URL. Select the Radio for `VM Memory Constrained` and input your VM. Click the **Simulate Alert** button. This will simulate a memory constrained alert on your VM.
+#. Now let's trigger the workflow. Navigate to the tab you opened in the setup with the **/alerts** URL [example 10.42.113.52/alerts]. Select the Radio for **VM Memory Constrained** and input your VM. Click the **Simulate Alert** button. This will simulate a memory constrained alert on your VM.
 
    .. figure:: images/rs23.png
 
-#. You should recieve an email to the email address you put down in the first playbook. It may take up to 4 minutes.
+#. You should recieve an email to the email address you put down in the first playbook. It may take up to 5 minutes.
 
    .. figure:: images/rs24.png
 
-#. Inside the email click the link to visit the ticket system. Alternatively you can directly access the ticket system by navigating to `http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/ticketsystem` your browser.
+#. Inside the email click the link to visit the ticket system. Alternatively you can directly access the ticket system by navigating to http://`<GTSPrismOpsLabUtilityServer_IP_ADDRESS>`/ticketsystem from a new tab in your browser.
 
    .. figure:: images/rs25.png
 
@@ -226,11 +238,11 @@ Request Headers: ``Content-Type:application/json;charset=utf-8``
 
    .. figure:: images/rs26.png
 
-#. Choose the 2nd playbook you created (Initials - Resolve Service Ticket), to run for this ticket.
+#. Choose the 2nd playbook you created **`Initials` - Resolve Service Ticket**, to run for this ticket.
 
    .. figure:: images/rs27.png
 
-#. Switch back to the tab with the Prism Central console open, and open up the details for the 'Initials - Resolve Service Ticket' Playbook.
+#. Switch back to the previous tab with the Prism Central console open, and open up the details for the **`Initials` - Resolve Service Ticket** Playbook.
 
    .. figure:: images/rs28.png
 
@@ -254,7 +266,24 @@ Takeaways
 .........
 
 - Prism Pro is our solution to make IT OPS smarter and automated. It covers the IT OPS process ranging from intelligent detection to automated remediation.
-- X-FIT is our machine learning engine to support smart IT OPS, including forecast, anomaly detection, and inefficiency detection.
+
+- X-FIT is our machine learning engine to support smart IT OPS, including anomaly detection, and inefficiency detection.
+
 - X-Play, the IFTTT for the enterprise, is our engine to enable the automation of daily operations tasks.
+
 - X-Play enables admins to confidently automate their daily tasks within minutes.
-- X-Play is extensive that can use customer’s existing APIs and scripts as part of its playbooks.
+
+- X-Play is extensive that can use customer’s existing APIs and scripts as part of its Playbooks, and can integrate nicely with customers existing ticketing workflows.
+
+Getting Connected
++++++++++++++++++
+
+Have a question about **Prism Pro**? Please reach out to the resources below:
+
++---------------------------------------------------------------------------------+
+|  Prism Pro Product Contacts                                                     |
++================================+================================================+
+|  Slack Channel                 |  #prism-pro                                    |
++--------------------------------+------------------------------------------------+
+|  Product Manager               |  Harry Yang, harry.yang@nutanix.com            |
++--------------------------------+------------------------------------------------+
