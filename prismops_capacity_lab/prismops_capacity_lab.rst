@@ -45,7 +45,7 @@ Capacity Planning Runway Monitoring
 
 Capacity runway is a measure of the remaining capacity left within a given cluster or node. There is an overall cluster runway as well as individual runway measurements for CPU, Memory and storage capacity. The Capacity Runway is calculated using X-FIT, Prism Pro's machine intelligence engine. Lets view the Capacity Runway of your lab cluster.
 
-#. In **Prism Central > Planning > Capacity Runway**.
+#. In **Prism Central > Operations > Planning > Capacity Runway**.
 
 - Note the runway summaries showing the days left for each cluster.
 - How long does the current cluster has before it runs out of memory, CPU, and storage?

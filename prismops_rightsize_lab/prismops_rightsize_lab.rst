@@ -150,11 +150,11 @@ Now let's look at how we can take automated action to resolve some of these inef
 
    .. figure:: images/rs11.png
 
-#. Next we would like to notify someone that the ticket was created by X-Play. Click **Add Action** and select the Email action.
+#. Notice the details from the **Generate Service Ticket** Action you created are automatically filled in for you.
 
    .. figure:: images/rs12.png
 
-#. Fill in the field in the email action. Here are the examples. Be sure to replace <GTSPrismOpsLabUtilityServer_IP_ADDRESS> in the message with it's IP Address.
+#. Next we would like to notify someone that the ticket was created by X-Play. Click **Add Action** and select the Email action. Fill in the field in the email action. Here are the examples. Be sure to replace <GTSPrismOpsLabUtilityServer_IP_ADDRESS> in the message with it's IP Address.
 
 **Recipient:** Fill in your email address.
 

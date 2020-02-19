@@ -92,6 +92,7 @@ Once the Blue Medora collectors are deployed and configured to monitor your MS S
    .. figure:: images/bm12.png
 
 #. Search for the **SQL Server Avg Query Latency high** alert policy. We will use this alert policy as the triggering criteria for the alert trigger.
+
    .. figure:: images/bm13.png
 
 #. Go ahead and save the update. Now if an alert is ever generated for **SQL Server Avg Query Latency high**, this playbook will automatically execute.
