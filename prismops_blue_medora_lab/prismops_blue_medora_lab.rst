@@ -104,15 +104,9 @@ Takeaways
 
 - IT operations are complex, error-prone, and siloed. With Prism Pro, IT admins can get visibility into and automate the entire stack, end-to-end.
 
-- The Blue Medora integration extends Prism Pro's capabilities into the application layer. The feature is currently avaiable for a limited early access, and will be released later this year (as part of the 5.18 release). The first release will support database applications like MS SQL server and Oracle DB.
+- The Blue Medora integration extends Prism Pro's capabilities into the application layer. By bringing application performance data into Prism, all of Prism Pro's values like X-FIT based anomaly-detection and X-Play (IFTTT-like) automation naturally extend into the application layer. IT admins can now automate their workflows for not just VMs, but for their applications too!
 
-- X-FIT is our machine learning engine to support smart IT OPS, including forecast, anomaly detection, and inefficiency detection.
-
-- X-Play, the IFTTT for the enterprise, is our engine to enable the automation of daily operations tasks.
-
-- X-Play enables admins to confidently automate their daily tasks within minutes.
-
-- X-Play is extensive that can use customer’s existing APIs and scripts as part of its playbooks.
+- The feature is currently avaiable for a limited early access, and will be released later this year (as part of the 5.18 release). The first release will support database applications like MS SQL server and Oracle DB.
 
 Getting Connected
 +++++++++++++++++
