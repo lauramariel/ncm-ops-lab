@@ -97,7 +97,7 @@ Now let's look at how we can take automated action to resolve some of these inef
 
    .. figure:: images/rs4.png
 
-#. We are creating an Action that we can later use in our playbook to Generate a Service Ticket. Fill in the following values replacing your initials in the *Initials* part, and the <GTSPrismOpsLabUtilityServer_IP_ADDRESS> in the URL field.
+#. We are creating an Action that we can later use in our playbook to Generate a Service Ticket. Fill in the following values replacing your initials in the *Initials* part, and the <GTSPrismOpsLabUtilityServer_IP_ADDRESS> in the URL field. Click **Copy**.
 
 **Name:** *Initials* - Generate Service Ticket
 
