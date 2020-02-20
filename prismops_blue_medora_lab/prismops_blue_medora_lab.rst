@@ -1,30 +1,17 @@
-.. title:: Nutanix .Next Prism Pro HOL
-
-
-.. toctree::
-  :maxdepth: 2
-  :caption: Appendix
-  :name: _appendix
-  :hidden:
-
-  tools_vms/linux_tools_vm
-
-.. _xplay:
-
-------------------------
-Prism Pro MS SQL monitoring with Blue Medora
-------------------------
+-------------------------------
+Monitoring MSSQL with Prism Pro
+-------------------------------
 
 .. figure:: images/operationstriangle.png
 
 The above graphic is what we like to refer to as the Operations Triangle, which shows the typical operations flow in any environment, a continuous cycle of monitoring, analyzing and then taking action where necessary. With Prism Pro, IT Admins are able to leverage insights from machine data to automate this typical flow.
 
-In this lab you will learn how Prism Pro can help IT Admins monitor, analyze and automatically act on database application data from our partner Blue Medora.
+In this lab you will learn how Prism Pro can help IT Admins monitor, analyze and automatically act on data from our partner Blue Medora.
 
 Lab Setup
 +++++++++
 
-Please be sure to complete the `Deploying MS SQL` lab as you will need to use the MS SQL server to complete this lab.
+Please be sure to complete the `Deploying MS SQL` lab as you will need to use the MSSQL server to complete this lab.
 
 #. Open your Prism Central and navigate to the VMs page. Note down the IP Address of the `GTSPrismOpsLabUtilityServer`.
 
@@ -34,7 +21,7 @@ Please be sure to complete the `Deploying MS SQL` lab as you will need to use th
 
    .. figure:: images/init2.png
 
-#. Now fill in the details, including your initials, email and select the VM you created in the `Deploying MS SQL` and click begin to begin the MS SQL server monitoring lab.
+#. Now fill in the details, including your initials, email and select the VM you created in the `Deploying MS SQL` and click begin to begin the Blue Medora lab.
 
    .. figure:: images/initbm.png
 
@@ -42,10 +29,10 @@ Please be sure to complete the `Deploying MS SQL` lab as you will need to use th
 
    .. figure:: images/init3.png
 
-Monitoring MS SQL with Prism Pro
-+++++++++++++++++++++++++++++++
+Monitoring MSSQL with Blue Medora
++++++++++++++++++++++++++++++++++
 
-Once the Blue Medora collectors are deployed and configured to monitor your MS SQL server, the application performance data will be visible in the Prism UI. Let's take a deeper look at how to get visibility into the application layer from the Prism Central console, and monitor the end-to-end stack with a single pane-of-glass.
+Prism Pro has partnered with Blue Medora to collect metrics and data that Blue Medora monitors and expose them in the Prism Central console. This feature will be having an Early Access phase in 5.17 and is planned to go GA in 5.18. Using these additional metrics, Prism Pro can give more insights into Database workloads such as MSSQL. Let's take a look.
 
 #. Navigate to the **Alerts** page by clicking the bell icon in the top of the navigation bar. Notice you have an alert claiming **SQL server query average latency high**. Click on the alert to take a closer look.
 
@@ -55,11 +42,11 @@ Once the Blue Medora collectors are deployed and configured to monitor your MS S
 
    .. figure:: images/bm2.png
 
-#. In this view you can see the metrics that are being collected by the Blue Medora collector. When a metric value deviates from it's expected range, Prism Pro will raise an anomaly. We can see that while number of queries and connections have remained constant, the CPU usage and query latency have been flagged as anomalous. To investigate further click the **Queries** menu item in the left side of the view.
+#. In this view you can see the metrics that we are collecting from Blue Medora. Using this machine learning engine X-FIT, Prism Pro is also able to generate baselines, or expected ranges, for these synced metrics. The X-FIT alogrithms learn the normal behavior of these entities and represent that as a baseline range on the different charts. Whenever a metric value deviates from this expected range, Prism Pro will raise an anomaly. From this view we can see that while number of queries and connections have remained constant, the CPU usage and query latency have shot up and anomalous data points have been identified. To investigate further click the **Queries** menu item in the left side of the view.
 
    .. figure:: images/bm3.png
 
-#. From this view, we can see that a new query type has been flagged and it appears that this query is taking much longer to execute (208 seconds). Now that we have identified the cause of the issue, lets use X-Play to remediate the situation. The MS SQL server needs it's memory increased to handle the memory consumption of the new query. We will run a Manual playbook to increase the MS SQL instance memory.
+#. From this view, we can see that a new query type has been flagged and it appears that this query is taking much longer to execute (208 seconds). Now that we have identified the cause of the issue, lets use X-Play to remediate the situation. The MSSQL server needs it's memory increased to handle the memory consumption of the new query. We will run a Manual playbook to increase the MSSQL instance memory.
 
    .. figure:: images/bm4.png
 
@@ -67,7 +54,7 @@ Once the Blue Medora collectors are deployed and configured to monitor your MS S
 
    .. figure:: images/bm5.png
 
-#. Select the Playbook with your initials in it and click **Run**. This will execute a powershell script to increase the MS SQL instance memory, and it will also send you an email notifying you of the update.
+#. Select the Playbook with your initials in it and click **Run**. This will execute a powershell script to increase the MSSQL instance memory, and it will also send you an email notifying you of the update.
 
    .. figure:: images/bm6.png
 

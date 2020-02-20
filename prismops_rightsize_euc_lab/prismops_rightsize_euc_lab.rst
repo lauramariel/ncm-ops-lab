@@ -1,17 +1,4 @@
-.. title:: Nutanix .Next Prism Pro HOL
-
-
-.. toctree::
-  :maxdepth: 2
-  :caption: Appendix
-  :name: _appendix
-  :hidden:
-
-  tools_vms/linux_tools_vm
-
-.. _xplay:
-
-------------------------
+-----------------------
 Prism Pro VM Right Sizing
 ------------------------
 
@@ -24,7 +11,7 @@ In this lab you will learn how Prism Pro can help IT Admins monitor, analyze and
 Lab Setup
 +++++++++
 
-Please be sure to complete the `Delivering Persistent Desktops` lab as you will need to use the VM created there to complete this lab.
+Please be sure to complete the `Building & Optimizing the Gold Image` lab as you will need to use the VM created there to complete this lab.
 
 #. Open your **Prism Central** and navigate to the **VMs** page. Note down the IP Address of the **GTSPrismOpsLabUtilityServer**. You will need to access this IP Address throughout this lab.
 

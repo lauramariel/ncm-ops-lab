@@ -1,16 +1,3 @@
-.. title:: Nutanix .Next Prism Pro HOL
-
-
-.. toctree::
-  :maxdepth: 2
-  :caption: Appendix
-  :name: _appendix
-  :hidden:
-
-  tools_vms/linux_tools_vm
-
-.. _xplay:
-
 ------------------------
 Prism Pro VM Right Sizing
 ------------------------
