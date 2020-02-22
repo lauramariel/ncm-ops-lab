@@ -34,8 +34,8 @@ Capacity runway is a measure of the remaining capacity left within a given clust
 
 #. In **Prism Central > Operations > Planning > Capacity Runway**.
 
-- Note the runway summaries showing the days left for each cluster.
-- How long does the current cluster has before it runs out of memory, CPU, and storage?
+   - Note the runway summaries showing the days left for each cluster.
+   - How long does the current cluster has before it runs out of memory, CPU, and storage?
 
 #. Click on the **Prism-Pro-Cluster** cluster.
 
@@ -123,15 +123,13 @@ Now let's look at how we can take automated action to generate this report when 
 
 #. Fill in the field in the email action. Here are the examples
 
-**Recipient:** Fill in your email address.
+   - **Recipient:** - Fill in your email address.
+   - **Subject :** - ``Playbook {{playbook.playbook_name}} was executed.``
+   - **Message:** - `As a result of the alert, {{trigger[0].alert_entity_info.name}}, the playbook, {{playbook.playbook_name}}, was executed. The generated report is attached to this email.``
 
-**Subject :**
-``Playbook {{playbook.playbook_name}} was executed.``
+   .. note::
 
-**Message:**
-``As a result of the alert, {{trigger[0].alert_entity_info.name}}, the playbook, {{playbook.playbook_name}}, was executed. The generated report is attached to this email.``
-
-You are welcome to compose your own subject message. The above is just an example. You could use the “parameters” to enrich the message.
+      You are welcome to compose your own subject message. The above is just an example. You could use the “parameters” to enrich the message.
 
    .. figure:: images/cap8.png
 

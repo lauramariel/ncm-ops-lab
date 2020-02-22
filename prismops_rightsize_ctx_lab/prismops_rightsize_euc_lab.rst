@@ -1,6 +1,8 @@
--------------------------------
-Right-sizing VMs with Prism Pro
--------------------------------
+.. _citrixrightsize:
+
+------------------------------------
+Right-sizing Desktops with Prism Pro
+------------------------------------
 
 .. figure:: images/operationstriangle.png
 
@@ -10,6 +12,8 @@ In this lab you will learn how Prism Pro can help IT Admins monitor, analyze and
 
 Lab Setup
 +++++++++
+
+Please be sure to complete the `Building & Optimizing the Gold Image` lab as you will need to use the VM created there to complete this lab.
 
 #. Open your **Prism Central** and navigate to the **VMs** page. Note down the IP Address of the **GTSPrismOpsLabUtilityServer**. You will need to access this IP Address throughout this lab.
 
@@ -38,6 +42,7 @@ Using machine learning, Prism Pro then analyzes the data and applies a classific
   * **Inactive:** VMs that have been powered off for a period of time or that are running VMs that do not consume any CPU, memory, or I/O resources.
   * **Constrained:** VMs that could see improved performance with additional resources.
   * **Bully:** VMs identified as using an abundance of resources and affecting other VMs.
+
 
 #. In **Prism Central**, select :fa:`bars` **> Dashboard** (if not already there).
 
@@ -79,7 +84,7 @@ Automatically Increase Constrained VM Memory with X-Play
 
 Now let's look at how we can take automated action to resolve some of these inefficiencies. For this lab we will assume that this VM is constrained for memory and will show how we can automatically remediate the right sizing of this VM. We will also use a custom Ticket system to give an idea of how this typical workflow could integrate with ticketing system such as Service Now.
 
-#. Navigate to your **`Initials`-LinuxToolsVM**. The examples will use a VM called **ABC - VM**.
+#. Navigate to the VM hosting your Personal Desktop that you created and powered on in the `Delivering Persistent Desktops` lab [example. ABC-PD-1]. The examples will use a VM called **ABC - VM**.
 
    .. figure:: images/rs1.png
 
