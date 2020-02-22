@@ -105,11 +105,11 @@ Now let's look at how we can take automated action to resolve some of these inef
 
 #. We are creating an Action that we can later use in our playbook to Generate a Service Ticket. Fill in the following values replacing your initials in the *Initials* part, and the <GTSPrismOpsLabUtilityServer_IP_ADDRESS> in the URL field. Click **Copy**.
 
-   - **Name:** - *Initials* - Generate Service Ticket
-   - **Method:** - POST
-   - **URL:** - http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/generate_ticket/
-   - **Request Body:** - ``{"vm_name":"{{trigger[0].source_entity_info.name}}","vm_id":"{{trigger[0].source_entity_info.uuid}}","alert_name":"{{trigger[0].alert_entity_info.name}}","alert_id":"{{trigger[0].alert_entity_info.uuid}}"}``
-   - **Request Header:** - | Content-Type:application/json;charset=utf-8
+   - **Name:** *Initials* - Generate Service Ticket
+   - **Method:** POST
+   - **URL:** http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/generate_ticket/
+   - **Request Body:** ``{"vm_name":"{{trigger[0].source_entity_info.name}}","vm_id":"{{trigger[0].source_entity_info.uuid}}","alert_name":"{{trigger[0].alert_entity_info.name}}","alert_id":"{{trigger[0].alert_entity_info.uuid}}"}``
+   - **Request Header:** Content-Type:application/json;charset=utf-8
 
    .. figure:: images/rs5.png
 
@@ -187,10 +187,10 @@ Now let's look at how we can take automated action to resolve some of these inef
 
 #. Last, we would like to call back to the ticket service to resolve the ticket in the ticket service. Click **Add Action** to add the REST API action. Fill in the following values replacing the <GTSPrismOpsLabUtilityServer_IP_ADDRESS> in the URL field.
 
-   - **Method:** - PUT
-   - **URL:** - http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/resolve_ticket
-   - **Request Body:** - ``{"vm_id":"{{trigger[0].source_entity_info.uuid}}"}``
-   - **Request Header:** -  Content-Type:application/json;charset=utf-8
+   - **Method:** PUT
+   - **URL:** http://<GTSPrismOpsLabUtilityServer_IP_ADDRESS>/resolve_ticket
+   - **Request Body:** ``{"vm_id":"{{trigger[0].source_entity_info.uuid}}"}``
+   - **Request Header:** Content-Type:application/json;charset=utf-8
 
    .. figure:: images/rs21.png
 
