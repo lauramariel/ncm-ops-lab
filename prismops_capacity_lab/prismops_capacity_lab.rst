@@ -4,7 +4,7 @@ Prism Pro Capacity Runway
 
 .. figure:: images/operationstriangle.png
 
-The above graphic is what we like to refer to as the Operations Triangle, which shows the typical operations flow in any environment, a continuous cycle of monitoring, analyzing and then taking action where necessary. With Prism Pro, IT Admins are able to leverage insights from machine data to automate this typical flow.
+The typical operations workflow is a continuous cycle of monitoring, analyzing and taking action where necessary. Prism Pro mirrors traditional IT Admin's workflows to improve operations efficiency. With Prism Pro, IT Admins are able to leverage insights from machine data to automate this typical flow using the power of the machine learning engine X-FIT and the X-Play automation engine.
 
 In this lab you will learn how Prism Pro can help IT Admins monitor, analyze and automatically act when cluster runway is low.
 
@@ -168,7 +168,7 @@ Takeaways
 
 - X-FIT is our machine learning engine to support smart IT OPS, including capacity forecasting.
 
-- X-Play, the IFTTT for the enterprise, is our engine to enable the automation of daily operations tasks.
+- X-Play, the IFTTT for the enterprise, is our engine to enable the automation of daily operations tasks, making it so easy that automation can be built by every admin.
 
 Getting Connected
 +++++++++++++++++
@@ -180,5 +180,5 @@ Have a question about **Prism Pro**? Please reach out to the resources below:
 +================================+================================================+
 |  Slack Channel                 |  #prism-pro                                    |
 +--------------------------------+------------------------------------------------+
-|  Product Manager               |  Harry Yang, harry.yang@nutanix.com            |
+|  Email                         |  pops-pm@nutanix.com                           |
 +--------------------------------+------------------------------------------------+
