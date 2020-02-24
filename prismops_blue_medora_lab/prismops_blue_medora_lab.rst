@@ -34,7 +34,7 @@ Monitoring MSSQL with Blue Medora
 
 Prism Pro has partnered with Blue Medora to collect metrics and data that Blue Medora monitors and expose them in the Prism Central console. This feature will be having an Early Access phase in 5.17 and is planned to go GA in 5.18. Using these additional metrics, Prism Pro can give more insights into Database workloads such as MSSQL. Let's take a look.
 
-#. Navigate to the **Alerts** page by clicking the bell icon in the top of the navigation bar. Notice you have an alert claiming **SQL server query average latency high**. Click on the alert that has your MSSQL VM listed in the **Source Entity** field to take a closer look.
+#. Navigate to the **Alerts** page by clicking the bell icon in the top of the navigation bar. Notice you have an alert claiming **SQL server query average latency high**. Click on the alert that has your MSSQL VM listed in the **Source Entity** column to take a closer look.
 
    .. figure:: images/bm1.png
 
