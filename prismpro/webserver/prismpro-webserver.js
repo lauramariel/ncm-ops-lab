@@ -789,7 +789,7 @@ app.post('/generate_ticket/', function (req, res) {
     alert_id: req.body.alert_id,
     vm_name: req.body.vm_name,
     vm_id: req.body.vm_id,
-    url: req.body.url
+    webhook_id: req.body.webhook_id
   };
   try {
     fs.readFile('./ticket-raised.json', 'utf-8', function (err, data) {

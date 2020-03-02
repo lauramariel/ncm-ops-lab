@@ -22,10 +22,6 @@ class TicketPage extends Component {
 
   constructor(props) {
     super(props);
-
-    this.validate = this.validate.bind(this);
-
-
     this.columns = [
       {
         title: 'Creation Time',
@@ -36,11 +32,11 @@ class TicketPage extends Component {
         }
       },
       {
-        title: 'Task ID',
+        title: 'Ticket ID',
         key: 'key'
       },
       {
-        title: 'Task Status',
+        title: 'Ticket Status',
         key: 'task_status'
       },
       {
@@ -48,37 +44,23 @@ class TicketPage extends Component {
         key: 'alert_name'
       },
       {
-        title: 'Alert ID',
-        key: 'alert_id'
-      },
-      {
         title: 'VM Name',
         key: 'vm_name'
       },
       {
-        title: 'VM ID',
-        key: 'vm_id'
+        title: 'Webhook Id',
+        key: 'webhook_id'
       }
-      // COMMENT out for now - we will use it in the 5.17 version.
-      // {
-      //   title: 'URL',
-      //   key: 'url'
-      // }
     ];
 
     this.state = {
       ticketData: [],
-      visible: false,
       inputVal: '',
       error: false,
-      showSuccessBanner: false,
-      rowData: null
+      showSuccessBanner: false
     };
   }
 
-  modalErrorAlert = (
-    <Alert type="error" inline={ true } message="Please Select a Playbook to proceed." />
-  );
   successAlert = <Alert type="success" inline={ false } message="Ticket resolved successfully!" />;
 
   componentDidMount() {
@@ -94,90 +76,36 @@ class TicketPage extends Component {
       });
   }
 
-  validate() {
-    // eslint-disable-next-line no-console
-    console.log('in validate', this.state);
-    const { selectedPlaybook, rowData } = this.state;
-
-    // initiate script
-    this.setState({ loading: true });
-
-    if (selectedPlaybook === null) {
-      this.setState({
-        error: true,
-        showSuccessBanner: false
-      });
-    } else {
-      return basicFetch({
-        url: '/api/nutanix/v3/action_rules/trigger',
-        method: 'POST',
-        data: JSON.stringify({
-          trigger_type: 'manual_trigger',
-          trigger_instance_list: [
-            {
-              action_rule_uuid: selectedPlaybook.uuid,
-              source_entity_info: JSON.stringify({
-                type: 'vm',
-                uuid: rowData.vm_id
-              })
-            }
-          ]
-        })
-      }).then(resp => {
-        if (resp && resp.stderr) {
-          this.setState({
-            error: resp.stderr,
-            loading: false
-          });
-        } else {
-          this.setState({
-            error: false,
-            visible: false,
-            showSuccessBanner: true
-          });
-        }
-      });
-    }
+  callWebhook(key, rowData) {
+    return basicFetch({
+      url: '/api/nutanix/v3/action_rules/trigger',
+      method: 'POST',
+      data: JSON.stringify({
+        trigger_type: 'incoming_webhook_trigger',
+        trigger_instance_list: [
+          {
+            webhook_id: rowData.webhook_id,
+            entity1: JSON.stringify({
+              type: 'vm',
+              name: rowData.vm_name,
+              uuid: rowData.vm_id
+            }),
+            entity2: JSON.stringify({
+              type: 'alert',
+              name: rowData.alert_name,
+              uuid: rowData.alert_id
+            })
+          }
+        ]
+      })
+    });
   }
-
-  renderEntityPicker() {
-    return (
-      <ElementPlusLabel
-        label={ 'Select the Playbook to Trigger' }
-        element={
-          <EntitySearch
-            onEntitiesChange={
-              selectedPlaybook => {
-                // eslint-disable-next-line no-console
-                console.log('selected playbook', selectedPlaybook);
-                this.setState({ selectedPlaybook });
-              }
-            }
-            selectedEntities={ this.state.selectedPlaybook }
-            placeholder="Type to search for a Playbook"
-            entityType="action_rule"
-            nameAttr="name"
-            // eslint-disable-next-line no-console
-            onError={ () => console.error('TODO do something if there is an error') }
-          />
-        }
-      />
-    );
-  }
-
-
-  handleRowAction(key, rowData) {
-    // alert(rowData.vm_id);
-    this.setState({ rowData,
-      visible:true });
-  }
-
 
   renderTicketsInTable() {
     return (
       <div>
         <StackingLayout padding="20px">
-          <Title>Prism Pro Lab Service Ticket System</Title>
+          <Title>Prism Pro Service Ticket System</Title>
           <Table
             oldTable={ false }
             loading={ false }
@@ -188,26 +116,12 @@ class TicketPage extends Component {
                 return [
                   {
                     key: 'custom',
-                    value: 'Run Playbook'
+                    value: 'Trigger Webhook'
                   }
                 ];
               },
-              onRowAction: this.handleRowAction.bind(this)
+              onRowAction: this.callWebhook
             } } />
-          <ConfirmModal
-            visible={ this.state.visible }
-            onConfirm={ this.validate }
-            confirmTitle="Run Playbook"
-            confirmButtonLabel="Submit"
-            confirmButtonType="primary"
-            alignContent="left"
-            confirmText={
-              <StackingLayout>
-                {this.state.error ? this.modalErrorAlert : null}
-                { this.renderEntityPicker() }
-              </StackingLayout>
-            }
-          />
         </StackingLayout>
       </div>
     );
