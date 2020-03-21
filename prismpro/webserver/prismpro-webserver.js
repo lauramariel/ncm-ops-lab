@@ -618,8 +618,28 @@ app.get('/alerts/', function (req, res){
   resp.redirect('/alerts');
 });
 
+app.get('/debug', function (req, res){
+  res.sendfile('public/index.html');
+});
+
+app.get('/debug/', function (req, res){
+  resp.redirect('/debug');
+});
+
+app.get('/stress', function (req, res){
+  res.sendfile('public/index.html');
+});
+
+app.get('/stress/', function (req, res){
+  resp.redirect('/stress');
+});
+
 app.get('/ticketsystem', function (req, res) {
   res.sendfile('public/index.html');
+});
+
+app.get('/ticketsystem/', function (req, res) {
+  resp.redirect('/ticketsystem');
 });
 
 app.get('/databases', function (req, res) {
@@ -628,10 +648,6 @@ app.get('/databases', function (req, res) {
 
 app.get('/databases/', function (req, res) {
   resp.redirect('/databases');
-});
-
-app.get('/ticketsystem/', function (req, res) {
-  resp.redirect('/ticketsystem');
 });
 
 app.get(/\/public\/(.*)/, function (req, res) {
@@ -715,7 +731,31 @@ app.post('/login/', function(req, res) {
 app.post('/repair/', function(req, res) {
   var status = 'SUCCESS';
   var url = './repair.sh ' + PC_IP + ' ' + PC_SSH_USER + ' ' + PC_SSH_PASS;
-  console.log(url);
+  console.log("in repiar ",url);
+  exec(url, {}, function(error, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    if (error !== null) {
+      res.status(500).send({
+        message: 'There was an error'
+      });
+    }
+    res.send({
+      stdout: stdout,
+      stderr: stderr,
+      error: error,
+      status: status
+    });
+  });
+});
+
+app.post('/generate_stress', function(req, res) {
+  console.log("in stress api")
+  var body = req.body;
+  console.log("in stress api", body.vmIp)
+  var status = 'SUCCESS';
+  var url = './stress.sh ' + body.vmIp + ' ' + 'root' + ' ' + 'nutanix/4u';
+  
   exec(url, {}, function(error, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);

@@ -16,6 +16,8 @@ import LoginPage from './pages/LoginPage.jsx';
 import AlertPage from './pages/AlertPage.jsx';
 import TicketPage from './pages/TicketPage.jsx';
 import ConfigureBlueMedoraPage from './pages/ConfigureBlueMedoraPage.jsx';
+import DebugPage from './pages/DebugPage.jsx';
+import StressPage from './pages/StressPage.jsx';
 
 import {
   basicFetch
@@ -43,6 +45,7 @@ class App extends Component {
   }
 
   renderPage() {
+    
     if (this.state.loading) {
       return null;
     }
@@ -50,9 +53,14 @@ class App extends Component {
       return <LoginPage />;
     }
     const { path } = this.props;
+    
     switch (path) {
       case '/ticketsystem':
         return <TicketPage />;
+      case '/debug':
+        return <DebugPage />;
+      case '/stress':
+        return <StressPage />;
       case '/databases':
         return <ConfigureBlueMedoraPage />;
       case '/alerts':
@@ -85,20 +93,20 @@ class App extends Component {
   render() {
     return (
       <MainPageLayout
-        fullPage={ true }
-        header={ (
+        fullPage={true}
+        header={(
           <NavBarLayout className="demo-mode"
-            logoIcon={ <NutanixLogoIcon style={ { cursor: 'pointer' } } color="gray-1" /> }
-            layout={ NavBarLayout.LAYOUTS.CENTER }
-            menuIcon={ null }
+            logoIcon={<NutanixLogoIcon style={{ cursor: 'pointer' }} color="gray-1" />}
+            layout={NavBarLayout.LAYOUTS.CENTER}
+            menuIcon={null}
           />
-        ) }
-        body={ <div className="page-body">
-          <Loader loading={ this.state.loading }>
+        )}
+        body={<div className="page-body">
+          <Loader loading={this.state.loading}>
             {this.renderPage()}
           </Loader>
-        </div> }
-        oldMainPageLayout={ false }
+        </div>}
+        oldMainPageLayout={false}
       />
     );
   }
