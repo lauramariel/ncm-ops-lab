@@ -848,6 +848,27 @@ app.post('/generate_ticket/', function (req, res) {
   }
 });
 
+app.post('/reset_ticket_system/', function (req, res) {
+    
+  try {
+    fs.readFile('./ticket-raised.json', 'utf-8', function (err, data) {
+      var arrayOfObjects = JSON.parse(data);
+
+      var count = arrayOfObjects.tickets.length
+      
+      arrayOfObjects.tickets.splice(0,count)
+      console.log(arrayOfObjects);
+
+      fs.writeFile('./ticket-raised.json', JSON.stringify(arrayOfObjects), 'utf-8', function (err) {
+        if (err) throw err
+        res.send(arrayOfObjects)
+      })
+    })
+  } catch (err) {
+
+  }
+});
+
 app.put('/resolve_ticket/', function (req, res) {
   var vmId = req && req.body && req.body.vm_id;
   try {

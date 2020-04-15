@@ -57,11 +57,15 @@ class TicketPage extends Component {
       ticketData: [],
       inputVal: '',
       error: false,
-      showSuccessBanner: false
+      showSuccessBanner: false,
+      structure: {
+        bodyMaxHeight: '1000px'
+
+      }
     };
   }
 
-  successAlert = <Alert type="success" inline={ false } message="Ticket resolved successfully!" />;
+  successAlert = <Alert type="success" inline={false} message="Ticket resolved successfully!" />;
 
   componentDidMount() {
     const options = {
@@ -70,8 +74,12 @@ class TicketPage extends Component {
     };
     basicFetch(options)
       .then(res => {
+
         this.setState({
-          ticketData: res.data.tickets
+          ticketData: res.data.tickets.sort(function (a, b) {
+            var dateA = new Date(a.creation_time), dateB = new Date(b.creation_time);
+            return dateB - dateA;
+          })
         });
       });
   }
@@ -107,11 +115,12 @@ class TicketPage extends Component {
         <StackingLayout padding="20px">
           <Title>Prism Pro Service Ticket System</Title>
           <Table
-            oldTable={ false }
-            loading={ false }
-            dataSource={ this.state.ticketData }
-            columns={ this.columns }
-            rowAction={ {
+            oldTable={false}
+            loading={false}
+            dataSource={this.state.ticketData}
+            columns={this.columns}
+            structure={this.state.structure}
+            rowAction={{
               actions: (rowData) => {
                 return [
                   {
@@ -121,7 +130,7 @@ class TicketPage extends Component {
                 ];
               },
               onRowAction: this.callWebhook
-            } } />
+            }} />
         </StackingLayout>
       </div>
     );
