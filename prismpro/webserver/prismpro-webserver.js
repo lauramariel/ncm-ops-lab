@@ -755,7 +755,7 @@ app.post('/generate_stress', function(req, res) {
   console.log("in stress api", body.vmIp)
   var status = 'SUCCESS';
   var url = './stress.sh ' + body.vmIp + ' ' + 'root' + ' ' + 'nutanix/4u';
-  
+
   exec(url, {}, function(error, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
@@ -825,11 +825,23 @@ app.post('/generate_ticket/', function (req, res) {
     creation_time,
     key,
     task_status,
-    alert_name: req.body.alert_name,
-    alert_id: req.body.alert_id,
-    vm_name: req.body.vm_name,
-    vm_id: req.body.vm_id,
-    webhook_id: req.body.webhook_id
+    incident_name: req.body.incident_name || req.body.alert_name,
+    incident_id: req.body.incident_id || req.body.alert_id,
+    incident_type: req.body.incident_type || 'alert',
+    entity_name: req.body.entity_name || req.body.vm_name,
+    entity_id: req.body.entity_id || req.body.vm_id,
+    entity_type: req.body.entity_type || 'vm',
+    webhook_id: req.body.webhook_id,
+    string1: req.body.string1,
+    string2: req.body.string2,
+    string3: req.body.string3,
+    string4: req.body.string4,
+    string5: req.body.string5,
+    integer1: req.body.integer1,
+    integer2: req.body.integer2,
+    integer3: req.body.integer3,
+    integer4: req.body.integer4,
+    integer5: req.body.integer5,
   };
   try {
     fs.readFile('./ticket-raised.json', 'utf-8', function (err, data) {
@@ -849,13 +861,13 @@ app.post('/generate_ticket/', function (req, res) {
 });
 
 app.post('/reset_ticket_system/', function (req, res) {
-    
+
   try {
     fs.readFile('./ticket-raised.json', 'utf-8', function (err, data) {
       var arrayOfObjects = JSON.parse(data);
 
       var count = arrayOfObjects.tickets.length
-      
+
       arrayOfObjects.tickets.splice(0,count)
       console.log(arrayOfObjects);
 
@@ -870,13 +882,13 @@ app.post('/reset_ticket_system/', function (req, res) {
 });
 
 app.put('/resolve_ticket/', function (req, res) {
-  var vmId = req && req.body && req.body.vm_id;
+  var incidentId = req && req.body && req.body.incident_id;
   try {
     fs.readFile('./ticket-raised.json', 'utf-8', function(err, data) {
       var arrayOfObjects = JSON.parse(data);
       var tickets = arrayOfObjects && arrayOfObjects.tickets;
       tickets && tickets.map(function(ticket) {
-        if (ticket.vm_id === vmId){
+        if (ticket.incident_id === incidentId){
           ticket.task_status = 'Resolved';
         }
       });

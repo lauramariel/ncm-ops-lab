@@ -45,13 +45,12 @@ class DebugPage extends Component {
     this.getError = this.getError.bind(this);
     this.repair = this.repair.bind(this);
     this.resetTicketSystem = this.resetTicketSystem.bind(this);
-
   }
 
 
-  successAlert = <Alert type="success" inline={false} message="Operation performed successfully!" />;
+  successAlert = <Alert type="success" inline={ false } message="Operation performed successfully!" />;
 
-  loadingBar = <Loader tip="Repairing..." overlay={true} />
+  loadingBar = <Loader tip="Repairing..." overlay={ true } />
 
 
   repair() {
@@ -67,13 +66,12 @@ class DebugPage extends Component {
         visibleErrorModal: false,
         visibleConfirmModal: false
       });
-    });;
-
+    });
   }
 
   resetTicketSystem() {
-    
-    this.setState({ loading: true,visibleConfirmModal:false });
+    this.setState({ loading: true,
+      visibleConfirmModal:false });
     basicFetch({
       url: '/reset_ticket_system',
       method: 'POST'
@@ -84,55 +82,54 @@ class DebugPage extends Component {
         visibleLogModal: false,
         visibleErrorModal: false
       });
-    });;
-
+    });
   }
 
   getError() {
-    this.setState({ visibleErrorModal: true, visibleLogModal: false })
+    this.setState({ visibleErrorModal: true,
+      visibleLogModal: false });
     basicFetch({
       url: '/error',
       method: 'GET'
     }).then(res => {
-      this.setState({ errorData: res.data })
+      this.setState({ errorData: res.data });
     });
   }
 
   getLogs() {
-    this.setState({ visibleLogModal: true, visibleErrorModal: false })
+    this.setState({ visibleLogModal: true,
+      visibleErrorModal: false });
     basicFetch({
       url: '/log',
       method: 'GET'
     }).then(res => {
-      this.setState({ logData: res.data })
+      this.setState({ logData: res.data });
     });
   }
 
 
-
   render() {
-
     return (
 
-      <FlexLayout style={{ height: '500px' }} alignItems="center" justifyContent="center">
+      <FlexLayout style={ { height: '500px' } } alignItems="center" justifyContent="center">
 
-        <StackingLayout style={{ width: '380px' }} itemSpacing="30px">
+        <StackingLayout style={ { width: '380px' } } itemSpacing="30px">
           {this.state.loading ? this.loadingBar : null}
           {this.state.showSuccessBanner ? this.successAlert : null}
 
           <Title>Welcome to Repair Page</Title>
 
-          <Button fullWidth={true} onClick={this.repair} >Repair</Button>
+          <Button fullWidth={ true } onClick={ this.repair } >Repair</Button>
 
-          <Button type="primary" fullWidth={true}
-              onClick={() => this.setState({ visibleConfirmModal: true })}>
+          <Button type="primary" fullWidth={ true }
+            onClick={ () => this.setState({ visibleConfirmModal: true }) }>
               Reset Ticket System
-            </Button>
-            <ConfirmModal
-              visible={this.state.visibleConfirmModal}
-              onConfirm={this.resetTicketSystem}
-              confirmText="Are you sure you want to reset the ticket system?"
-            />
+          </Button>
+          <ConfirmModal
+            visible={ this.state.visibleConfirmModal }
+            onConfirm={ this.resetTicketSystem }
+            confirmText="Are you sure you want to reset the ticket system?"
+          />
 
           <StackingLayout>
             <FlexLayout alignItems="center">
@@ -140,11 +137,11 @@ class DebugPage extends Component {
 
               <div>
                 <Button type="primary"
-                  onClick={this.getLogs}>
+                  onClick={ this.getLogs }>
                   Logs
                 </Button>
                 <FullPageModal
-                  visible={this.state.visibleLogModal}
+                  visible={ this.state.visibleLogModal }
                   title="Logs"
                 >
                   <Paragraph>{this.state.logData}</Paragraph>
@@ -155,11 +152,11 @@ class DebugPage extends Component {
 
               <div>
                 <Button type="primary"
-                  onClick={this.getError}>
+                  onClick={ this.getError }>
                   Errors
-        </Button>
+                </Button>
                 <FullPageModal
-                  visible={this.state.visibleErrorModal}
+                  visible={ this.state.visibleErrorModal }
                   title="Errors"
 
                 >
@@ -172,8 +169,6 @@ class DebugPage extends Component {
           </StackingLayout>
         </StackingLayout>
       </FlexLayout>
-
-
 
 
     );

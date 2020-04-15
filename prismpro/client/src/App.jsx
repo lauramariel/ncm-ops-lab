@@ -45,7 +45,6 @@ class App extends Component {
   }
 
   renderPage() {
-    
     if (this.state.loading) {
       return null;
     }
@@ -53,7 +52,7 @@ class App extends Component {
       return <LoginPage />;
     }
     const { path } = this.props;
-    
+
     switch (path) {
       case '/ticketsystem':
         return <TicketPage />;
@@ -93,20 +92,20 @@ class App extends Component {
   render() {
     return (
       <MainPageLayout
-        fullPage={true}
-        header={(
+        fullPage={ true }
+        header={ (
           <NavBarLayout className="demo-mode"
-            logoIcon={<NutanixLogoIcon style={{ cursor: 'pointer' }} color="gray-1" />}
-            layout={NavBarLayout.LAYOUTS.CENTER}
-            menuIcon={null}
+            logoIcon={ <NutanixLogoIcon style={ { cursor: 'pointer' } } color="gray-1" /> }
+            layout={ NavBarLayout.LAYOUTS.CENTER }
+            menuIcon={ null }
           />
-        )}
-        body={<div className="page-body">
-          <Loader loading={this.state.loading}>
+        ) }
+        body={ <div className="page-body">
+          <Loader loading={ this.state.loading }>
             {this.renderPage()}
           </Loader>
-        </div>}
-        oldMainPageLayout={false}
+        </div> }
+        oldMainPageLayout={ false }
       />
     );
   }
