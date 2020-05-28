@@ -163,6 +163,24 @@ if (env.simulatePrismPro) {
     });
   });
 
+  var getAttributePresenceFlag = function(body){
+    console.info(body)
+    var flag = false
+    var count = 1 
+    body.group_member_attributes.forEach(function(item){
+      if(item.attribute === 'capacity.bully_vm_num' ||
+      item.attribute === 'capacity.constrained_vm_num' ||
+      item.attribute === 'capacity.dead_vm_num' ||
+      item.attribute === 'capacity.overprovisioned_vm_num'){
+        count = count + 1
+      }
+      if(count === 4){
+        flag = true
+      }
+    })
+    return flag
+  }
+
   app.post(new RegExp(apiURL + '/groups'), function(req, res, next) {
     const body = req.body;
     if (!body) {
@@ -455,7 +473,45 @@ if (env.simulatePrismPro) {
             }
             res.json(result);
           });
-        } else {
+        }
+        else if(getAttributePresenceFlag(body)){
+
+          var origHostPortUrl = env.proxyProtocol +'://' + PC_IP +
+          (env.proxyPort ? ':' + env.proxyPort : '');
+          var payload = JSON.stringify(body);
+          var fwdURL = origHostPortUrl + req.url;
+
+          r.post(fwdURL, { 'body' : payload }, function(error, response, body) {
+            var result = JSON.parse(body);
+
+            if(result && result.group_results && result.group_results.length) {
+
+              result.group_results[0].entity_results.forEach(function(res){
+
+                if(res.data[0].values[0].values[0] === 'Prism-Pro-Cluster'){
+
+                  res.data.forEach(function(item) {
+                    if (item.name === 'capacity.bully_vm_num') {
+                      item.values = [{"values":["1"],"time":1568937600000000}];
+                    }
+                    else if (item.name === 'capacity.constrained_vm_num') {
+                      item.values = [{"values":["0"],"time":1568937600000000}];
+                    }
+                    else if (item.name === 'capacity.dead_vm_num') {
+                      item.values = [{"values":["2"],"time":1568937600000000}];
+                    }
+                    else if (item.name === 'capacity.overprovisioned_vm_num') {
+                      item.values = [{"values":["2"],"time":1568937600000000}];
+                    }
+                  });
+                }                
+              })              
+            }
+            res.json(result);
+          });
+          
+        }
+        else {
           next();
         }
         break;
