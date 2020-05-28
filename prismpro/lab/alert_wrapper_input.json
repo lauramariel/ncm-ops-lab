@@ -1,7 +1,22 @@
 [{
+  "alert_id":"A120240",
+  "severity": "kInfo",
+  "alert_message": "Memory usage was below the minimum threshold for 99.5% of the time during the last 21 days."
+},
+{
   "alert_id":"A120241",
   "severity": "kInfo",
   "alert_message": "Max hourly average memory usage (92.52%) exceeded the threshold (90%) during the last 21 days."
+},
+{
+  "alert_id":"A120242",
+  "severity": "kInfo",
+  "alert_message": "CPU usage was below the minimum threshold for 99.5% of the time during the last 21 days."
+},
+{
+  "alert_id":"A120243",
+  "severity": "kInfo",
+  "alert_message": "Max hourly average CPU usage (92.52%) exceeded the threshold (90%) during the last 21 days."
 },
 {
   "alert_id":"A120245",

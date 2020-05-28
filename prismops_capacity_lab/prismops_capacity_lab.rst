@@ -169,16 +169,3 @@ Takeaways
 - X-FIT is our machine learning engine to support smart IT OPS, including capacity forecasting.
 
 - X-Play, the IFTTT for the enterprise, is our engine to enable the automation of daily operations tasks, making it so easy that automation can be built by every admin.
-
-Getting Connected
-+++++++++++++++++
-
-Have a question about **Prism Pro**? Please reach out to the resources below:
-
-+---------------------------------------------------------------------------------+
-|  Prism Pro Product Contacts                                                     |
-+================================+================================================+
-|  Slack Channel                 |  #prism-pro                                    |
-+--------------------------------+------------------------------------------------+
-|  Email                         |  pops-pm@nutanix.com                           |
-+--------------------------------+------------------------------------------------+

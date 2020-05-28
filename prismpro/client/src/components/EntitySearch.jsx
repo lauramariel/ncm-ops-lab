@@ -252,7 +252,12 @@ export default class EntitySearch extends React.Component {
   fetchResults(query) {
     const { nameAttr, entityType } = this.props;
     const nameAttribute = nameAttr || 'vm_name';
-    const filter = query ? `${nameAttribute}==.*${caseInsensitiveRegex(query)}.*` : '';
+    let filter = query ? `${nameAttribute}==.*${caseInsensitiveRegex(query)}.*` : '';
+    if (entityType === 'action_rule') {
+      // Only show webhook trigger
+      const additionalFilters = 'is_enabled==true;trigger_type_name_list=cs=incoming_webhook_trigger';
+      filter = filter ? `${filter};${additionalFilters}` : additionalFilters;
+    }
     return basicFetch({
       url: '/api/nutanix/v3/groups',
       method: 'POST',

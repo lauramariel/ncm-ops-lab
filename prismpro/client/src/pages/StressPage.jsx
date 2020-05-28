@@ -84,19 +84,16 @@ class StressPage extends Component {
             Select a virtual machine where stress needs to be generated.
           </TextLabel></div>
         </StackingLayout>
-        <StackingLayout itemSpacing="20px">
-          
-         
-        </StackingLayout>
+        <StackingLayout itemSpacing="20px" />
         { this.renderEntityPicker('Select the PrismProServer VM', ' ', true) }
         <InputPlusLabel
-            error={ ppvmIp && !isValidIP(ppvmIp) }
-            onChange={e => this.setState({ ppvmIp : e.target.value }) }
-            id="ppvmIP"
-            label="VM IP Address"
-            placeholder="Enter the IP Address VM"
-            helpText={ ppvmIp && !isValidIP(ppvmIp) ? 'Enter a Valid IP Address' : '' }
-          />
+          error={ ppvmIp && !isValidIP(ppvmIp) }
+          onChange={ e => this.setState({ ppvmIp : e.target.value }) }
+          id="ppvmIP"
+          label="VM IP Address"
+          placeholder="Enter the IP Address VM"
+          helpText={ ppvmIp && !isValidIP(ppvmIp) ? 'Enter a Valid IP Address' : '' }
+        />
       </StackingLayout>
     );
   }
@@ -118,7 +115,7 @@ class StressPage extends Component {
       url: 'generate_stress/',
       method: 'POST',
       data: JSON.stringify({
-        pcIp: pcIp,
+        pcIp,
         vmIp: uvmIp,
         vmId: ppvm && ppvm.uuid,
         vmName: ppvm && ppvm.name,
@@ -148,7 +145,7 @@ class StressPage extends Component {
 
   getFooter() {
     const { entity } = this.state;
-    const enabled = entity ;
+    const enabled = entity;
     return (
       <div>
         <Button disabled={ !enabled } type="primary" onClick={ () => this.completeCurrentStep() }>

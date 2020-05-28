@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 
 // Components
 import {
@@ -40,21 +41,29 @@ class TicketPage extends Component {
         key: 'task_status'
       },
       {
-        title: 'Alert Name',
-        key: 'alert_name'
+        title: 'Incident Name',
+        key: 'incident_name',
+        render: (name, rowData) => {
+          return <div>{ _.upperFirst(rowData.incident_type) || 'Alert' }: { name }</div>;
+        }
       },
       {
-        title: 'VM Name',
-        key: 'vm_name'
+        title: 'Entity Name',
+        key: 'entity_name'
       },
       {
         title: 'Webhook Id',
         key: 'webhook_id'
+      },
+      {
+        title: 'Info',
+        key: 'string1'
       }
     ];
 
     this.state = {
       ticketData: [],
+      confirmVisible: false,
       inputVal: '',
       error: false,
       showSuccessBanner: false,
@@ -65,7 +74,9 @@ class TicketPage extends Component {
     };
   }
 
-  successAlert = <Alert type="success" inline={false} message="Ticket resolved successfully!" />;
+  modalErrorAlert = (
+    <Alert type="error" inline={ true } message="Please Select a Playbook to proceed." />
+  );
 
   componentDidMount() {
     const options = {
@@ -74,38 +85,110 @@ class TicketPage extends Component {
     };
     basicFetch(options)
       .then(res => {
-
         this.setState({
-          ticketData: res.data.tickets.sort(function (a, b) {
-            var dateA = new Date(a.creation_time), dateB = new Date(b.creation_time);
+          ticketData: res.data.tickets.sort(function(a, b) {
+            let dateA = new Date(a.creation_time), dateB = new Date(b.creation_time);
             return dateB - dateA;
           })
         });
       });
   }
 
-  callWebhook(key, rowData) {
+  runPlaybook = () => {
+    const { selectedPlaybook, rowData } = this.state;
+    if (selectedPlaybook === null || !rowData) {
+      this.setState({
+        error: true,
+        showSuccessBanner: false
+      });
+      return;
+    }
+
+    // initiate script
+    return this.callWebhook(rowData, selectedPlaybook);
+  }
+
+  renderEntityPicker() {
+    return (
+      <ElementPlusLabel
+        label={ 'Select the Playbook to Trigger' }
+        element={
+          <EntitySearch
+            onEntitiesChange={
+              selectedPlaybook => {
+                // eslint-disable-next-line no-console
+                console.log('selected playbook', selectedPlaybook);
+                this.setState({ selectedPlaybook });
+              }
+            }
+            selectedEntities={ this.state.selectedPlaybook }
+            placeholder="Type to search for a Playbook"
+            entityType="action_rule"
+            nameAttr="name"
+            // eslint-disable-next-line no-console
+            onError={ () => console.error('TODO do something if there is an error') }
+          />
+        }
+      />
+    );
+  }
+
+  handleRowAction = (key, rowData) => {
+    if (key === 'webhook') {
+      this.callWebhook(rowData);
+    } else if (key === 'playbook') {
+      this.setState({
+        rowData,
+        confirmVisible:true
+      });
+    }
+  }
+
+
+  callWebhook(rowData, selectedPlaybook) {
+    this.setState({ loading: true });
     return basicFetch({
       url: '/api/nutanix/v3/action_rules/trigger',
       method: 'POST',
       data: JSON.stringify({
         trigger_type: 'incoming_webhook_trigger',
-        trigger_instance_list: [
-          {
-            webhook_id: rowData.webhook_id,
-            entity1: JSON.stringify({
-              type: 'vm',
-              name: rowData.vm_name,
-              uuid: rowData.vm_id
-            }),
-            entity2: JSON.stringify({
-              type: 'alert',
-              name: rowData.alert_name,
-              uuid: rowData.alert_id
-            })
-          }
-        ]
+        trigger_instance_list: [{
+          webhook_id: (selectedPlaybook && selectedPlaybook.uuid) || rowData.webhook_id,
+          entity1: JSON.stringify({
+            type: rowData.entity_type,
+            name: rowData.entity_name,
+            uuid: rowData.entity_id
+          }),
+          entity2: JSON.stringify({
+            type: rowData.incident_type,
+            name: rowData.incident_name,
+            uuid: rowData.incident_id
+          }),
+          string1: rowData.string1,
+          string2: rowData.string2,
+          string3: rowData.string3,
+          string4: rowData.string4,
+          string5: rowData.string5,
+          integer1: rowData.integer1,
+          integer2: rowData.integer2,
+          integer3: rowData.integer3,
+          integer4: rowData.integer4,
+          integer5: rowData.integer5
+        }]
       })
+    }).then(resp => {
+      if (resp && resp.stderr) {
+        this.setState({
+          error: resp.stderr,
+          loading: false
+        });
+      } else {
+        this.setState({
+          error: false,
+          confirmVisible: false,
+          showSuccessBanner: selectedPlaybook ? 'Playbook Triggered Successfully' : 'Remediation Triggered Successfully'
+        });
+      }
     });
   }
 
@@ -115,22 +198,41 @@ class TicketPage extends Component {
         <StackingLayout padding="20px">
           <Title>Prism Pro Service Ticket System</Title>
           <Table
-            oldTable={false}
-            loading={false}
-            dataSource={this.state.ticketData}
-            columns={this.columns}
-            structure={this.state.structure}
-            rowAction={{
+            oldTable={ false }
+            loading={ false }
+            dataSource={ this.state.ticketData }
+            columns={ this.columns }
+            structure={ this.state.structure }
+            rowAction={ {
               actions: (rowData) => {
                 return [
                   {
-                    key: 'custom',
-                    value: 'Trigger Webhook'
+                    key: 'webhook',
+                    value: 'Trigger Remediation'
+                    // value: 'Approve'
+                  },
+                  {
+                    key: 'playbook',
+                    value: 'Run Playbook'
                   }
                 ];
               },
-              onRowAction: this.callWebhook
-            }} />
+              onRowAction: this.handleRowAction
+            } } />
+          <ConfirmModal
+            visible={ this.state.confirmVisible }
+            onConfirm={ this.runPlaybook }
+            confirmTitle="Run Playbook"
+            confirmButtonLabel="Submit"
+            confirmButtonType="primary"
+            alignContent="left"
+            confirmText={
+              <StackingLayout>
+                {this.state.error ? this.modalErrorAlert : null}
+                { this.renderEntityPicker() }
+              </StackingLayout>
+            }
+          />
         </StackingLayout>
       </div>
     );
@@ -139,7 +241,7 @@ class TicketPage extends Component {
   render() {
     return (
       <StackingLayout>
-        {this.state.showSuccessBanner ? this.successAlert : null}
+        {this.state.showSuccessBanner ? <Alert type="success" inline={ false } message={ this.state.showSuccessBanner } /> : null}
         {this.renderTicketsInTable()}
       </StackingLayout>
     );

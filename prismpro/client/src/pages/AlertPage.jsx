@@ -84,16 +84,19 @@ class DefaultPage extends Component {
             id="alert_radiogroup"
             defaultValue={ this.state.radio }
             onChange={ e => this.setState({ radio : e.target.value }) }
-            layout="horizontal"
           >
             <Radio
               value="A120241"
               title="VM Memory Constrained"
             />
             <Radio
+              value="A120240"
+              title="VM Memory Overprovisioned"
+            />
+            {/* <Radio
               value="A120245"
               title="VM Bully"
-            />
+            /> */}
             <Radio
               value="A120094"
               title="Memory Runway is Short"
