@@ -8,7 +8,7 @@ ENTITY_UUID="$5"
 CATEGORY_NAME="$6"
 CATEGORY_VALUE="$7"
 
-echo "Adding category $CATEGORY_NAME with value $CATEGORY_VALUE of type $CATEGORY_TYPE"
+echo "Removing category $CATEGORY_NAME with value $CATEGORY_VALUE of type $CATEGORY_TYPE"
 
 echo "Installing jq"
 curl -k --show-error --remote-name --location https://s3.amazonaws.com/get-ahv-images/jq-linux64.dms
@@ -31,8 +31,8 @@ GET_ENDPOINT="https://${PC_IP}:9440/api/nutanix/v3/${CATEGORY_TYPE}/${ENTITY_UUI
 
 output=$(curl -s -u $PC_SSH_USER:$PC_SSH_PASS -H 'Accept:application/json' -k $GET_ENDPOINT \
 | jq  'del(.status)' \
-| jq  --argjson catmap "{\"use_categories_mapping\": true}" '.metadata += $catmap' \
-| jq  --argjson category "{\"$CATEGORY_NAME\":[\"$CATEGORY_VALUE\"]}" '.metadata.categories_mapping += ($category)' \
+| jq  'del(.metadata.categories_mapping.'$CATEGORY_NAME')' \
+| jq  --argjson catmap "{\"use_categories_mapping\": true}" '.metadata += $catmap' 
 )
 
 content=$(curl -X PUT -k $GET_ENDPOINT \
