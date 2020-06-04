@@ -443,7 +443,7 @@ if (env.simulatePrismPro) {
             res.json(result);
           });
         }
-        else if(getAttributePresenceFlag(body)){
+        else if (getAttributePresenceFlag(body)){
           var origHostPortUrl = env.proxyProtocol +'://' + PC_IP +
           (env.proxyPort ? ':' + env.proxyPort : '');
           var payload = JSON.stringify(body);
@@ -453,7 +453,7 @@ if (env.simulatePrismPro) {
             var result = JSON.parse(body);
             if(result && result.group_results && result.group_results.length) {
               result.group_results[0].entity_results.forEach(function(res){
-                if(res.data[0].values[0].values[0] === 'Prism-Pro-Cluster'){
+                if(res && res.data && res.data[0] && res.data[0].values && res.data[0].values[0] && res.data[0].values[0].values && res.data[0].values[0].values[0] === 'Prism-Pro-Cluster'){
                   res.data.forEach(function(item) {
                     if (item.name === 'capacity.bully_vm_num') {
                       item.values = [{"values":["0"],"time":1568937600000000}];
@@ -643,7 +643,7 @@ app.get('/debug', function (req, res){
 });
 
 app.get('/debug/', function (req, res){
-  resp.redirect('/debug');
+  res.sendfile('public/index.html');
 });
 
 app.get('/stress', function (req, res){
@@ -729,7 +729,7 @@ app.post('/login/', function(req, res) {
       return;
     }
     var status = 'SUCCESS';
-    var url = './restart.sh ' + body.pc_ip+ ' ' + body.user + ' ' + body.pass;
+    var url = './restart.sh ' + body.pc_ip+ ' ' + body.user + ' ' + body.pass + ' ' + PC_SSH_USER + ' ' + PC_SSH_PASS;
     console.log(url);
     exec(url, {}, function(error, stdout, stderr) {
       console.log(stdout);
@@ -751,7 +751,7 @@ app.post('/login/', function(req, res) {
 app.post('/repair/', function(req, res) {
   var status = 'SUCCESS';
   var url = './repair.sh ' + PC_IP + ' ' + PC_SSH_USER + ' ' + PC_SSH_PASS;
-  console.log("in repiar ",url);
+  console.log("in repair ",url);
   exec(url, {}, function(error, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
