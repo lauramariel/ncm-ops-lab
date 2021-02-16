@@ -9,17 +9,17 @@ from util.ncc.data_access.data_interface import *
 
 from util.ncc.config_module.config import *
 from util.ncc.ncc_utils.globals import HealthServerGlobals
-from serviceability.plugin_schema_pb2 import *
+from serviceability.interface.plugin_schema_pb2 import *
 from google.protobuf import text_format
 import datetime
 import time
 import math
 import copy
 import os
-import json 
+import json
 
 hglobals = HealthServerGlobals()
-idf = hglobals.get_insights_da() 
+idf = hglobals.get_insights_da()
 options = {"create_entity" : True}
 
 print "begin writing capacity data"
@@ -61,7 +61,7 @@ for entity_type in entity_types:
 		if entity_id in completed_entity_ids:
 			continue
 		completed_entity_ids.add(entity_id)
-                
+
                 #print "entity id", entity_id
 		if entity_type != "vm_small":
 			attribute_file = open(entity_type + "/" + entity_id + "_attr.json", "rb")
@@ -71,7 +71,7 @@ for entity_type in entity_types:
 			#print "Creating", entity_type ," with entity id = ", entity_id
 			idf.register_entity(entity_type=entity_type, attribute_dict=json.loads(attribute_file.read()), entity_id=entity_id)
 			#print "Created", entity_type ,"with entity id = ", entity_id
-		
+
 		#print "Adding metrics for ", entity_type," with entity id = ", entity_id
 
 		# print type(metric_file.read())
@@ -103,15 +103,15 @@ for entity_type in entity_types:
 						fd.values[i] = last_good_value
 					if fd.values[i] != -1:
 						last_good_value = fd.values[i]
-						
+
 				zeroes = 0
 				non_zeroes = 0
 				for x in fd.values:
 					if x==0:
 						zeroes = zeroes+1
 					else:
-						non_zeroes = non_zeroes+1	
-			
+						non_zeroes = non_zeroes+1
+
                         #print "num of zeroes =",zeroes," and num of non zeroes = ",non_zeroes," for ", fd.field_name, " of ",entity_id
                         time.sleep(0.5)
 			#print "Prepared entity data object for ", entity_type," with entity id = ", entity_id
