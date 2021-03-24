@@ -17,7 +17,7 @@ PC_IP="$1"
 PC_UI_USER="$2"
 PC_UI_PASS="$3"
 WEBHOOK_ID="$4"
-CATEGORY_TYPE="$5"
+ENTITY_TYPE="$5"
 UUIDS="$6"
 
 echo "Installing jq"
@@ -28,17 +28,17 @@ mv jq* ~/bin
 
 ATTRIBUTE_NAME=""
 
-if [ "$CATEGORY_TYPE" == "vm" ]; then
-    CATEGORY_TYPE="mh_vm"
+if [ "$ENTITY_TYPE" == "vm" ]; then
+    ENTITY_KIND="mh_vm"
     ATTRIBUTE_NAME="vm_name"
-elif [ "$CATEGORY_TYPE" == "host" ]; then
-    CATEGORY_TYPE="host"
+elif [ "$ENTITY_TYPE" == "host" ]; then
+    ENTITY_KIND="host"
     ATTRIBUTE_NAME="node_name"
-elif [ "$CATEGORY_TYPE" == "cluster" ]; then
-    CATEGORY_TYPE="cluster"
+elif [ "$ENTITY_TYPE" == "cluster" ]; then
+    ENTITY_KIND="cluster"
     ATTRIBUTE_NAME="cluster_name"
 else
-    echo "Incorrect category type" $CATEGORY_TYPE
+    echo "Incorrect category type" $ENTITY_TYPE
     exit 0
 fi
 
@@ -50,7 +50,7 @@ for i in "${my_array[@]}"
 do
 REQUEST1=$(cat <<EOF
 {
-  "entity_type": "$CATEGORY_TYPE",
+  "entity_type": "$ENTITY_KIND",
   "entity_ids": ["$i"],
   "group_member_count": 100,
   "group_member_attributes": [
@@ -75,7 +75,7 @@ REQUEST2=$(cat <<EOF
  "trigger_type": "incoming_webhook_trigger",
  "trigger_instance_list": [{
    "webhook_id": "$WEBHOOK_ID",
-   "entity1" : "{\"type\":\"$CATEGORY_TYPE\",\"name\":\"$content\",\"uuid\":\"$i\"}"
+   "entity1" : "{\"type\":\"$ENTITY_TYPE\",\"name\":\"$content\",\"uuid\":\"$i\"}"
  }]
 }
 EOF
