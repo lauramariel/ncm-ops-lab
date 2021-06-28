@@ -7,8 +7,7 @@ import {
   StackingLayout,
   ElementPlusLabel,
   Button,
-  RadioGroup,
-  Radio,
+  Select,
   Loader,
   TextLabel,
   Alert
@@ -26,7 +25,7 @@ class DefaultPage extends Component {
 
   state = {
     step: 0,
-    radio: 'A120241'
+    alert_type: 'A120241'
   };
 
   renderModalHeader() {
@@ -59,8 +58,8 @@ class DefaultPage extends Component {
             onEntitiesChange={ selected => this.setState({ entity : selected }) }
             selectedEntities={ entity }
             placeholder="Type to search for your VM"
-            entityType="vm"
-            nameAttr="vm_name"
+            entityType={ this.isvCenterAlert() ? 'nutanix_vcenter__vm' : 'vm' }
+            nameAttr={ this.isvCenterAlert() ? 'name' : 'vm_name' }
             onError={ this.onEntitySearchErr }
           />
         }
@@ -80,28 +79,69 @@ class DefaultPage extends Component {
         </StackingLayout>
         <StackingLayout itemSpacing="20px">
           <Title size="h4">Select the type of alert to simulate</Title>
-          <RadioGroup
-            id="alert_radiogroup"
-            defaultValue={ this.state.radio }
-            onChange={ e => this.setState({ radio : e.target.value }) }
-          >
-            <Radio
-              value="A120241"
-              title="VM Memory Constrained"
-            />
-            <Radio
-              value="A120240"
-              title="VM Memory Overprovisioned"
-            />
-            {/* <Radio
-              value="A120245"
-              title="VM Bully"
-            /> */}
-            <Radio
-              value="A120094"
-              title="Memory Runway is Short"
-            />
-          </RadioGroup>
+          <Select
+            value={ this.state.alert_type }
+            onChange={ value => this.setState({ alert_type : value }) }
+            placeholder="Select Alert Type"
+            multiple={ false }
+            selectOptions={[
+              {
+                value: 'A120241',
+                title: 'VM Memory Constrained',
+                key: 'A120241'
+              },
+              {
+                value: 'A120240',
+                title: 'VM Memory Overprovisioned',
+                key: 'A120240'
+              },
+              {
+                value: 'A120094',
+                title: 'Memory Runway is Short',
+                key: 'A120094'
+              },
+              {
+                value: 'A120243',
+                title: 'VM CPU Constrained',
+                key: 'A120241'
+              },
+              {
+                value: 'A120242',
+                title: 'VM CPU Overprovisioned',
+                key: 'A120240'
+              },
+              {
+                value: 'A120245',
+                title: 'VM Bully',
+                key: 'A120245'
+              },
+              {
+                value: 'A120323',
+                title: 'Non-AOS VM Memory Constrained',
+                key: 'A120323'
+              },
+              {
+                value: 'A120322',
+                title: 'Non-AOS VM Memory Overprovisioned',
+                key: 'A120322'
+              },
+              {
+                value: 'A120325',
+                title: 'Non-AOS VM CPU Constrained',
+                key: 'A120325'
+              },
+              {
+                value: 'A120324',
+                title: 'Non-AOS VM CPU Overprovisioned',
+                key: 'A120324'
+              },
+              {
+                value: 'A120327',
+                title: 'Non-AOS VM Bully',
+                key: 'A120327'
+              }
+            ]}
+          />
         </StackingLayout>
         { this.isClusterAlert() ? null : this.renderEntityPicker() }
       </StackingLayout>
@@ -120,7 +160,7 @@ class DefaultPage extends Component {
     });
 
     // simulate alert
-    this.simulateAlert(this.state.radio).then(resp => {
+    this.simulateAlert(this.state.alert_type).then(resp => {
       if (resp && resp.stderr) {
         this.setState({
           error: resp.stderr,
@@ -143,7 +183,12 @@ class DefaultPage extends Component {
   }
 
   isClusterAlert() {
-    return this.state.radio === 'A120094';
+    return this.state.alert_type === 'A120094';
+  }
+
+  isvCenterAlert() {
+    const vCenterAlerts = ['A120322', 'A120323', 'A120324', 'A120325', 'A120327'];
+    return vCenterAlerts.includes(this.state.alert_type);
   }
 
   simulateAlert(alert_uid) {
