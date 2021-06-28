@@ -24,6 +24,31 @@
   "alert_message": "This VM’s IO usage is affecting 1 other VMs for 240 minutes in the last 24 hours."
 },
 {
+  "alert_id":"A120322",
+  "severity": "kInfo",
+  "alert_message": "Memory usage was below the minimum threshold for 99.5% of the time during the last 21 days."
+},
+{
+  "alert_id":"A120323",
+  "severity": "kInfo",
+  "alert_message": "Max hourly average memory usage (92.52%) exceeded the threshold (90%) during the last 21 days."
+},
+{
+  "alert_id":"A120324",
+  "severity": "kInfo",
+  "alert_message": "CPU usage was below the minimum threshold for 99.5% of the time during the last 21 days."
+},
+{
+  "alert_id":"A120325",
+  "severity": "kInfo",
+  "alert_message": "Max hourly average CPU usage (92.52%) exceeded the threshold (90%) during the last 21 days."
+},
+{
+  "alert_id":"A120327",
+  "severity": "kInfo",
+  "alert_message": "This VM’s IO usage is affecting 1 other VMs for 240 minutes in the last 24 hours."
+},
+{
   "alert_id":"A106472",
   "severity": "kCritical"
 },

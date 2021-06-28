@@ -203,8 +203,32 @@ if (env.simulatePrismPro) {
         }
         break;
       case 'cluster':
+        // TEMP CODE FOR DASHBOARD ISSUE
+        if (body.group_member_count === 10 && body.group_member_sort_order === "DESCENDING" &&
+            (body.group_member_sort_attribute === 'controller_num_iops' || body.group_member_sort_attribute === 'aggregate_hypervisor_memory_usage_ppm' || body.group_member_sort_attribute === 'controller_avg_io_latency_usecs' || body.group_member_sort_attribute === 'hypervisor_cpu_usage_ppm')) {
+          var origHostPortUrl = env.proxyProtocol +'://' + PC_IP +
+          (env.proxyPort ? ':' + env.proxyPort : '');
+          var payload = JSON.stringify(body);
+          var fwdURL = origHostPortUrl + req.url;
+
+          r.post(fwdURL, { 'body' : payload }, function(error, response, body) {
+            var result = JSON.parse(body);
+            if(result && result.group_results && result.group_results.length) {
+              var newResults = [];
+              result.group_results[0].entity_results.forEach(function(entityRes){
+                // only keep results that aren't prism pro cluster
+                if (entityRes.entity_id !== '00057d50-00df-b390-0000-00000000eafd') {
+                  newResults.push(entityRes);
+                }
+              });
+              result.group_results[0].entity_results = newResults;
+            }
+            res.json(result);
+          });
+        }
+        // END TEMP DASHBOARD CODE. TO BE REMOVED AFTER 2021.7
         // Code for the UI ready flag
-        if(body.entity_ids && body.entity_ids[0] === '00057d50-00df-b390-0000-00000000eafd' &&
+        else if(body.entity_ids && body.entity_ids[0] === '00057d50-00df-b390-0000-00000000eafd' &&
             body.group_member_attributes && body.group_member_attributes.length === 21) {
           var origHostPortUrl = env.proxyProtocol +'://' + PC_IP +
           (env.proxyPort ? ':' + env.proxyPort : '');
@@ -327,71 +351,6 @@ var proxyFunction = function(req, resp) {
     console.error("ERROR Proxying Request:", e);
   }
 };
-
-// Prism Central Routing
-//----------------------
-// Redirect to console always.
-app.get('/', function(req, resp) {
-  if (!PC_IP || !PC_UI_PASS || !PC_UI_USER) {
-    // Take the user to enter their credentials.
-    resp.sendfile('public/index.html');
-  } else {
-    // Redirect to console to serve up the static UI files.
-    resp.redirect('/console/');
-  }
-});
-
-var walkmeScript = '<script>!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t,e){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="https://cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);analytics._loadOptions=e};analytics.SNIPPET_VERSION="4.1.0";analytics.load("SQBKbPgLzflz5eUSkuu0ePSAwKYmiKZ1");analytics.page();}}();</script>'
-var localStorageScript = '<script>if (localStorage) { localStorage.setItem("nutanix_show_search_tutorial", false); localStorage.setItem("FirstTimeExpAutoShown", true) }</script>'
-
-// Serve the static UI files from the proxyHost
-app.get(/console/, function(req, resp) {
-  if (!PC_IP || !PC_UI_PASS || !PC_UI_USER) {
-    // Take the user to enter their credentials.
-    resp.redirect('/');
-    return;
-  }
-  if (env.enableWalkme) {
-    if (req.url.indexOf('console/index.html') > -1) {
-      // Intercept the index.html file to include a script for walkme
-      r.get(origHostPortUrl + req.url, function(error, response, body) {
-        if (body) {
-          var position = body.indexOf('</body>');
-          body = [body.slice(0, position), walkmeScript + localStorageScript, body.slice(position)].join('');
-        }
-        resp.send(body);
-      });
-    } else if (req.url === '/console' || req.url === '/console/') {
-      // Intercept the index.html file to include a script for walkme
-      r.get(origHostPortUrl + '/console/index.html', function(error, response, body) {
-        if (body) {
-          var position = body.indexOf('</body>');
-          body = [body.slice(0, position), walkmeScript + localStorageScript, body.slice(position)].join('');
-        }
-        resp.send(body);
-      });
-    } else {
-      proxyFunction(req, resp);
-    }
-  } else {
-    proxyFunction(req, resp);
-  }
-});
-app.get(/\/app-extension\/scripts\/(.*)/ , function(req, res) {
-  var path = req.path.replace('/ssp/', '/');
-  proxyFunction(req, res);
-});
-// For calm to work
-app.get(/apps\/(.*)/,proxyFunction);
-// Proxy API calls
-app.all(/PrismGateway\/(.*)|api\/|static\/(.*)/, proxyFunction);
-// Serve up the swagger.json
-app.get(staticUrl + 'swagger.json', function(req, res) {
-  // Customize response
-  r.get(env.proxyProtocol +'://' + PC_IP + ':' +
-  (env.proxyPort ? ':' + env.proxyPort : '') +
-  req.url).pipe(res);
-});
 
 // Webserver Client
 //----------------------
@@ -683,6 +642,77 @@ app.put('/resolve_ticket/', function (req, res) {
 });
 
 // Webserver Client (End)
+//----------------------
+
+// Prism Central Routing
+//----------------------
+// Redirect to console always.
+app.get('/', function(req, resp) {
+  if (!PC_IP || !PC_UI_PASS || !PC_UI_USER) {
+    // Take the user to enter their credentials.
+    resp.sendfile('public/index.html');
+  } else {
+    // Redirect to console to serve up the static UI files.
+    resp.redirect('/console/');
+  }
+});
+
+var walkmeScript = '<script>!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t,e){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="https://cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);analytics._loadOptions=e};analytics.SNIPPET_VERSION="4.1.0";analytics.load("SQBKbPgLzflz5eUSkuu0ePSAwKYmiKZ1");analytics.page();}}();</script>'
+var localStorageScript = '<script>if (localStorage) { localStorage.setItem("nutanix_show_search_tutorial", false); localStorage.setItem("FirstTimeExpAutoShown", true) }</script>'
+
+// Serve the static UI files from the proxyHost
+app.get(/console/, function(req, resp) {
+  if (!PC_IP || !PC_UI_PASS || !PC_UI_USER) {
+    // Take the user to enter their credentials.
+    resp.redirect('/');
+    return;
+  }
+  if (env.enableWalkme) {
+    if (req.url.indexOf('console/index.html') > -1) {
+      // Intercept the index.html file to include a script for walkme
+      r.get(origHostPortUrl + req.url, function(error, response, body) {
+        if (body) {
+          var position = body.indexOf('</body>');
+          body = [body.slice(0, position), walkmeScript + localStorageScript, body.slice(position)].join('');
+        }
+        resp.send(body);
+      });
+    } else if (req.url === '/console' || req.url === '/console/') {
+      // Intercept the index.html file to include a script for walkme
+      r.get(origHostPortUrl + '/console/index.html', function(error, response, body) {
+        if (body) {
+          var position = body.indexOf('</body>');
+          body = [body.slice(0, position), walkmeScript + localStorageScript, body.slice(position)].join('');
+        }
+        resp.send(body);
+      });
+    } else {
+      proxyFunction(req, resp);
+    }
+  } else {
+    proxyFunction(req, resp);
+  }
+});
+app.get(/\/app-extension\/scripts\/(.*)/ , function(req, res) {
+  var path = req.path.replace('/ssp/', '/');
+  proxyFunction(req, res);
+});
+// For calm to work
+app.get(/apps\/(.*)/,proxyFunction);
+// Proxy API calls
+app.all(/PrismGateway\/(.*)|api\/|static\/(.*)/, proxyFunction);
+// Serve up the swagger.json
+app.get(staticUrl + 'swagger.json', function(req, res) {
+  // Customize response
+  r.get(env.proxyProtocol +'://' + PC_IP + ':' +
+  (env.proxyPort ? ':' + env.proxyPort : '') +
+  req.url).pipe(res);
+});
+
+// Pass remainder to proxy function
+app.all(/(.*)/,proxyFunction);
+
+// Prism Central Routing END
 //----------------------
 
 // Kick off the server.
