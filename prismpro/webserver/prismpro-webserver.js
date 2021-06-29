@@ -182,22 +182,50 @@ if (env.simulatePrismPro) {
             console.log(e);
             next();
           }
-        } else if (body.filter_criteria && body.filter_criteria.indexOf('(capacity%2Evm_efficiency_status==.*[c|C][o|O][n|N][s|S][t|T][r|R][a|A][i|I][n|N][e|E][d|D].*,capacity%2Evm_efficiency_status==.*[i|I][n|N][a|A][c|C][t|T][i|I][v|V][e|E].*,capacity%2Evm_efficiency_status==.*[b|B][u|U][l|L][l|L][y|Y].*,capacity%2Evm_efficiency_status==.*[o|O][v|V][e|E][r|R][p|P][r|R][o|O][v|V][i|I][s|S][i|I][o|O][n|N][e|E][d|D].*)') > -1) {
-          var filedata = fs.readFileSync(sampleData +  '/prismpro/efficiency.json');
-          var data = filedata && JSON.parse(filedata);
-          res.json(data.all);
-        } else if (body.filter_criteria && body.filter_criteria.indexOf('capacity%2Evm_efficiency_status==.*[o|O][v|V][e|E][r|R][p|P][r|R][o|O][v|V][i|I][s|S][i|I][o|O][n|N][e|E][d|D].*') > -1) {
-          var filedata = fs.readFileSync(sampleData +  '/prismpro/efficiency.json');
-          var data = filedata && JSON.parse(filedata);
-          res.json(data.overprovisioned);
-        } else if (body.filter_criteria && body.filter_criteria.indexOf('capacity%2Evm_efficiency_status==.*[c|C][o|O][n|N][s|S][t|T][r|R][a|A][i|I][n|N][e|E][d|D].*') > -1) {
-          var filedata = fs.readFileSync(sampleData +  '/prismpro/efficiency.json');
-          var data = filedata && JSON.parse(filedata);
-          res.json(data.constrained);
-        } else if (body.filter_criteria && body.filter_criteria.indexOf('capacity%2Evm_efficiency_status==.*[i|I][n|N][a|A][c|C][t|T][i|I][v|V][e|E].*') > -1) {
-          var filedata = fs.readFileSync(sampleData +  '/prismpro/efficiency.json');
-          var data = filedata && JSON.parse(filedata);
-          res.json(data.inactive);
+        }
+        // Make the request but enhance it with the fake efficiency data
+        else if (body.filter_criteria && body.filter_criteria.indexOf('capacity%2Evm_efficiency_status') > -1) {
+          var isConstrained = body.filter_criteria.indexOf('capacity%2Evm_efficiency_status==.*[c|C][o|O][n|N][s|S][t|T][r|R][a|A][i|I][n|N][e|E][d|D].*') > -1;
+          var isInactive = body.filter_criteria.indexOf('capacity%2Evm_efficiency_status==.*[i|I][n|N][a|A][c|C][t|T][i|I][v|V][e|E].*') > -1;
+          var isOverprovisioned = body.filter_criteria.indexOf('capacity%2Evm_efficiency_status==.*[o|O][v|V][e|E][r|R][p|P][r|R][o|O][v|V][i|I][s|S][i|I][o|O][n|N][e|E][d|D].*') > -1;
+
+          var origHostPortUrl = env.proxyProtocol +'://' + PC_IP +
+          (env.proxyPort ? ':' + env.proxyPort : '');
+          var payload = JSON.stringify(body);
+          var fwdURL = origHostPortUrl + req.url;
+          r.post(fwdURL, { 'body' : payload }, function(error, response, body) {
+            var result = JSON.parse(body);
+            if (result) {
+              console.log(result);
+              var filedata = fs.readFileSync(sampleData +  '/prismpro/efficiency.json');
+              var data = filedata && JSON.parse(filedata);
+              console.log(data)
+              result.group_results = (result.group_results.length && result.group_results) || data.group_results;
+              console.log(result.group_results)
+              result.group_results[0].entity_results = result.group_results[0].entity_results || [];
+              if (isConstrained) {
+                result.group_results[0].entity_results.push(data.constrained[0]);
+                result.group_results[0].entity_results.push(data.constrained[1]);
+                result.total_entity_count += 2;
+                result.filtered_entity_count += 2;
+                result.group_results[0].total_entity_count += 2;
+              }
+              if (isOverprovisioned) {
+                result.group_results[0].entity_results.push(data.overprovisioned[0]);
+                result.group_results[0].entity_results.push(data.overprovisioned[1]);
+                result.total_entity_count += 2;
+                result.filtered_entity_count += 2;
+                result.group_results[0].total_entity_count += 2;
+              }
+              if (isInactive) {
+                result.group_results[0].entity_results.push(data.inactive[0]);
+                result.total_entity_count += 1;
+                result.filtered_entity_count += 1;
+                result.group_results[0].total_entity_count += 1;
+              }
+            }
+            res.json(result);
+          });
         } else {
           next();
         }
