@@ -9,7 +9,7 @@ from util.ncc.data_access.data_interface import *
 
 from util.ncc.config_module.config import *
 from util.ncc.ncc_utils.globals import HealthServerGlobals
-from serviceability.plugin_schema_pb2 import *
+from serviceability.interface.plugin_schema_pb2 import *
 from google.protobuf import text_format
 import datetime
 import time
