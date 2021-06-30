@@ -214,7 +214,7 @@ Import Playbook
 
 #. Within Prism Central, click on :fa:`bars` **Operations > Playbooks**.
 
-#. Select **List** from the left-hand menu, then click on **Import**.
+#. Select **List** from the left-hand menu, then click on **Import**. **Please do this from the PC VM IP and not the lab utility server.**
 
 #. Click the **Browse** button, and select the Playbook you previously downloaded, then click **Import**.
 
@@ -228,7 +228,7 @@ Import Playbook
 
 #. Once all fields have the correct information, click **Save & Close**. If validation errors are still present, you will be notified upon saving.
 
-#. Enter *Initials*\ **- SQL Log Collection** in the *Name* field.
+#. Enter *Initials*\ **- SQL Log Collection** in the *Name* field. **Do remember to remove any special characters from the playbook name to avoid validation errors.**
 
 #. Slide the *Playbook Status* to the right (Enabled), and click **Save**.
 
