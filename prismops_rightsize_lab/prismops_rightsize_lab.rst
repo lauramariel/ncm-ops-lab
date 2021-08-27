@@ -119,8 +119,8 @@ Now let’s look at how we can take automated action to resolve some of these in
 #. Now, we would like to call back to the ticket service to resolve the ticket in the ticket service. Click **Add Action** to add the **REST API** action. Fill in the following values replacing the <PrismOpsLabUtilityServer_IP_ADDRESS> in the URL field. This concludes our first conditional branch for an approved request.
 
    - **Method:** PUT
-   - **URL:** http://<PrismOpsLabUtilityServer_IP_ADDRESS>/resolve_ticket
-   - **Request Body:** ``{"incident_id":"{{trigger[0].entity1.uuid}}"}``
+   - **URL:** http://<PrismOpsLabUtilityServer_IP_ADDRESS>/resolve_ticket/
+   - **Request Body:** ``{"incident_id":"{{trigger[0].entity2.uuid}}"}``
    - **Request Header:** Content-Type:application/json;charset=utf-8
 
    .. figure:: images/resolveticket.png
@@ -244,7 +244,7 @@ X-Play now has the ability to import and export playbooks across Prism Centrals.
 
 #. Download the following file which is an export of the playbook you will need. https://drive.google.com/file/d/1f5utfXCp1MJZc-KIxGQwkigkxVnd4OVp/view?usp=sharing
 
-#. Go to Playbooks page and click on **Import**. **Please do this from the PC VM IP and not the lab utility server.** 
+#. Go to Playbooks page and click on **Import**. **Please do this from the PC VM IP and not the lab utility server.**
 
  .. figure:: images/import0.png
 
@@ -270,7 +270,7 @@ X-Play now has the ability to import and export playbooks across Prism Centrals.
 
  .. figure:: images/rsimport4.png
 
-#. Once you have changed these fields click on **Save & Close**. If validation errors are still present, the pop-up will say so. otherwise remember to click **Enable** and add your Initials to the playbook name before clicking **Save**. **Do remember to remove any special characters from the playbook name to avoid validation errors.** 
+#. Once you have changed these fields click on **Save & Close**. If validation errors are still present, the pop-up will say so. otherwise remember to click **Enable** and add your Initials to the playbook name before clicking **Save**. **Do remember to remove any special characters from the playbook name to avoid validation errors.**
 
  .. figure:: images/rsimport1.png
 

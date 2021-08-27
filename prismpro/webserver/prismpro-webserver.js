@@ -88,12 +88,9 @@ if (env.simulatePrismPro) {
           r.post(fwdURL, { 'body' : payload }, function(error, response, body) {
             var result = JSON.parse(body);
             if (result) {
-              console.log(result);
               var filedata = fs.readFileSync(sampleData +  '/prismpro/efficiency.json');
               var data = filedata && JSON.parse(filedata);
-              console.log(data)
               result.group_results = (result.group_results.length && result.group_results) || data.group_results;
-              console.log(result.group_results)
               result.group_results[0].entity_results = result.group_results[0].entity_results || [];
               if (isConstrained) {
                 result.group_results[0].entity_results.push(data.constrained[0]);
@@ -473,61 +470,82 @@ app.post('/generate_alert/:alert_uid', function(req, res) {
   });
 });
 
-
-// TODO NEED TO ADD ERROR HANDLING....
-app.get('/create_playbook', function(req, res) {
-  console.log(req.info)
-  // Look up the action types
-  r.post(origHostPortUrl + '/api/nutanix/v3/action_types/list', {
-    kind: 'action_type',
-    offset: 0,
-    length: 40
-  }, function(err, resp1) {
-    var actionTypes = resp1 && resp1.data && resp1.data.entities
-    // Look up the trigger types
-    r.post(origHostPortUrl + '/api/nutanix/v3/groups', {
-      entity_type: 'trigger_type',
-      group_member_attributes: [{ attribute: 'name'}, { attribute: 'display_name' }],
-      filter_criteria: 'name==alert_trigger,name==incoming_webhook_trigger',
-      group_member_sort_attribute: "display_name",
-      group_member_count: 20
-    }, function(err, resp2) {
-      var alertTriggerId = resp2.data.group_results[0].entity_results[0].entity_id;
-      var webhookTriggerId = resp2.data.group_results[0].entity_results[1].entity_id;
-      var filedata = fs.readFileSync(sampleData +  '/prismpro/constrained_vm_playbooks.json', 'utf8');
-      filedata = filedata && filedata.replace(/XXXXXX/mgi, '10.45.32.144'); // This needs to be replaced...
-
-      var data = filedata && JSON.parse(filedata);
-
-      // Construct webhook playbook body
-      var webhookPB = data[1];
-      var resources1 = webhookPB.spec.resources;
-      resources1.trigger_list[0].action_trigger_type_reference.uuid = webhookTriggerId;
-      resources1.action_list.forEach(function(action){
-        var match = actionTypes.find(function(type){ type.status.resources.name === action.action_type_reference.name });
-        action.action_type_reference.uuid = match.metadata.uuid;
-      });
-      // Create the Webhook playbook
-      r.post(origHostPortUrl + '/api/nutanix/v3/action_rules', webhookPB, function(err, resp3) {
-        // Replace the webhook id
-        filedata = filedata && filedata.replace(/YYYYYY/mgi, resp3.data.metadata.uuid);
-        data = filedata && JSON.parse(filedata);
-        // Construct Alert Playbook body
-        const alertPB = data[0];
-        var resources2 = alertPB.spec.resources;
-        resources2.trigger_list[0].action_trigger_type_reference.uuid = alertTriggerId;
-        resources2.action_list.forEach(function(action){
-          var match = actionTypes.find(function(type){ type.status.resources.name === action.action_type_reference.name });
-          action.action_type_reference.uuid = match.metadata.uuid;
-        });
-        // Create the alert playbook
-        r.post(origHostPortUrl + '/api/nutanix/v3/action_rules', alertPB, function(err, resp4) {
-          res.send('Successfully Created Playbooks');
+// Endpoint to create playbooks for the Ticketsystem workflow
+app.post('/create_playbooks', function(req, res) {
+  var handleErr = function(error, body) {
+    if ((body && body.state === 'ERROR') || error) {
+      console.log(error)
+      console.log(body)
+      res.status(500).send({ message: 'Something went wrong' });
+      return true;
+    }
+  }
+  try {
+    // Look up the action types
+    r.post(origHostPortUrl + '/api/nutanix/v3/action_types/list', { 'body' : JSON.stringify({
+      kind: 'action_type',
+      offset: 0,
+      length: 40
+    }) }, function(err, resp, body) {
+      if (handleErr(err, body)) return;
+      var data1 = JSON.parse(body);
+      var actionTypes = data1 && data1.entities;
+      // Look up the trigger types
+      r.post(origHostPortUrl + '/api/nutanix/v3/groups', { 'body' : JSON.stringify({
+        entity_type: 'trigger_type',
+        group_member_attributes: [{ attribute: 'name'}, { attribute: 'display_name' }],
+        filter_criteria: 'name==alert_trigger,name==incoming_webhook_trigger',
+        group_member_sort_attribute: "display_name",
+        group_member_count: 20
+      }) }, function(err, resp, body) {
+        var data2 = JSON.parse(body);
+        if (handleErr(err, body)) return;
+        var results = data2.group_results[0].entity_results;
+        var alertTriggerId = results[0].entity_id;
+        var webhookTriggerId = results[1].entity_id;
+        fs.readFile(sampleData +  '/prismpro/playbooks.json', 'utf-8', function (err, filedata) {
+          // Replace the request URL in the REST API actions
+          filedata = filedata && filedata.replace(/XXXXXX/mgi, req.get('host'));
+          var filecontents = filedata && JSON.parse(filedata);
+          // Construct webhook playbook body
+          var webhookPB = filecontents && filecontents[1];
+          var resources1 = webhookPB.spec.resources;
+          // Set the Trigger UUID
+          resources1.trigger_list[0].action_trigger_type_reference.uuid = webhookTriggerId;
+          // Set the UUIDs of the actions
+          resources1.action_list.forEach(function(action){
+            var match = actionTypes.find(function(type){ return type.status.resources.name === action.action_type_reference.name });
+            action.action_type_reference.uuid = match.metadata.uuid;
+          });
+          // Create the Webhook playbook
+          r.post(origHostPortUrl + '/api/nutanix/v3/action_rules', { 'body' : JSON.stringify(webhookPB) }, function(err, resp, body) {
+            var data3 = JSON.parse(body);
+            if (handleErr(err, body)) return;
+            // Replace the webhook id in the Generate ticket request
+            filedata = filedata && filedata.replace(/YYYYYY/mgi, data3.metadata.uuid);
+            // Construct Alert Playbook body
+            filecontents = filedata && JSON.parse(filedata);
+            var alertPB = filecontents[0];
+            var resources2 = alertPB.spec.resources;
+            resources2.trigger_list[0].action_trigger_type_reference.uuid = alertTriggerId;
+            resources2.action_list.forEach(function(action){
+              // Look up the matching action in the actions types
+              var match = actionTypes.find(function(type){ return type.status.resources.name === action.action_type_reference.name });
+              action.action_type_reference.uuid = match.metadata.uuid;
+            });
+            // Create the alert playbook
+            r.post(origHostPortUrl + '/api/nutanix/v3/action_rules', { 'body' : JSON.stringify(alertPB) }, function(err, resp, body) {
+              if (handleErr(err, body)) return;
+              res.send('Successfully Created Playbooks');
+            });
+          });
         });
       });
     });
-  });
-
+  } catch (err) {
+    console.log(err)
+    res.status(500).send({ message: 'Something went wrong' });
+  }
 });
 
 // TicketSystem

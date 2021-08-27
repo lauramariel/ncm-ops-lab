@@ -124,7 +124,7 @@
           "should_continue_on_failure": false,
           "max_retries": 2,
           "input_parameter_values": {
-            "values": "[\"{{action[0].parsed_data}}\",\"Approved\"]",
+            "values": "[\"{{action[0].parsed_data}}\",\"approved\"]",
             "condition": "[\"if\"]",
             "branch": "[\"1547218c-2d5f-4207-8581-eb6af774a562\"]",
             "conditional_expression": "[\"{0}=={1}\"]"
@@ -182,8 +182,8 @@
           "input_parameter_values": {
             "headers": "Content-Type:application/json;charset=utf-8",
             "method": "PUT",
-            "url": "http://XXXXXX/resolve_ticket",
-            "request_body": "{\"incident_id\":\"{{trigger[0].entity1.uuid}}\"}"
+            "url": "http://XXXXXX/resolve_ticket/",
+            "request_body": "{\"incident_id\":\"{{trigger[0].entity2.uuid}}\"}"
           },
           "child_action_uuids": []
         }
