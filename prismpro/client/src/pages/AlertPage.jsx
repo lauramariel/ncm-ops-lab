@@ -115,31 +115,31 @@ class DefaultPage extends Component {
                 title: 'VM Bully',
                 key: 'A120245'
               },
-              {
-                value: 'A120323',
-                title: 'Non-AOS VM Memory Constrained',
-                key: 'A120323'
-              },
-              {
-                value: 'A120322',
-                title: 'Non-AOS VM Memory Overprovisioned',
-                key: 'A120322'
-              },
-              {
-                value: 'A120325',
-                title: 'Non-AOS VM CPU Constrained',
-                key: 'A120325'
-              },
-              {
-                value: 'A120324',
-                title: 'Non-AOS VM CPU Overprovisioned',
-                key: 'A120324'
-              },
-              {
-                value: 'A120327',
-                title: 'Non-AOS VM Bully',
-                key: 'A120327'
-              }
+              // {
+              //   value: 'A120323',
+              //   title: 'Non-AOS VM Memory Constrained',
+              //   key: 'A120323'
+              // },
+              // {
+              //   value: 'A120322',
+              //   title: 'Non-AOS VM Memory Overprovisioned',
+              //   key: 'A120322'
+              // },
+              // {
+              //   value: 'A120325',
+              //   title: 'Non-AOS VM CPU Constrained',
+              //   key: 'A120325'
+              // },
+              // {
+              //   value: 'A120324',
+              //   title: 'Non-AOS VM CPU Overprovisioned',
+              //   key: 'A120324'
+              // },
+              // {
+              //   value: 'A120327',
+              //   title: 'Non-AOS VM Bully',
+              //   key: 'A120327'
+              // }
             ]}
           />
         </StackingLayout>

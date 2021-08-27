@@ -30,7 +30,7 @@ class EnableServiceHelper(object):
       service(str): Service name to be enabled('nutanix-vcenter' or 'nutanix-netflow')
     Returns:
     """
-    headers = {'content-type': 'application/json;charset=UTF-8'}
+    headers = {'content-type': 'application/json;charset=UTF-8', 'X-NTNX-TREAT-EXTERNAL': 'true'}
     url = "https://{}:9440/api/aiops/v4.r0.a1/perfmon/" \
           "dataprovider/{}/$actions/enable" . format(self.pc_ip, service)
     res = requests.post(url=url,

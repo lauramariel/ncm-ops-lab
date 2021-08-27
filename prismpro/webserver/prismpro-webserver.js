@@ -47,67 +47,6 @@ app.use(bodyParser.json({ limit: "50mb" }))
 //----------------------
 
 if (env.simulatePrismPro) {
-  var VM_TYPES = ['bootcamp_inactive', 'bootcamp_constrained', 'bootcamp_good', 'bootcamp_overprovisioned', 'bootcamp_op_constrained'];
-  var getVmType = function(list) {
-    var id = list && list[0];
-    if (!id) return;
-    var selectedType = ''
-    VM_TYPES.find(function(type) {
-      if (id.indexOf(type) > -1) {
-        selectedType = type;
-        return true;
-      }
-    });
-    return selectedType;
-  }
-
-  var isStatsQuery = function (body) {
-    return body.query_name === 'prism:CPStatsModel';
-  }
-
-  var getTimeRange = function(body) {
-    var difference = body.interval_end_ms - body.interval_start_ms;
-    var MILLISECONDS_PER_HOUR = '3600000';
-    var MILLISECONDS_PER_DAY = 24 * MILLISECONDS_PER_HOUR;
-    var range = '';
-    if (difference < 2 * MILLISECONDS_PER_HOUR && difference > 0 * MILLISECONDS_PER_HOUR) {
-      range = 'last_1';
-    } else if (difference < 25 * MILLISECONDS_PER_HOUR && difference > 23 * MILLISECONDS_PER_HOUR) {
-      range = 'last_24';
-    } else if (difference < 8 * MILLISECONDS_PER_DAY && difference > 6 * MILLISECONDS_PER_DAY) {
-      range = 'last_week';
-    } else if (difference < 22 * MILLISECONDS_PER_DAY && difference > 20 * MILLISECONDS_PER_DAY) {
-      range = 'last_21';
-    }
-    return range;
-  }
-
-  var METRICS = ['hypervisor_cpu_usage_ppm', 'hypervisor.cpu_ready_time_ppm', 'controller_num_iops', 'memory_usage_ppm'];
-  var getGroupMemberMetric = function (list) {
-    var attribute = list && list[0] && list[0].attribute;
-    if (!attribute) return '';
-    var metric = '';
-    METRICS.find(function(metricName) {
-      if (attribute.indexOf(metricName) > -1) {
-        metric = metricName;
-        return true;
-      }
-    });
-    return metric;
-  };
-
-  app.get('/PrismGateway/services/rest/v2.0/events?', function(req, res, next) {
-    if (req.url && req.url.indexOf('event_ids=9db1b9a7-6019-404b-a3e0-6da5f24fb3df') > -1) {
-      var data = fs.readFileSync(sampleData + '/prismpro/anomalydetails.json', 'utf8');
-      var date = Date.now() - 13300000;
-      data = data.replace(/"XXXXXXXX"/gi, date * 1000);
-      res.json(JSON.parse(data));
-      return;
-    }
-    next();
-    return;
-  });
-
   var getAttributePresenceFlag = function(body){
     if (!body || !body.group_member_attributes) {
       return false;
@@ -135,56 +74,9 @@ if (env.simulatePrismPro) {
       return;
     }
     switch(body.entity_type) {
-      case 'event':
-        if(body.query_name === 'prism:EntityEventQueryModel' && body.filter_criteria && body.filter_criteria.indexOf('vm=cs=bootcamp_good') >= 0) {
-          var date = Date.now() - 13300000;
-          var filedata = fs.readFileSync(sampleData +  '/prismpro/chartanomaly.json', 'utf8');
-          filedata = filedata && filedata.replace(/XXXXXX/mgi, date * 1000);
-          var data = filedata && JSON.parse(filedata);
-          res.json(data);
-          return;
-        }
-        next();
-        break;
       case 'mh_vm':
-        var type = getVmType(body.entity_ids);
-        if (isStatsQuery(body) && type) {
-          try {
-            var filedata = fs.readFileSync(sampleData +  '/prismpro/' + type + '.json');
-            var jsonContent = filedata && JSON.parse(filedata);
-            var metric = getGroupMemberMetric(body.group_member_attributes);
-            var timerange = getTimeRange(body);
-            var content = jsonContent && jsonContent[metric] && jsonContent[metric][timerange];
-            var info = content && content.data;
-            if (info) {
-              var end = body.interval_end_ms * 1000;
-              var endTime = content.endTime * 1000;
-              info.group_results[0].entity_results[0].data.map(function(item) {
-                var length = item && item.values && item.values.length;
-                if (!length) return;
-                item.values.map(function(value) {
-                  if (!value) return;
-                  var val = value.values && value.values[0];
-                  if (val && type === 'bootcamp_good') {
-                    value.values = [val * 1.3];
-                  }
-                  if (val && type === 'bootcamp_constrained' && metric === 'hypervisor_cpu_usage_ppm') {
-                    value.values = [val * 1.5];
-                  }
-                  value.time = value.time - endTime + end;
-                });
-              });
-              res.send(info);
-            } else {
-              next();
-            }
-          } catch (e) {
-            console.log(e);
-            next();
-          }
-        }
         // Make the request but enhance it with the fake efficiency data
-        else if (body.filter_criteria && body.filter_criteria.indexOf('capacity%2Evm_efficiency_status') > -1) {
+        if (body.filter_criteria && body.filter_criteria.indexOf('capacity%2Evm_efficiency_status') > -1) {
           var isConstrained = body.filter_criteria.indexOf('capacity%2Evm_efficiency_status==.*[c|C][o|O][n|N][s|S][t|T][r|R][a|A][i|I][n|N][e|E][d|D].*') > -1;
           var isInactive = body.filter_criteria.indexOf('capacity%2Evm_efficiency_status==.*[i|I][n|N][a|A][c|C][t|T][i|I][v|V][e|E].*') > -1;
           var isOverprovisioned = body.filter_criteria.indexOf('capacity%2Evm_efficiency_status==.*[o|O][v|V][e|E][r|R][p|P][r|R][o|O][v|V][i|I][s|S][i|I][o|O][n|N][e|E][d|D].*') > -1;
@@ -309,6 +201,24 @@ if (env.simulatePrismPro) {
         else {
           next();
         }
+        break;
+      case 'storage_container':
+        // Code to work around ENG-408414
+        var origHostPortUrl = env.proxyProtocol +'://' + PC_IP +
+        (env.proxyPort ? ':' + env.proxyPort : '');
+        var payload = JSON.stringify(body);
+        var fwdURL = origHostPortUrl + req.url;
+        r.post(fwdURL, { 'body' : payload }, function(error, response, body) {
+          var result = JSON.parse(body);
+          if (result && result.group_results && result.group_results.length && result.group_results[0].entity_results) {
+            result.group_results[0].entity_results = result.group_results[0].entity_results.filter(er => {
+              if (er.entity_id !== 'container_7d' && er.entity_id !== 'container_8d') {
+                return er;
+              }
+            });
+          }
+          res.json(result);
+        });
         break;
       default :
         next();
@@ -538,13 +448,8 @@ app.post('/generate_stress', function(req, res) {
 });
 
 app.post('/generate_alert/:alert_uid', function(req, res) {
-  var body = req.body;
+  var body = req.body || {};
   var alert_uid = req.params.alert_uid;
-  if (!body) {
-    res.send({
-      error: 'Invalid Request. PC IP is required to generate alerts.'
-    });
-  }
   var status = 'SUCCESS';
   var configFileDir = '/home/nutanix/neuron/plugin_config';
   if (alert_uid === 'A106472') {
@@ -566,6 +471,63 @@ app.post('/generate_alert/:alert_uid', function(req, res) {
       status: status
     });
   });
+});
+
+
+// TODO NEED TO ADD ERROR HANDLING....
+app.get('/create_playbook', function(req, res) {
+  console.log(req.info)
+  // Look up the action types
+  r.post(origHostPortUrl + '/api/nutanix/v3/action_types/list', {
+    kind: 'action_type',
+    offset: 0,
+    length: 40
+  }, function(err, resp1) {
+    var actionTypes = resp1 && resp1.data && resp1.data.entities
+    // Look up the trigger types
+    r.post(origHostPortUrl + '/api/nutanix/v3/groups', {
+      entity_type: 'trigger_type',
+      group_member_attributes: [{ attribute: 'name'}, { attribute: 'display_name' }],
+      filter_criteria: 'name==alert_trigger,name==incoming_webhook_trigger',
+      group_member_sort_attribute: "display_name",
+      group_member_count: 20
+    }, function(err, resp2) {
+      var alertTriggerId = resp2.data.group_results[0].entity_results[0].entity_id;
+      var webhookTriggerId = resp2.data.group_results[0].entity_results[1].entity_id;
+      var filedata = fs.readFileSync(sampleData +  '/prismpro/constrained_vm_playbooks.json', 'utf8');
+      filedata = filedata && filedata.replace(/XXXXXX/mgi, '10.45.32.144'); // This needs to be replaced...
+
+      var data = filedata && JSON.parse(filedata);
+
+      // Construct webhook playbook body
+      var webhookPB = data[1];
+      var resources1 = webhookPB.spec.resources;
+      resources1.trigger_list[0].action_trigger_type_reference.uuid = webhookTriggerId;
+      resources1.action_list.forEach(function(action){
+        var match = actionTypes.find(function(type){ type.status.resources.name === action.action_type_reference.name });
+        action.action_type_reference.uuid = match.metadata.uuid;
+      });
+      // Create the Webhook playbook
+      r.post(origHostPortUrl + '/api/nutanix/v3/action_rules', webhookPB, function(err, resp3) {
+        // Replace the webhook id
+        filedata = filedata && filedata.replace(/YYYYYY/mgi, resp3.data.metadata.uuid);
+        data = filedata && JSON.parse(filedata);
+        // Construct Alert Playbook body
+        const alertPB = data[0];
+        var resources2 = alertPB.spec.resources;
+        resources2.trigger_list[0].action_trigger_type_reference.uuid = alertTriggerId;
+        resources2.action_list.forEach(function(action){
+          var match = actionTypes.find(function(type){ type.status.resources.name === action.action_type_reference.name });
+          action.action_type_reference.uuid = match.metadata.uuid;
+        });
+        // Create the alert playbook
+        r.post(origHostPortUrl + '/api/nutanix/v3/action_rules', alertPB, function(err, resp4) {
+          res.send('Successfully Created Playbooks');
+        });
+      });
+    });
+  });
+
 });
 
 // TicketSystem
@@ -686,7 +648,7 @@ app.get('/', function(req, resp) {
 });
 
 var walkmeScript = '<script>!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t,e){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="https://cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);analytics._loadOptions=e};analytics.SNIPPET_VERSION="4.1.0";analytics.load("SQBKbPgLzflz5eUSkuu0ePSAwKYmiKZ1");analytics.page();}}();</script>'
-var localStorageScript = '<script>if (localStorage) { localStorage.setItem("nutanix_show_search_tutorial", false); localStorage.setItem("FirstTimeExpAutoShown", true) }</script>'
+var localStorageScript = '<script>if (localStorage) { localStorage.setItem("nutanix_show_search_tutorial", false); localStorage.setItem("FirstTimeExpAutoShown", true)} if (sessionStorage) { sessionStorage.setItem("XDiscover-enabled", true) };</script>'
 
 // Serve the static UI files from the proxyHost
 app.get(/console/, function(req, resp) {

@@ -5,12 +5,10 @@ set -x
 PC_IP="$1"
 PC_USER="$2"
 PC_PASS="$3"
-PE_IP="$4"
-PE_SSH_USER="$5"
-PE_SSH_PASS="$6"
 
 echo "Enabling App Discovery and VCenter Monitoring Services"
-./enableUltimateFeatures.sh $PC_IP $PC_USER $PC_PASS $PE_IP $PE_SSH_USER $PE_SSH_PASS
+
+python enable_services.py $PC_IP $PC_USER $PC_PASS
 
 echo "Creating cron job for capacity"
 

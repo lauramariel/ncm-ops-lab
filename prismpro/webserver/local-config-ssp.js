@@ -32,8 +32,6 @@ var env = {
 
     simulatePrismPro: true,
 
-    simulateBlueMedora: false,
-
     // User/Pass for auto login
     userName: 'admin',
     userPass: 'Nutanix/4u',
