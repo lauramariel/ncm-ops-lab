@@ -37,7 +37,7 @@ class StressPage extends Component {
   renderModalHeader() {
     return (
       <div className="modal-title-container">
-        <Title size="h3">Easy Ops Lab</Title>
+        <Title size="h3">Lab Helper Tool</Title>
       </div>
     );
   }
@@ -69,7 +69,6 @@ class StressPage extends Component {
             onError={ this.onEntitySearchErr }
           />
         }
-        helpText="Choose the VM that you created for this lab"
       />
     );
   }

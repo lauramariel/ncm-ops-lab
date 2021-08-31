@@ -48,23 +48,23 @@ app.use(bodyParser.json({ limit: "50mb" }))
 
 if (env.simulatePrismPro) {
   var getAttributePresenceFlag = function(body){
-    if (!body || !body.group_member_attributes) {
+    if (!body || !body.group_attributes) {
       return false;
     }
     var flag = false
     var count = 1
-    body.group_member_attributes.forEach(function(item){
-      if(item.attribute === 'capacity.bully_vm_num' ||
+    body.group_attributes.forEach(function(item){
+      if (item.attribute === 'capacity.bully_vm_num' ||
       item.attribute === 'capacity.constrained_vm_num' ||
       item.attribute === 'capacity.dead_vm_num' ||
-      item.attribute === 'capacity.overprovisioned_vm_num'){
+      item.attribute === 'capacity.overprovisioned_vm_num') {
         count = count + 1
       }
-      if(count === 4){
+      if (count === 4) {
         flag = true
       }
-    })
-    return flag
+    });
+    return flag;
   }
 
   app.post(new RegExp(apiURL + '/groups'), function(req, res, next) {
@@ -163,6 +163,7 @@ if (env.simulatePrismPro) {
             res.json(result);
           });
         }
+        // Add counts for the fake VMs to the VM Efficiency widget
         else if (getAttributePresenceFlag(body)){
           var origHostPortUrl = env.proxyProtocol +'://' + PC_IP +
           (env.proxyPort ? ':' + env.proxyPort : '');
@@ -171,25 +172,17 @@ if (env.simulatePrismPro) {
 
           r.post(fwdURL, { 'body' : payload }, function(error, response, body) {
             var result = JSON.parse(body);
-            if(result && result.group_results && result.group_results.length) {
-              result.group_results[0].entity_results.forEach(function(res){
-                if(res && res.data && res.data[0] && res.data[0].values && res.data[0].values[0] && res.data[0].values[0].values && res.data[0].values[0].values[0] === 'Prism-Pro-Cluster'){
-                  res.data.forEach(function(item) {
-                    if (item.name === 'capacity.bully_vm_num') {
-                      item.values = [{"values":["0"],"time":1568937600000000}];
-                    }
-                    else if (item.name === 'capacity.constrained_vm_num') {
-                      item.values = [{"values":["2"],"time":1568937600000000}];
-                    }
-                    else if (item.name === 'capacity.dead_vm_num') {
-                      item.values = [{"values":["1"],"time":1568937600000000}];
-                    }
-                    else if (item.name === 'capacity.overprovisioned_vm_num') {
-                      item.values = [{"values":["2"],"time":1568937600000000}];
-                    }
-                  });
-                }
-              })
+            if(result && result.group_results && result.group_results.length && result.group_results[0].group_summaries) {
+              var summaries = result.group_results[0].group_summaries;
+              // Add 2 to the constrained count
+              summaries['sum:capacity.constrained_vm_num'].values[0].values[0] =
+                [JSON.stringify(JSON.parse(summaries['sum:capacity.constrained_vm_num'].values[0].values[0]) + 2)];
+              // Add 1 to the inactive count
+              summaries['sum:capacity.dead_vm_num'].values[0].values[0] =
+                [JSON.stringify(JSON.parse(summaries['sum:capacity.dead_vm_num'].values[0].values[0]) + 1)];
+              // Add 2 to the overprovisioned count
+              summaries['sum:capacity.overprovisioned_vm_num'].values[0].values[0] =
+                [JSON.stringify(JSON.parse(summaries['sum:capacity.overprovisioned_vm_num'].values[0].values[0]) + 2)];
             }
             res.json(result);
           });

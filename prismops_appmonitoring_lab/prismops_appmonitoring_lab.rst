@@ -9,12 +9,27 @@ Overview
 
 In this lab you will learn how Prism Ultimate can help IT Admins monitor, analyze and automatically act when a SQL Server's performance is impacted. You will also see how you can discover applications running on your cluster with Prism Ultimate.
 
+Lab Setup
++++++++++
+
+#. Open your **Prism Central** and navigate to the **VMs** page. Note down the IP Address of the **PrismOpsLabUtilityServer**. You will need to access this IP Address throughout this lab.
+
+   .. figure:: images/init1.png
+
+#. Open a new tab in the browser, and navigate to http://`<PrismOpsLabUtilityServer_IP_ADDRESS>`/ [example http://10.38.17.12/]. It is possible you may need to log into the VM if you are the first one to use it. Just fill out the **Prism Central IP**, **Username** and **Password** and click **Login**.
+
+   .. figure:: images/init2.png
+
+#. After you have provided the login details, use the UI at this URL to complete this lab.
+
+   .. figure:: images/init3.png
+
 SQL Server Monitoring with Prism Ultimate
 +++++++++++++++++++++++++++++++++++++++++
 
 Prism Ultimate licensing includes the SQL Server monitoring pack, which allows IT admins to understand how infrastructure may impact applications and vice versa. This is an agentless solution that gives visibility into databases, queries, SQL metrics and applies the X-FIT behavior learning and anomaly detection capabilities.
 
-#. Within Prism Central, click on :fa:`bars` **Operations > Integrations**.
+#. Within the lab UI, click on :fa:`bars` **Operations > Integrations**.
 
       .. figure:: images/appmonitoring0.png
 
@@ -212,9 +227,7 @@ Import Playbook
 
 #. Download this `Playbook <https://drive.google.com/file/d/1lyVoKI0Xf0lJgC4k9aAfMTdztWD0fVMT/view?usp=sharing>`_.
 
-#. Within Prism Central, click on :fa:`bars` **Operations > Playbooks**.
-
-#. Select **List** from the left-hand menu, then click on **Import**. **Please do this from the PC VM IP and not the lab utility server.**
+#. Go to the Playbooks page and click on **Import**. **Please do this in a separate tab from the Prism Central IP URL and not the lab utility server.**
 
 #. Click the **Browse** button, and select the Playbook you previously downloaded, then click **Import**.
 

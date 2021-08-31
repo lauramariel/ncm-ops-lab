@@ -40,7 +40,7 @@ Using machine learning, Prism Pro then analyzes the data and applies a classific
 
 #. In **Prism Central**, select :fa:`bars` **> Dashboard** (if not already there).
 
-#. From the Dashboard, take a look at the VM Efficiency widget. This widget gives a summary of inefficient VMs that Prism Pro’s X-FIT machine learning has detected in your environment. Click on the ‘View All Inefficeint VMs’ link at the bottom of the widget to take a closer look.
+#. From the Dashboard, take a look at the VM Efficiency widget. It is possible it may not be in the same position as in the below screen capture. This widget gives a summary of inefficient VMs that Prism Pro’s X-FIT machine learning has detected in your environment. Click on the ‘View All Inefficeint VMs’ link at the bottom of the widget to take a closer look.
 
    .. figure:: images/ppro_58.png
 
@@ -244,7 +244,7 @@ X-Play now has the ability to import and export playbooks across Prism Centrals.
 
 #. Download the following file which is an export of the playbook you will need. https://drive.google.com/file/d/1f5utfXCp1MJZc-KIxGQwkigkxVnd4OVp/view?usp=sharing
 
-#. Go to Playbooks page and click on **Import**. **Please do this from the PC VM IP and not the lab utility server.**
+#. Go to the Playbooks page and click on **Import**. **Please do this in a separate tab from the Prism Central IP URL and not the lab utility server.**
 
  .. figure:: images/import0.png
 
