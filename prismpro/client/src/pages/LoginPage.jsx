@@ -27,7 +27,7 @@ class DefaultPage extends Component {
   renderModalHeader() {
     return (
       <div className="modal-title-container">
-        <Title size="h3">Easy Ops Lab</Title>
+        <Title size="h3">Lab Helper Tool Login</Title>
       </div>
     );
   }

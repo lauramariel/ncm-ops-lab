@@ -198,7 +198,6 @@ class TicketPage extends Component {
     return (
       <div>
         <StackingLayout padding="20px">
-          <Title>Easy Ops Ticket System</Title>
           <Table
             oldTable={ false }
             loading={ false }

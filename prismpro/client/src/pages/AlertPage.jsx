@@ -31,7 +31,7 @@ class DefaultPage extends Component {
   renderModalHeader() {
     return (
       <div className="modal-title-container">
-        <Title size="h3">Easy Ops Lab</Title>
+        <Title size="h3">Alert Generation Tool</Title>
       </div>
     );
   }
@@ -52,7 +52,7 @@ class DefaultPage extends Component {
     const { entity } = this.state;
     return (
       <ElementPlusLabel
-        label="Select your VM"
+        label="Select the VM to raise this alert on"
         element={
           <EntitySearch
             onEntitiesChange={ selected => this.setState({ entity : selected }) }
@@ -63,7 +63,6 @@ class DefaultPage extends Component {
             onError={ this.onEntitySearchErr }
           />
         }
-        helpText="Choose the VM that you created for this lab"
       />
     );
   }
