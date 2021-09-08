@@ -6,7 +6,15 @@ PC_IP="$1"
 PC_USER="$2"
 PC_PASS="$3"
 
-echo "Enabling App Discovery and VCenter Monitoring Services"
+echo "Temporarily fixing NCC Bug that Prevents SeedPC from working"
+
+cp nutanix_serviceability-lib.egg ~/ncc/lib/py/nutanix_serviceability-lib.egg
+
+genesis stop cluster_health
+genesis stop neuron
+cluster start
+
+echo "Enabling App Discovery and vCenter Monitoring Services"
 
 python enable_services.py $PC_IP $PC_USER $PC_PASS
 
