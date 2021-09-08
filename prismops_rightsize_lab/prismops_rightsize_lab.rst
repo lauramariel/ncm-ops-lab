@@ -33,14 +33,16 @@ Prism Pro uses X-FIT machine learning to detect and monitor the behaviors of VMs
 
 Using machine learning, Prism Pro then analyzes the data and applies a classification to VMs that are learned to be inefficient. The following are short descriptions of the different classifications:
 
-  * **Overprovisioned:** VMs identified as using minimal amounts of assigned resources.
-  * **Inactive:** VMs that have been powered off for a period of time or that are running VMs that do not consume any CPU, memory, or I/O resources.
-  * **Constrained:** VMs that could see improved performance with additional resources.
-  * **Bully:** VMs identified as using an abundance of resources and affecting other VMs.
+- **Overprovisioned:** VMs identified as using minimal amounts of assigned resources.
+- **Inactive:** VMs that have been powered off for a period of time or that are running VMs that do not consume any CPU, memory, or I/O resources.
+- **Constrained:** VMs that could see improved performance with additional resources.
+- **Bully:** VMs identified as using an abundance of resources and affecting other VMs.
 
 #. In **Prism Central**, select :fa:`bars` **> Dashboard** (if not already there).
 
-#. From the Dashboard, take a look at the VM Efficiency widget. It is possible it may not be in the same position as in the below screen capture. This widget gives a summary of inefficient VMs that Prism Pro’s X-FIT machine learning has detected in your environment. Click on the ‘View All Inefficeint VMs’ link at the bottom of the widget to take a closer look.
+#. From the Dashboard, take a look at the VM Efficiency widget. It is possible it may not be in the same position as in the below screen capture. This widget gives a summary of inefficient VMs that Prism Pro’s X-FIT machine learning has detected in your environment. 
+
+#. Click on the ‘View All Inefficeint VMs’ link at the bottom of the widget to take a closer look.
 
    .. figure:: images/ppro_58.png
 
@@ -56,7 +58,7 @@ Using machine learning, Prism Pro then analyzes the data and applies a classific
 
 
 Increase Constrained VM Memory with X-Play based on Conditional Execution
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Now let’s look at how we can take automated action to resolve some of these inefficiencies. For this lab we will assume that this VM is constrained for memory, and will show how we can automatically remediate the right sizing of this VM. We will also use a custom ticket system to give an idea of how this typical workflow could integrate with ticketing system such as ServiceNow and use string parsing and conditional execution, two of our latest capabilities added into X-Play.
 
@@ -68,7 +70,7 @@ Now let’s look at how we can take automated action to resolve some of these in
 
    .. figure:: images/navigateplaybook.png
 
-#. We will need to create a couple of Playbooks for this workflow to be possible. Let's start by clicking **Create Playbook**. We will first be creating the Playbook that will be increasing the Memory of the VM. We want to create a playbook that reads in a string coming from the ticket system (approved or denied in our case) and have conditional branching and execution of the next steps accordingly.
+#. We will need to create a couple of Playbooks for this workflow to be possible. Let's start by clicking **Create Playbook**. We will first be creating the Playbook that will be increasing the Memory of the VM. We want to create a playbook that reads in a string coming from the ticket system (approved or denied in our case) and have conditional branching and execution of the next steps.
 
    .. figure:: images/rs3b.png
 
@@ -84,7 +86,7 @@ Now let’s look at how we can take automated action to resolve some of these in
 
    .. figure:: images/addparse.png
 
-#. Use the **Parameters** link to fill in the **string5** parameter exposed from the webhook trigger. In our example this will be the condition passed in from the API call. We have the format options for JSON, XML and Regex. This example we’ll use a JSON path. The input from the webhook will in in the format **{"message":"The request was approved.","status":"approved"}** or **{"message":"The request was denied.","status":"denied"}**. We will picking out the status field as **string5** to check if the request was approved or denied. Fill in the other fields according to the screen below. Then click **Add Action** to add the next action.
+#. Use the **Parameters** link to fill in the **string5** parameter exposed from the webhook trigger. In our example this will be the condition passed in from the API call. We have the format options for JSON, XML and Regex. This example we’ll use a JSON path. The input from the webhook will be in the format ``{"message":"The request was approved.","status":"approved"}** or **{"message":"The request was denied.","status":"denied"}``. We will picking out the status field as **string5** to check if the request was approved or denied. Fill in the other fields according to the screen below. Then click **Add Action** to add the next action.
 
    .. figure:: images/editparse.png
 
@@ -100,9 +102,11 @@ Now let’s look at how we can take automated action to resolve some of these in
 
    .. figure:: images/addmemory.png
 
-#. Select the **Resolve Alert** action. Use the **Parameters** link to fill in the **entity2** parameter which is exposed from the Webhook trigger. The caller will pass the Alert to be resolved as entity2. Then click **Add Action** and choose the **Email** action.
+#. Select the **Resolve Alert** action. Use the **Parameters** link to fill in the **entity2** parameter which is exposed from the Webhook trigger. The caller will pass the Alert to be resolved as entity2.
 
    .. figure:: images/resolvealert.png
+
+#. Then click **Add Action** and choose the **Email** action.
 
 #. Fill in the field in the email action. Here are the examples.
 
@@ -118,14 +122,16 @@ Now let’s look at how we can take automated action to resolve some of these in
 
 #. Now, we would like to call back to the ticket service to resolve the ticket in the ticket service. Click **Add Action** to add the **REST API** action. Fill in the following values replacing the <PrismOpsLabUtilityServer_IP_ADDRESS> in the URL field. This concludes our first conditional branch for an approved request.
 
-   - **Method:** PUT
-   - **URL:** http://<PrismOpsLabUtilityServer_IP_ADDRESS>/resolve_ticket/
-   - **Request Body:** ``{"incident_id":"{{trigger[0].entity2.uuid}}"}``
-   - **Request Header:** Content-Type:application/json;charset=utf-8
+   - **Method:** - PUT
+   - **URL:** - ``http://<PrismOpsLabUtilityServer_IP_ADDRESS>/resolve_ticket/``
+   - **Username** - leave blank
+   - **Password** - leave blank
+   - **Request Body:** - ``{"incident_id":"{{trigger[0].entity2.uuid}}"}``
+   - **Request Header:** - ``Content-Type:application/json;charset=utf-8``
 
    .. figure:: images/resolveticket.png
 
-#. Next we’ll add the 2nd condition for when the request is denied. Click **Add Action** and choose the **Branch** action. We will use the **Else** condition. We could also add **Else If** we wanted to check more than just the approved and denied condition. For now we’ll use just **Else**. We can also add a description for this action as "Denied" following the same steps that we did for the "Approved" Branch description above.
+#. Next we’ll add the 2nd condition for when the request is denied. Click on **Add Condition** followed by **Add Action** and choose the **Branch** action. We will use the **Else** condition. We could also add **Else If** we wanted to check more than just the approved and denied condition. For now we’ll use just **Else**. We can also add a description for this action as "Denied" following the same steps that we did for the "Approved" Branch description above.
 
    .. figure:: images/elsebranch.png
 
@@ -137,7 +143,7 @@ Now let’s look at how we can take automated action to resolve some of these in
 
    .. figure:: images/deniedemail.png
 
-#. Click **Save & Close** button and save it with a name “*Initials* - Resolve Service Ticket”. **Be sure to enable the ‘Enabled’ toggle.**
+#. Click **Save & Close** button and save it with a name “*Initials* - Resolve Service Ticket” and **Be sure to enable the ‘Enabled’ toggle.**
 
 #. For the next part of this lab, if you understand how to set up Playbooks already and wish to do so, you have the option to skip the setup of the next Playbook. Instead follow the steps under the Importing/Exporting Playbooks section below. We recommend reading through the steps to create the Playbook to better understand what it is doing.
 
@@ -149,15 +155,19 @@ Now let’s look at how we can take automated action to resolve some of these in
 
    .. figure:: images/rs4.png
 
-#. Fill in the following values replacing your initials in the *Initials* part, and the <PrismOpsLabUtilityServer_IP_ADDRESS> in the URL field. Click **Copy**. **If you chose to import the Playbook for this lab instead of creating it, you may skip this step**
+#. Fill in the following values replacing your initials in the *Initials* part, and the <PrismOpsLabUtilityServer_IP_ADDRESS> in the URL field.
 
    - **Name:** *Initials* - Generate Service Ticket
    - **Method:** POST
+   - **Username** - leave blank
+   - **Password** - leave blank
    - **URL:** http://<PrismOpsLabUtilityServer_IP_ADDRESS>/generate_ticket/
    - **Request Body:** ``{"vm_name":"{{trigger[0].source_entity_info.name}}","vm_id":"{{trigger[0].source_entity_info.uuid}}","alert_name":"{{trigger[0].alert_entity_info.name}}","alert_id":"{{trigger[0].alert_entity_info.uuid}}", "webhook_id":"<ENTER_ID_HERE>","string1":"Request 1GiB memory increase."}``
-   - **Request Header:** Content-Type:application/json;charset=utf-8
+   - **Request Header:** - ``Content-Type:application/json;charset=utf-8``
 
    .. figure:: images/rs5.png
+
+#. Click **Copy**. 
 
 #. Now switch to the Playbooks list by clicking the **List** item in the left hand menu. **If you chose to import the Playbook for this lab instead of creating it, you may skip this step**
 
