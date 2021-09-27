@@ -35,9 +35,10 @@ In this bootcamp, you will run through 4 different labs starting with a look at 
 What's New
 ++++++++++
 
-- Workshop updated for the following software versions:
-    - AOS 5.20.x
-    - Prism 2021.7
+Workshop updated for the following software versions:
+
+- AOS 5.20.x
+- Prism 2021.7
 
 Agenda
 ++++++
