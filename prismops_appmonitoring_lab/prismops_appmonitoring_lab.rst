@@ -16,64 +16,79 @@ Lab Setup
 
    .. figure:: images/init1.png
 
-#. Open a new tab in the browser, and navigate to http://`<PrismOpsLabUtilityServer_IP_ADDRESS>`/ [example http://10.38.17.12/]. It is possible you may need to log into the VM if you are the first one to use it. Just fill out the **Prism Central IP**, **Username** and **Password** and click **Login**.
+#. Open a new tab in the browser, and navigate to ``http://<PrismOpsLabUtilityServer_IP_ADDRESS>/`` [example http://10.38.17.12/]. It is possible you may need to log into the VM if you are the first one to use it. Just fill out the **Prism Central IP**, **Username** and **Password** and click **Login**.
 
    .. figure:: images/init2.png
 
-#. After you have provided the login details, use the UI at this URL to complete this lab.
+#. In a separate tab, navigate to ``http://<PrismOpsLabUtilityServer_IP_ADDRESS>/`` to complete the lab from [example http://10.38.17.12/]. Use the UI at this URL to complete this lab.
 
    .. figure:: images/init3.png
+
+.. note::
+
+   The following instructions are executed in Prism Ops Lab Utility Server console which is accessed via Prism Ops Lab Utility Server at ``http://<PrismOpsLabUtilityServer_IP_ADDRESS>/``
+
+   Prism Ops Lab Utility Server has functions to simulate the environment for doing this lab. Doing the lab on the Prism Central will not show simulated environment and labs will **not** work.
+
+   In case, the ``http://<PrismOpsLabUtilityServer_IP_ADDRESS>/``  does not load for a while. Restart your **PrismProLabUtilityServer** VM from Prism Central/Prism Element.
+
 
 SQL Server Monitoring with Prism Ultimate
 +++++++++++++++++++++++++++++++++++++++++
 
 Prism Ultimate licensing includes the SQL Server monitoring pack, which allows IT admins to understand how infrastructure may impact applications and vice versa. This is an agentless solution that gives visibility into databases, queries, SQL metrics and applies the X-FIT behavior learning and anomaly detection capabilities.
 
-#. Within the lab UI, click on :fa:`bars` **Operations > Integrations**.
+#. Within the lab UI, click on :fa:`bars` **Operations > Monitoring Integrations**.
 
-      .. figure:: images/appmonitoring0.png
+   .. figure:: images/appmonitoring0.png
 
 #. Click **Get Started** to configure the monitoring integration. The *Monitoring Integrations* screen will appear. This is the page where the your configured integrations would show up.
 
 #. Click on **Configure Instance**.
 
-      .. figure:: images/appmonitoring2.png
+   .. figure:: images/appmonitoring2.png
 
-#. Select **Microsoft SQL Server** from the dropdown, check the box for *I have increase Prism Central (PC) VM's Memory and vCPU* (please see the note directly below), and then click **Enable**. This allows Nutanix Collector to collect external entity instance metrics. In this case, the SQL Server collector is already enabled, you will not see that option and can skip to the next step.
+#. Select **Microsoft SQL Server** from the dropdown
+
+#. Click **Enable** for Nutanix Collector. This allows Nutanix Collector to collect external entity instance metrics. In case, the Nutanix Collector is already enabled for SQL Server, you will not see that option and can skip to the next step.
 
    .. note::
 
       Pay close attention to the other features you may have, or will enable in Prism Central in addition to what is outlined in this workshop. Please refer to `Prism Central: Resource Requirements for various services enablement on Prism Central <https://portal.nutanix.com/page/documents/kbs/details?targetId=kA00e000000brBgCAI>`_ for considerations regarding resources.
 
-#. Select the IP address of you MSSQL server VM within the *Microsoft SQL Server Host*. Fill in the rest of the fields with the information listed below. The *Microsoft SQL Server Port* field should be auto-filled with 1433 (standard SQL port). Click on **Test Connection**, and once that is successful, click **Save**.
+#. Select the IP address of your MSSQLSource-User0X within the *Microsoft SQL Server Host*. This SQL VM will be provided by your instructor. 
 
-   - **Microsoft SQL Server Port** 1433
-   - **username:** sa
-   - **password:** Nutanix/1234
+#. Fill in the rest of the fields with the information listed below. The *Microsoft SQL Server Port* field should be auto-filled with 1433 (standard SQL port). 
 
-      .. figure:: images/appmonitoring5.png
+   - **Microsoft SQL Server Port** -  1433
+   - **username:** - sa
+   - **password:** - Nutanix/1234
+   
+   .. figure:: images/appmonitoring5.png
+
+#. Click on **Test Connection**, and once that is successful, click **Save**.
 
 #. Once complete, your SQL Server will be listed under *Monitoring Integrations*, as seen below.
 
-      .. figure:: images/appmonitoring6.png
+   .. figure:: images/appmonitoring6.png
 
 #. Click on the IP Address of the server, under the *Name* column to observe the information being collected. The *Summary* screen is now shown.
 
-      .. figure:: images/appmonitoring7.png
+   .. figure:: images/appmonitoring7.png
 
 #. In addition to the *Summary* view, click **Queries** from the left-hand menu to observe SQL Server queries, sorted by highest average execution time, providing greater insight into the application itself.
 
-      .. figure:: images/sqlqueries.png
+   .. figure:: images/sqlqueries.png
 
 #. Click **Metrics** from the left-hand menu. As SQL monitoring has recently been setup, it will take time for these metrics to full populate. In the example below, we can see that in the *CPU Utilization* chart anomalies are generated based on machine learned baselines, just as Prism Pro provides on the VM level.
 
-      .. figure:: images/sqlcharts.png
+   .. figure:: images/sqlcharts.png
 
    Next, we will create an alert policy for the *Buffer Pool Size*, and a playbook based on that alert, to extend the simplicity of our powerful X-Play automation onto applications as well.
 
 #. Scroll down to the **Buffer Pool Size** metric (typically 3rd from the bottom, right column), click on **Actions**, and then choose **Alert Settings**.
-
-      .. figure:: images/bufferalert1.png
+   
+   .. figure:: images/bufferalert1.png
 
    We will be stressing the SQL Server in a later step using an application called *HammerDB*. The stress will cause the metric to increase after a short delay. We will keep the alert threshold at a fair number so to get the alert policy raised as soon as possible for our example.
 
@@ -83,7 +98,7 @@ Prism Ultimate licensing includes the SQL Server monitoring pack, which allows I
 
 #. Within *Policy Name* enter *Initials*\ **- SQL Server Buffer Pool Size**, and click **Save**.
 
-      .. figure:: images/bufferalert2.png
+   .. figure:: images/bufferalert2.png
 
 #. Within Prism Central, click on :fa:`bars` **Operations > Playbooks**.
 
@@ -95,7 +110,7 @@ Prism Ultimate licensing includes the SQL Server monitoring pack, which allows I
 
 #. From the *Select an Alert Policy* dropdown, select *Initials*\ **- MSSQL Buffer Pool Size**.
 
-      .. figure:: images/sqlplay1.png
+   .. figure:: images/sqlplay1.png
 
    The built-in PowerShell script requires our MSSQL VM IP address, which we will obtain by creating *Action* entries. The first one will be to the lookup the VM IP.
 
@@ -111,7 +126,7 @@ Prism Ultimate licensing includes the SQL Server monitoring pack, which allows I
 
    .. note::
 
-   While the field names in this example include the phrase *(Optional)*, they are required for this step.
+     While the field names in this example include the phrase *(Optional)*, they are required for this step.
 
    - **URL:** `https://<PRISM-CENTRAL-IP-ADDRESS>:9440/api/nutanix/v3/groups`
    - **Username (Optional)** admin

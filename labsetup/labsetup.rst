@@ -17,7 +17,10 @@ Lab Setup
 
    .. figure:: images/init2b.png
 
-#. In a separate tab, navigate to http://`<PrismOpsLabUtilityServer_IP_ADDRESS>`/ to complete the lab from [example http://10.38.17.12/]. Use the UI at this URL to complete the lab.
+#. Open a new browser tab, navigate to http://`<PrismOpsLabUtilityServer_IP_ADDRESS>`/ to complete the lab from [example http://10.38.17.12/]. Use the UI at this URL to complete this lab.
+
+   .. note::
+      This page may take a few minutes to load. If the page is malformed, refresh the browser tab
 
    .. figure:: images/init3.png
 
