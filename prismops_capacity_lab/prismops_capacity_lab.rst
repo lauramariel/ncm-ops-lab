@@ -111,8 +111,8 @@ Now let's look at how we can take automated action to generate this report when 
 
    - **Recipient:** - Fill in your email address.
    - **Subject :** - ``Playbook {{playbook.playbook_name}} was executed.``
-   - **Message:** - `As a result of the alert, {{trigger[0].alert_entity_info.name}}, the playbook, {{playbook.playbook_name}}, was executed. The generated report is attached to this email.`
-   - **Attachment:**  - Choose **Report PDF**
+   - **Message:** - ``As a result of the alert, {{trigger[0].alert_entity_info.name}}, the playbook, {{playbook.playbook_name}}, was executed. The generated report is attached to this email.``
+   - **Attachment:**  - Choose **Gernerate Forecast Report: Report PDF**
 
    .. note::
 
@@ -120,11 +120,11 @@ Now let's look at how we can take automated action to generate this report when 
 
    .. figure:: images/cap8.png
 
-#. Click **Save & Close** button and save it with a name *Initials* - Automatically Generated Forecast Report.
+#. Click **Save & Close** button and save it with a name: *Initials* - Automatically Generated Forecast Report.
 
    .. figure:: images/cap9.png
 
-#. Enable the *Enabled* toggle
+#. Set the playbook status to *Enabled* 
 
 #. Now let's trigger the workflow. Switch to the browser tab where you opened **PrismOpsLabUtilityServer** in the :ref:`labsetup` section with the **/alerts** URL [example 10.38.17.12/alerts]. 
 
@@ -132,7 +132,7 @@ Now let's look at how we can take automated action to generate this report when 
 
    .. figure:: images/cap10.png
 
-#. Switch back to the previous tab with the **Prism Central > Operations > Playbooks** browser tab. From the table view click to open the details for the “*Initials* - Automatically Generate Forecast Report” Playbook.
+#. Switch back to the previous **Prism Central > Operations > Playbooks** browser tab. From the table view click to open the details for the `*Initials* - Automatically Generate Forecast Report” Playbook.`
 
    .. figure:: images/cap11.png
 
