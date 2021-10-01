@@ -19,7 +19,7 @@ Capacity runway is a measure of the remaining capacity left within a given clust
 
 #. Click on the **Prism-Pro-Cluster** cluster.
 
-. You can now take a look at the Runway for Storage, CPU, and Memory.
+   You can now take a look at the Runway for Storage, CPU, and Memory.
 
    .. figure:: images/ppro_12.png
 
@@ -27,7 +27,7 @@ Capacity runway is a measure of the remaining capacity left within a given clust
 
    .. figure:: images/ppro_13.png
 
-#. Click on the **‘Optimize Resources’** button on left. This is where you can see the inefficient VMs in the environment with suggestions on how you can optimize these resources to be as efficient as possible.
+#. Click on the **‘Optimize Resources’** button on left. This is where you can (depending on the workload running in your Nutanix cluster) see the inefficient VMs in the environment with suggestions on how you can optimize these resources to be as efficient as possible.
 
    .. figure:: images/ppro_14.png
 
@@ -68,12 +68,14 @@ Prism Pro's X-FIT engine also provides the capability to plan for future workloa
 
    .. figure:: images/ppro_20.png
 
+#. Choose to not save your scenario upon exit as we will be configuring automated report generation using Playbooks
+
 Automate Capacity Forecast Report Generation with X-Play
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Now let's look at how we can take automated action to generate this report when the Capacity Runway is low. We will use X-Play, Prism Pro's simple automation engine.
 
-#. Use the hamburger menu to navigate to **Operations** > **Playbook**.
+#. Use the hamburger menu to navigate to **Operations** > **Playbook** > and **Get Started** (if this option appears) 
 
    .. figure:: images/cap1.png
 
@@ -85,15 +87,19 @@ Now let's look at how we can take automated action to generate this report when 
 
    .. figure:: images/cap3.png
 
-#. Select the Specific Alert Policies radio button and then search 'runway' in the search box. Select **Cluster running out of storage Capacity (low runway)**, **Cluster running out of Memory Capacity (low runway)**, and **Cluster running out of CPU Capacity (low runway)** from the dropdown, since these are the 3 alerts we would want to generate a report for if Storage, Memory or CPU runway are low.
+#. Select the Specific Alert Policies radio button and then search 'runway' in the search box. Select the following from the dropdown, since these are the 3 alerts we would want to generate a report for if Storage, Memory or CPU runway are low:
+   
+   - **Cluster running out of storage Capacity (low runway)**
+   - **Cluster running out of Memory Capacity (low runway)** and 
+   - **Cluster running out of CPU Capacity (low runway)** 
 
    .. figure:: images/cap4.png
 
-#. First, we would like to Generate a Forecast report for this alert. Click **Add Action** on the left side and select the **Generate Forecast Report** action.
+#. First, we would like to Generate a Forecast report for this alert. Click **Add Action** on the left pane and select the **Generate Forecast Report** action.
 
    .. figure:: images/cap5.png
 
-#. The Alert Source Entity in this case will be the Cluster that the alert is generated on. You can also change the Runway Period if you would like.
+#. The **Alert Matching Criteria: Source Entity** in this case will be your Cluster that the alert is generated on. You can also change the Runway Period if you would like.
 
    .. figure:: images/cap6.png
 
@@ -105,7 +111,8 @@ Now let's look at how we can take automated action to generate this report when 
 
    - **Recipient:** - Fill in your email address.
    - **Subject :** - ``Playbook {{playbook.playbook_name}} was executed.``
-   - **Message:** - `As a result of the alert, {{trigger[0].alert_entity_info.name}}, the playbook, {{playbook.playbook_name}}, was executed. The generated report is attached to this email.``
+   - **Message:** - ``As a result of the alert, {{trigger[0].alert_entity_info.name}}, the playbook, {{playbook.playbook_name}}, was executed. The generated report is attached to this email.``
+   - **Attachment:**  - Choose **Gernerate Forecast Report: Report PDF**
 
    .. note::
 
@@ -113,15 +120,19 @@ Now let's look at how we can take automated action to generate this report when 
 
    .. figure:: images/cap8.png
 
-#. Click **Save & Close** button and save it with a name “*Initials* - Automatically Generate Forecast Report”. **Be sure to enable the ‘Enabled’ toggle.**
+#. Click **Save & Close** button and save it with a name: *Initials* - Automatically Generated Forecast Report.
 
    .. figure:: images/cap9.png
 
-#. Now let's trigger the workflow. Switch to the tab you opened in the setup with the **/alerts** URL [example 10.38.17.12/alerts]. Select the Radio for **Memory Runway is Short** and click **Simulate Alert**. This will simulate a memory constrained alert for the **Prism-Pro-Cluster**.
+#. Set the playbook status to *Enabled* 
+
+#. Now let's trigger the workflow. Switch to the browser tab where you opened **PrismOpsLabUtilityServer** in the :ref:`labsetup` section with the **/alerts** URL [example 10.38.17.12/alerts]. 
+
+#. Select the **Memory Runway is Short** option and click **Simulate Alert**. This will simulate a memory constrained alert for the **Prism-Pro-Cluster**.
 
    .. figure:: images/cap10.png
 
-#. Switch back to the previous tab with the **Prism Central** console. From the table view click to open the details for the “*Initials* - Automatically Generate Forecast Report” Playbook.
+#. Switch back to the previous **Prism Central > Operations > Playbooks** browser tab. From the table view click to open the details for the `*Initials* - Automatically Generate Forecast Report” Playbook.`
 
    .. figure:: images/cap11.png
 

@@ -31,13 +31,13 @@ Operations in Prism are designed to connect machine signals to operational actio
 
 In this bootcamp, you will run through 4 different labs starting with a look at the cluster Capacity Planning and automating the generation and communication of a runway forecast report. The 2nd lab will involve right-sizing a VM in the event of an inefficiency alert being triggered on the VM showcasing a IFTTT workflow using X-Play and an in-built ticketing system. The 3rd lab introduces Prism Ultimate - Setup application monitoring on a SQL Server and create a playbook to collect logs from the VM when the server is stressed, also look at Application Discovery to export a list of the applications running on your cluster. Last go through the cost governance lab with Xi Beam, whose on-premise capabilities are now licensed under Prism Ultimate.
 
-
 What's New
 ++++++++++
 
-- Workshop updated for the following software versions:
-    - AOS 5.17.x | 5.18.x | 5.19.x
-    - Prism 2021.1
+Workshop updated for the following software versions:
+
+- AOS 5.20.x
+- Prism 2021.7
 
 Agenda
 ++++++
@@ -316,6 +316,5 @@ For RTP:
 Nutanix Version Info
 ++++++++++++++++++++
 
-- **AHV Version** - AHV 20170830.337 (AOS 5.11+)
-- **AOS Version** - 5.17.x | 5.18.x | 5.19.x
-- **PC Version** - Prism 2021.1
+- **AOS Version** - 5.20.x
+- **PC Version** - Prism 2021.7
