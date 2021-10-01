@@ -43,7 +43,7 @@ Beam is a SaaS service and does not require any on-premises installation for cos
 #. This will take you to an Active Directory login page. Use your login credentials assigned from the cluster assignment spreadsheet:
 
    - **Username** - Your **Lab VPN Username** (provided by your instructor)
-   - **Password** - Please find the Beam SaaS login password (provided by your instructor)
+   - **Password** - Please find the Beam SaaS login password (provided by your instructor - your HPOC password)
 
    .. figure:: images/beam_01c2.png
 
