@@ -375,7 +375,7 @@ In order to configure Beam with AWS, customers will need access to their **AWS P
 
    Beam identifies cost spending based on the CUR data. Observe that the CUR name and the AWS S3 storage bucket name where the CUR resides have been configured in the lab setup. Customers can specify their account name, whether they want to give Spend Analysis and Optimize Recommendations to Beam or allow Beam to act on recommendations, and generate a CloudFormation Template. 
    
-   ..  nnote::
+   ..  note::
    
     Customers can run the CloudFormation Template by logging into their AWS Payer or Linked accounts to complete the setup. This will create an AWS access role for Beam and allow Beam to read their billing data from the CUR. If they give write access then they will also be able to take various one-click actions from the Beam console to act upon Beam’s cost saving recommendations.
 
@@ -385,13 +385,15 @@ In order to configure Beam with AWS, customers will need access to their **AWS P
 
 #. In the **Review Configuration** page, observe the permissions granted to Beam in AWS.
 
+   .. figure:: images/beam_32a.png
+
    .. note::
 
     Usually a customer would confirm these setting here and click **Execute CloudFormation Template** to run the template on AWS. Once it is run, customer can click on **Verify and Save**
 
-#. We will not be configuring Linked Accounts at this time. The purpose of this section was to demonstrate how to configure cloud accounts in Beam. 
-
 #. Click **Back**  and **X** on top right corner to return to the **Dashboard** for the AWS account.
+ 
+   We will not be configuring Linked Accounts at this time. The purpose of this section was to demonstrate how to configure cloud accounts in Beam. 
 
 Beam helps public cloud customers with cost savings through three different ways: eliminating unused resources, right-sizing underutilized resources, and smarter Reserved Instance (RI) purchases. You may observe the cost savings identified by Beam:
 
