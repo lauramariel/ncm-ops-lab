@@ -406,55 +406,71 @@ Eliminate Unused Resources
 
 Beam identifies cloud resources that have been unused for an extended period of time and can be eliminated to save on their costs. Beam cost policy defines the criteria it considers when identifying unused resources and is easily configurable based on customer requirement of what should be considered an unused resource.
 
-#. Click on the **menu on top left** and click on **Save** to go to Overview tab. Next click on the **Eliminate** tab. Here you will see various cloud resources identified by Beam that have not been used and satisfy the criteria for unused resources in the Beam Cost Policy. 
+#. From the :fa:`bars` icon at the top left of the portal, click on **Save** to go to Overview tab. 
 
-   ..figure:: images/beam_33.png
+#. Click on the **Eliminate** tab. Here you will see various cloud resources identified by Beam that have not been used and satisfy the criteria for unused resources in the Beam Cost Policy. 
+
+   .. figure:: images/beam_33.png
 	
-#. Familiarize yourself with the default Beam cost policy. From the toolbar at the top left select **Configure > Cost Policy**
+#. Familiarize yourself with the default Beam cost policy. 
+
+#. From the :fa:`bars` icon at the top left of the portal, select **Configure > Cost Policy**
 
    .. figure:: images/beam_33a.png
 
-#. Click **View** next to the **System Policy-AWS**. It will show the Beam cost policy used to identify unused and underutilized resources. After reviewing, click **X** to close the policy and then select the **menu at top left**, select **Save** and then **Eliminate** tab to go back to Eliminate view.
+#. Click **View** next to the **System Policy-AWS**. It will show the Beam cost policy used to identify unused and underutilized resources. After reviewing, click **X** to close the policy and then select the **menu at top left**.
 
    .. figure:: images/beam_33b.png
 
-#. In the **Eliminate** tab, select **Unused ELB** to see more details about the unused AWS Elastic Load Balancers idenfied by Beam. Click **View List**.
+#. Select **Save** and then **Eliminate** tab to go back to Eliminate view.
 
+#. In the **Eliminate** tab, select **Unused ELB** to see more details about the unused AWS Elastic Load Balancers idenfied by Beam.
+
+#. You will see see details of unused ELBs including their resource ID, the cloud account that they are in, and associated cost savings by eliminating them. If Beam was given write access during AWS account configuration, customers could take one-click action to eliminate this unused ELB from the Beam console and immediately realize cost savings.
+   
    .. figure:: images/beam_34.png
-
-#. You will see see details of unused ELBs including their resource ID, the cloud account that they are in, and associated cost savings by eliminating them. If Beam was given write access during AWS account configuration, customers could take one-click action to eliminate this unused ELB from the Beam console and immediately realize cost savings. The lab environment does not have this feature enabled.
 
    .. figure:: images/beam_35.png
 
+   .. note::
+
+     This lab environment does not have this feature to delete unused resources. However a production environment that a customer uses will have this feature.
+
 Right-size Underutilized Resources
-............................
+....................................
 
 Beam also identifies cloud resources that are being used but not optimally and therefore they are underutilized. Optimizing the size of these resources can add to cost savings. Beam cost policy defines the criteria is considered when identifying underutilized resources and can be modified by customers.
 
-#. Click on the **Optimize** tab. Here you will see various cloud resources identified by Beam that satisfy the underutilized resource criteria in the Beam Cost Policy.
+#. From the :fa:`bars` icon at the top left of the portal, click on **Optimize** tab. Here you will see various cloud resources identified by Beam that satisfy the underutilized resource criteria in the Beam Cost Policy.
 
-#. Select **Unuderutilized EC2** to see more details about the underutilized AWS Elastic Compute Cloud instances idenfied by Beam. Click **View List**.
+#. In the **Unuderutilized EC2** to see more details about the underutilized AWS Elastic Compute Cloud instances idenfied by Beam, click **View List**.
 
    .. figure:: images/beam_36.png
 
-#. Selet any instance from the list. You will see see details of EC2 instances including their resource ID, the cloud account that they are in, and associated cost savings by changing their size from their current size to a downgraded size recommended by Beam. These recommendations are made based on CPU utilization and the optimization rules configured in Beam policy. 
+#. Select any instance from the list. You will see see details of EC2 instances including their resource ID, the cloud account that they are in, and associated cost savings by changing their size from their current size to a downgraded size recommended by Beam. These recommendations are made based on CPU utilization and the optimization rules configured in Beam policy. 
 
    .. figure:: images/beam_37.png
 
 Smarter Reserved Instance Purchases
-............................
+....................................
 
 Beam also makes recommendations on the most optimal EC2 Reserved Instance (RI) purchases based on customer's usage history. By purchase RIs using Beam's recommendations, customers can save a huge amount over their on-demand instance spend. 
 
-#. From the **menu at top left**, select **Purchase > Overview** tab. Here you will see the current amount of EC2 RI coverage in the AWS account as well as Beam’s recommendations for new RI purchases. Click on **View All Recommendations** to see all RI purchase recommendations
+#. From the :fa:`bars` icon at the top left of the portal, select **Purchase > Overview** tab. Here you will see the current amount of EC2 RI coverage in the AWS account as well as Beam’s recommendations for new RI purchases. 
+
+#. Click on **View All Recommendations** to see all RI purchase recommendations
 
    .. figure:: images/beam_38.png
 
-#. Here you will see Beam’s EC2 RI Purchase recommendations and the associated cost savings by switching to RI instead of on-demand pricing. Beam makes these RI recommendations by first identifying the EC2 instances that are running continuously over a lookback period (default value is 14 days). Beam then normalizes the size of those EC2 instances and calculates the amount of normalized instances that can be optimally covered by an RI purchase. Click on any of the RI recommendations to see their details.
+#. Here you will see Beam’s EC2 RI Purchase recommendations and the associated cost savings by switching to RI instead of on-demand pricing. Beam makes these RI recommendations by first identifying the EC2 instances that are running continuously over a lookback period (default value is 14 days). Beam then normalizes the size of those EC2 instances and calculates the amount of normalized instances that can be optimally covered by an RI purchase. 
+
+#. Click on any of the RI recommendations to see their details.
 
    .. figure:: images/beam_39.png
 
-#. In the RI details view, you will see the EC2 instance utilization chart showing the number of instances of the same type and how they have changed over the lookback period. Beam identifies the minimum number of instances so that the RI purchase will always cover at least the minimum number of instances that are running continuously. Beam also provides a cost comparison chart and shows the time period it would take for the higher upfront cost of a RI purchase to break-even vs on-demand costs. Customers can then decide if they should purchase this RI if they expect to use these EC2 instances for the duration of the break-even period. 
+#. In the RI details view, you will see the EC2 instance utilization chart showing the number of instances of the same type and how they have changed over the lookback period. Beam identifies the minimum number of instances so that the RI purchase will always cover at least the minimum number of instances that are running continuously. 
+
+   Beam also provides a cost comparison chart and shows the time period it would take for the higher upfront cost of a RI purchase to break-even vs on-demand costs. Customers can then decide if they should purchase this RI if they expect to use these EC2 instances for the duration of the break-even period. 
 
    .. figure:: images/beam_40.png
 
