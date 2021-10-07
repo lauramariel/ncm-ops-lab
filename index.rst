@@ -36,7 +36,7 @@ What's New
 
 Workshop updated for the following software versions:
 
-- AOS 5.20.x
+- AOS 5.20.1.1
 - Prism 2021.7
 
 Agenda
@@ -316,5 +316,5 @@ For RTP:
 Nutanix Version Info
 ++++++++++++++++++++
 
-- **AOS Version** - 5.20.x
+- **AOS Version** - 5.20.1.1
 - **PC Version** - Prism 2021.7
