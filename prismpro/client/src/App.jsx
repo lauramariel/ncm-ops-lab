@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 // Components
 import {
+  Alert,
   Loader,
   NavBarLayout,
   MainPageLayout,
@@ -87,6 +88,10 @@ class App extends Component {
   }
 
   render() {
+    let showAlert = false;
+    if (localStorage && localStorage.getItem('banner_dismissed') !== 'true') {
+      showAlert = true;
+    }
     return (
       <MainPageLayout
         fullPage={ true }
@@ -99,6 +104,16 @@ class App extends Component {
         ) }
         body={ <div className="page-body">
           <Loader loading={ this.state.loading }>
+          { showAlert ? <Alert
+            type={ Alert.TYPE.INFO }
+            message="This interface is only intended for demo purposes and is not an actual Nutanix product."
+            closeable={ !!localStorage }
+            onClose={ () => {
+              if (localStorage) {
+                localStorage.setItem('banner_dismissed', true);
+              }
+            } }
+          /> : null }
             {this.renderPage()}
           </Loader>
         </div> }
