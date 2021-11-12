@@ -184,7 +184,7 @@ Now let's look at how we can take automated action to generate this report when 
    .. figure:: images/cap15.png
 
 Takeaways
-.........
+++++++++++
 
 - Prism Pro is our solution to make IT OPS smarter and automated. It covers the IT OPS process ranging from intelligent detection to automated remediation.
 
