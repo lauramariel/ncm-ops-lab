@@ -7,7 +7,6 @@ Overview
 
 In this lab you will learn how Prism Pro can help IT Admins monitor, analyze and automatically act when a VM's memory resource is constrained.
 
-
 Inefficiency Detection with Prism Pro X-FIT
 +++++++++++++++++++++++++++++++++++++++++++
 
@@ -19,6 +18,14 @@ Using machine learning, Prism Pro then analyzes the data and applies a classific
 - **Inactive:** VMs that have been powered off for a period of time or that are running VMs that do not consume any CPU, memory, or I/O resources.
 - **Constrained:** VMs that could see improved performance with additional resources.
 - **Bully:** VMs identified as using an abundance of resources and affecting other VMs.
+
+.. note::
+
+   The following instructions are executed in Prism Ops Lab Utility Server console which is accessed via Prism Ops Lab Utility Server at ``http://<PrismOpsLabUtilityServer_IP_ADDRESS>/``
+
+   Prism Ops Lab Utility Server has functions to simulate the environment for doing this lab. Doing the lab on the Prism Central will not show simulated environment and labs will **not** work.
+
+   In case, the ``http://<PrismOpsLabUtilityServer_IP_ADDRESS>/``  does not load for a while. Restart your **PrismProLabUtilityServer** VM from Prism Central/Prism Element.
 
 #. In **Prism Ops Lab Utility Server**, select :fa:`bars` **> Dashboard** (if not already there).
 
