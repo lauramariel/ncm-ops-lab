@@ -29,6 +29,10 @@ Lab Setup
 
    .. figure:: images/init3.png
 
+
+Capacity Planning Runway Monitoring
+++++++++++++++++++++++++++++++++++++++
+
 .. note::
 
    The following instructions are executed in Prism Ops Lab Utility Server console which is accessed via Prism Ops Lab Utility Server at ``http://<PrismOpsLabUtilityServer_IP_ADDRESS>/``
@@ -38,19 +42,15 @@ Lab Setup
    In case, the ``http://<PrismOpsLabUtilityServer_IP_ADDRESS>/``  does not load for a while. Restart your **PrismProLabUtilityServer** VM from Prism Central/Prism Element.
 
 
-Capacity Planning Runway Monitoring
-++++++++++++++++++++++++++++++++++++++
-
 Capacity runway is a measure of the remaining capacity left within a given cluster or node. There is an overall cluster runway as well as individual runway measurements for CPU, Memory and storage capacity. The Capacity Runway is calculated using X-FIT, Prism Pro's machine intelligence engine. Lets view the Capacity Runway of your lab cluster.
 
-#. In **Prism Central > Operations > Planning > Capacity Runway**.
-
-   - Note the runway summaries showing the days left for each cluster.
-   - How long does the current cluster has before it runs out of memory, CPU, and storage?
+#. In **Prism Central > Main Dashboard > Cluster Runway**.
 
 #. Click on the **Prism-Pro-Cluster** cluster.
+ 
+   .. figure:: images/ppro-dashboard.png
 
-   You can now take a look at the Runway for Storage, CPU, and Memory.
+#. You can now take a look at the Runway for Storage, CPU, and Memory.
 
    .. figure:: images/ppro_12.png
 
