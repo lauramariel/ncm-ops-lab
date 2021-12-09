@@ -118,7 +118,7 @@ Now let's look at how we can take automated action to generate this report when 
 
    .. figure:: images/cap3.png
 
-#. Select the Specific Alert Policies radio button and then search 'runway' in the search box. Select the following from the dropdown, since these are the 3 alerts we would want to generate a report for if Storage, Memory or CPU runway are low:
+#. Select the **Specific Alert Policies** radio button and then search 'runway' in the search box. Select the following from the dropdown, since these are the 3 alerts we would want to generate a report for if Storage, Memory or CPU runway are low:
    
    - **Cluster running out of storage Capacity (low runway)**
    - **Cluster running out of Memory Capacity (low runway)** and 
@@ -151,11 +151,13 @@ Now let's look at how we can take automated action to generate this report when 
 
    .. figure:: images/cap8.png
 
-#. Click **Save & Close** button and save it with a name: *Initials* - Automatically Generated Forecast Report.
+#. Click **Save & Close** button and input a name: *Initials* - Automatically Generated Forecast Report.
 
    .. figure:: images/cap9.png
 
 #. Set the playbook status to *Enabled* 
+
+#. Click on **Save**
 
 #. Now let's trigger the workflow. Switch to the browser tab where you opened **PrismOpsLabUtilityServer** in the :ref:`labsetup` section with the **/alerts** URL [example 10.38.17.12/alerts]. 
 
@@ -171,7 +173,7 @@ Now let's look at how we can take automated action to generate this report when 
 
    .. figure:: images/cap12.png
 
-#. The sections in this view can be expanded to show more details for each item. If there were any errors, they would also be surfaced in this view.
+#. Click on Playbook name to show more details for each item in the play. If there were any errors, they would also be surfaced in this view.
 
    .. figure:: images/cap13.png
 

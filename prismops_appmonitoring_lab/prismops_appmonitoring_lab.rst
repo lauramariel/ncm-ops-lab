@@ -97,7 +97,9 @@ Prism Ultimate licensing includes the SQL Server monitoring pack, which allows I
 
 #. From the dropdown for *Trigger alert if conditions persist for*, select **0 Minutes**.
 
-#. Within *Policy Name* enter *Initials*\ **- SQL Server Buffer Pool Size**, and click **Save**.
+#. Within *Policy Name* enter *Initials*\ **- SQL Server Buffer Pool Size**, 
+
+#. Click **Save**.
 
    .. figure:: images/bufferalert2.png
 
@@ -139,7 +141,7 @@ Prism Ultimate licensing includes the SQL Server monitoring pack, which allows I
 
 #. Click **Select** on the *String Parser* action.
 
-#. Directly to the right of *String Parser*, click the :fa:`pencil`, enter **Extract VM IP** in the *Add Description* field, and click **Save*.
+#. Directly to the right of *String Parser*, click the :fa:`pencil`, enter **Extract VM IP** in the *Add Description* field, and click **Save**.
 
 #. Directly below the *String to Parse* field, click **Parameters**, and select **Response Body** within the *Previous Action* column.
 
@@ -159,8 +161,9 @@ Prism Ultimate licensing includes the SQL Server monitoring pack, which allows I
 
 #. Directly to the right of *IP Address Powershell*, click the :fa:`pencil`, enter **Upload to Google Drive** in the *Add Description* field, and click **Save**.
 
-#. Directly below the *IP Address/Hostname* field, click **Parameters**, and select **Parsed String** within the **Previous Action** column. Fill out the following fields as indicated:
-
+#. Fill out the following fields as indicated:
+   
+   - **IP Address/Hostname** - click **Parameters**, and select **Parsed String** within the **Previous Action** column. 
    - **Username** - Administrator
    - **Password** - Nutanix/4u
    - **JSON Path:** - `C:\\Users\\Administrator\\Desktop\\UploadToGDrive.ps1` -id <Initials>
@@ -279,13 +282,17 @@ Prism Ultimate gives the capability to discover applications, identify applicati
 
    .. figure:: images/appdiscovery3.png
 
-#. Review the list of apps, and observe that there are some apps listed as *Unknown*. Select any of these apps, then click on **Actions > Identify** to setup a policy to identify the app.
+#. Review the list of apps, and observe that there are some apps listed as *Unknown*. 
+
+#. Select the app with the VM name as **LAMP_CENTOS76_DVS_PG1_3** (look in the VM column)
+
+#. Click on **Actions > Identify** to setup a policy to identify the app.
 
    .. figure:: images/appdiscovery4.png
 
 #. You can identify an app by the port(s), as they will be automatically input into the corresponding field.
 
-#. Give the app an appropriate name (ex. *Initials*\ **- My Special App**, then click on **Save and Apply**.
+#. Give the app an appropriate name (ex. *Initials*\ **- My Special App**), then click on **Save and Apply**.
 
    .. figure:: images/appdiscovery5.png
 
@@ -293,7 +300,7 @@ Prism Ultimate gives the capability to discover applications, identify applicati
 
    .. figure:: images/appdiscovery6.png
 
-#. Select the policy, and click **Actions > Delete**. Observe that the app you previously identified (via the policy you created) is once again listed as *Unknown*.
+#. Select the policy, and click **Actions > Unidentify**. Observe that the app you previously identified (via the policy you created) is once again listed as *Unknown*.
 
    .. figure:: images/appdiscovery7.png
 
