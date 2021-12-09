@@ -86,7 +86,9 @@ Playbook 1
 
    .. figure:: images/rs3b.png
 
-#. Select **Webhook** as the trigger. Using this trigger exposes a public API that allows scripts and third party tools such as ServiceNow to use this Webhook to call back into Prism Central and trigger this playbook. In our case, this Playbook will be called by the ticket system to initiate conditional execution.
+#. Select **Webhook** as the trigger. 
+ 
+   Using this trigger exposes a public API that allows scripts and third party tools such as ServiceNow to use this Webhook to call back into Prism Central and trigger this playbook. In our case, this Playbook will be called by the ticket system to initiate conditional execution.
 
    .. figure:: images/rs16.png
 
@@ -94,7 +96,9 @@ Playbook 1
 
    .. figure:: images/rs17.png
 
-#. The first action we will add is **String Parser** action. This action allows the user to parse data coming from a string which can then subsequently be used in the succeeding actions.
+#. Search and select the **String Parser** action. 
+
+   This action allows the user to parse data coming from a string which can then subsequently be used in the succeeding actions.
 
    .. figure:: images/addparse.png
 
@@ -131,7 +135,7 @@ Playbook 1
 
 #. Click add **Add Action** under the **Branch** action.
 
-#. First action we want to take is add memory to the VM. Select the **VM Add Memory** action. Fill the following fields:
+#. First action we want to take is add memory to the VM. Search and select the **VM Add Memory** action. Fill the following fields:
    
    - **Target VM**         - entity1 (select by clicking on the **Parameters** link and scroll down to choose **entity1**)
    - **Memory to Add**     - 1  (GiB)
@@ -191,11 +195,13 @@ Playbook 1
 
    .. figure:: images/deniedemail.png
 
-#. Click **Save & Close** button. Fill the following fields to save:
+#. Click **Save & Close** button and enter the following fields.
 
    - **Name**              - *Initials* - Resolve Service Ticket” 
    - **Description**       - Leave blank
    - **Playbook Status**   - Enabled (toggle to Enabled)
+
+#. Click on **Save**.
 
 Playbook 2
 -----------
@@ -238,11 +244,15 @@ For the next part of this lab, We will create a custom action to be used in our 
 
    .. figure:: images/rs6.png
 
-#. We will need to copy the Webhook ID from the first Playbook we created so that it can be passed in the generate ticket step. Open up your Resolve Service Ticket playbook and copy the Webhook ID to your clipboard. 
+#. We will need to copy the Webhook ID from the first Playbook we created so that it can be passed in the generate ticket step. 
+
+#. Open your Resolve Service Ticket playbook (E.g: XYZ - Resolve Service Ticket) and copy the Webhook ID to your clipboard. 
 
    .. figure:: images/webhookid.png
 
-#. Now we will create a Playbook to automate the generation of a service ticket. Close your Playbook and then click **Create Playbook** at the top of the table view. 
+#. Now we will create a Playbook to automate the generation of a service ticket. 
+
+#. Close your Playbook and then click **Create Playbook** at the top of the table view. 
 
    .. figure:: images/rs7.png
 
@@ -276,7 +286,7 @@ For the next part of this lab, We will create a custom action to be used in our 
 
 #. Click **Save & Close** button and save it with the following details: 
 
-   - **Name**              - *Initials* - Generate Service Ticket for Constrained VM” 
+   - **Name**              - *Initials* - Generate Service Ticket for Constrained VM
    - **Description**       - Leave blank
    - **Playbook Status**   - Enabled (toggle to Enabled)
 
@@ -337,7 +347,7 @@ Importing/Exporting Playbooks
 
 X-Play now has the ability to import and export playbooks across Prism Centrals. In the example below we will show how to import the playbook that is created in the preceding steps. The user will still need to create the alert policies and go through the workflow to trigger the alert as listed in the steps in the previous section. We recommend reading through the steps to create the playbook and understanding them properly.
 
-#. Download the file which is an export of the playbook `here. <https://drive.google.com/file/d/1f5utfXCp1MJZc-KIxGQwkigkxVnd4OVp/view?usp=sharing>`_ . The extension of the downloaded file should be **.pbk**. If not, rename downloaded file extension to **.pbk**. 
+#. Download the file which is an export of the playbook `here <https://drive.google.com/file/d/1f5utfXCp1MJZc-KIxGQwkigkxVnd4OVp/view?usp=sharing>`_ . The extension of the downloaded file should be **.pbk**. If not, rename downloaded file extension to **.pbk**. 
 
    .. note::
 
@@ -345,7 +355,9 @@ X-Play now has the ability to import and export playbooks across Prism Centrals.
       
       **Do not do this on the Lab Utility Server**
 
-#. Go to Prism Central > :fa:`bars` > Operations > Playbooks page and click on **Import**. 
+#. Go to Prism Central > :fa:`bars` > Operations > Playbooks page (click on **Get Started** if it appears)
+
+#. Click on **Import**. 
 
    .. figure:: images/import0.png
 
