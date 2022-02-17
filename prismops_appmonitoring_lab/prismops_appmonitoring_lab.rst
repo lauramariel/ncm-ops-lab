@@ -147,6 +147,7 @@ Prism Ultimate licensing includes the SQL Server monitoring pack, which allows I
 
 #. Enter the below into the *JSON Path* field.
 
+   - **Format** - JSON
    - **JSON Path**
 
       .. code-block:: bash
@@ -274,7 +275,9 @@ Application Discovery with Prism Ultimate
 
 Prism Ultimate gives the capability to discover applications, identify application to VM dependency, and provide a view of the full stack.
 
-#. Within Prism Central, click on :fa:`bars` **Operations > Discovery**.
+#. Within PrismProLabUtilityServer GUI ``http://<PrismOpsLabUtilityServer_IP_ADDRESS>/``
+
+#. Click on :fa:`bars` **Operations > Discovery**.
 
 #. Click on **Enable App Discovery** (if available), otherwise click **Discover** to begin the discovery process on your cluster. Once complete, you will be presented with a summary of the apps discovered, and identified.
 
