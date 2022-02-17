@@ -74,7 +74,9 @@ Playbook 1
 
 #. Click on :fa:`bars` > **Compute & Storage** and choose **VMs**
 
-#. Navigate to your **LinuxToolsVM-User0X** in the VM list. Note the current **Memory Capacity** of the VM, as we will later increase it with X-Play. You may need to scroll down within the **Properties** widget to find this value.
+#. Navigate to your **LinuxToolsVM-User0X** in the VM list. Note the current **Memory Capacity** of the VM, as we will later increase it with X-Play. 
+
+   You may need to scroll down within the **Properties** widget to find this value.
 
    .. figure:: images/linuxvm.png
 
@@ -82,13 +84,17 @@ Playbook 1
 
    .. figure:: images/navigateplaybook.png
 
-#. We will need to create a couple of Playbooks for this workflow to be possible. Let's start by clicking **Create Playbook**. We will first be creating the Playbook that will be increasing the Memory of the VM. We want to create a playbook that reads in a string coming from the ticket system (approved or denied in our case) and have conditional branching and execution of the next steps.
+#. We will need to create a couple of Playbooks for this workflow to be possible. Let's start by clicking **Create Playbook**. 
+
+   We will first be creating the Playbook that will be increasing the Memory of the VM. We want to create a playbook that reads in a string coming from the ticket system (approved or denied in our case) and have conditional branching and execution of the next steps.
 
    .. figure:: images/rs3b.png
 
 #. Select **Webhook** as the trigger. 
  
-   Using this trigger exposes a public API that allows scripts and third party tools such as ServiceNow to use this Webhook to call back into Prism Central and trigger this playbook. In our case, this Playbook will be called by the ticket system to initiate conditional execution.
+   Using this trigger exposes a public API that allows scripts and third party tools such as ServiceNow to use this Webhook to call back into Prism Central and trigger this playbook. 
+   
+   In our case, this Playbook will be called by the ticket system to initiate conditional execution.
 
    .. figure:: images/rs16.png
 
@@ -137,7 +143,7 @@ Playbook 1
 
 #. First action we want to take is add memory to the VM. Search and select the **VM Add Memory** action. Fill the following fields:
    
-   - **Target VM**         - entity1 (select by clicking on the **Parameters** link and scroll down to choose **entity1**)
+   - **Target VM**         - Webhook: entity1 (select by clicking on the **Parameters** link and scroll down to choose **entity1**)
    - **Memory to Add**     - 1  (GiB)
    - **Maximum Limit**     - 20 (GiB)
    
@@ -147,7 +153,7 @@ Playbook 1
 
 #. Select the **Resolve Alert** action. Fill the following fields:
 
-   - **Parameters**  - entity2 (select by clicking on the **Parameters** link and scroll down to choose **entity2**)
+   - **Parameters**  - entity2 (select by clicking on the **Parameters** link and scroll down to choose **Webhook: entity2**)
 
    .. figure:: images/resolvealert.png
 
@@ -168,9 +174,9 @@ Playbook 1
 #. Now, we would like to call back to the ticket service to resolve the ticket in the ticket service. Click **Add Action** to add the **REST API** action. Fill in the following values replacing the <PrismOpsLabUtilityServer_IP_ADDRESS> in the URL field. This concludes our first conditional branch for an approved request.
 
    - **Method:**           - PUT
-   - **URL:**              - ``http://<PrismOpsLabUtilityServer_IP_ADDRESS>/resolve_ticket/``
    - **Username**          - leave blank
    - **Password**          - leave blank
+   - **URL:**              - ``http://<PrismOpsLabUtilityServer_IP_ADDRESS>/resolve_ticket/``
    - **Request Body:**     - ``{"incident_id":"{{trigger[0].entity2.uuid}}"}``
    - **Request Header:**   - ``Content-Type:application/json;charset=utf-8``
 
@@ -270,7 +276,7 @@ For the next part of this lab, We will create a custom action to be used in our 
 
 #. First, we would like to generate a ticket for this alert. 
 
-#. Click **Add Action** on the left side and select the **Generate Service Ticket** action you created. Notice the details from the **Generate Service Ticket** Action you created are automatically filled in for you. Go ahead and replace the **<ENTER_ID_HERE>** text with the Webhook ID you copied to your clipboard. 
+#. Click **Add Action** on the left side and select the **Initials - Generate Service Ticket** action you created. Notice the details from the **Generate Service Ticket** Action you created are automatically filled in for you. Go ahead and replace the **<ENTER_ID_HERE>** text with the Webhook ID you copied to your clipboard. 
 
    .. figure:: images/serviceticket.png
 

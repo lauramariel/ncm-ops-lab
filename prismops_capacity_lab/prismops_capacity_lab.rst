@@ -130,11 +130,11 @@ Now let's look at how we can take automated action to generate this report when 
 
    .. figure:: images/cap5.png
 
-#. The **Alert Matching Criteria: Source Entity** in this case will be your Cluster that the alert is generated on. You can also change the Runway Period if you would like.
+#. The **Alert Matching Criteria: Source Entity** in this case will be your Cluster (e.g. PHX-SPOC007-4) that the alert is generated on. You can also change the Runway Period if you would like.
 
    .. figure:: images/cap6.png
 
-#. Next we would like to notify someone that the ticket was created by X-Play. Click **Add Action** and select the **Email** action.
+#. Next we would like to notify someone that the ticket was created by X-Play. Click **Add Action** and select the **Email** action. You can also search for **Email** action from the **Search for Action** area.
 
    .. figure:: images/cap7.png
 
