@@ -120,30 +120,34 @@ if (env.simulatePrismPro) {
         }
         break;
       case 'cluster':
-        // TEMP CODE FOR DASHBOARD ISSUE
-        if (body.group_member_count === 10 && body.group_member_sort_order === "DESCENDING" &&
-            (body.group_member_sort_attribute === 'controller_num_iops' || body.group_member_sort_attribute === 'aggregate_hypervisor_memory_usage_ppm' || body.group_member_sort_attribute === 'controller_avg_io_latency_usecs' || body.group_member_sort_attribute === 'hypervisor_cpu_usage_ppm')) {
+        // CODE FOR ISSUE WHERE PRISM PRO CLUSTER IS FILTERED OUT IN CAPACITY PLANNING
+        if (body.filter_criteria === 'feature_name==CAPACITY_FORECAST') {
+          // Remove the filter criteria
+          body.filter_criteria = '';
+
           var origHostPortUrl = env.proxyProtocol +'://' + PC_IP +
           (env.proxyPort ? ':' + env.proxyPort : '');
           var payload = JSON.stringify(body);
           var fwdURL = origHostPortUrl + req.url;
 
           r.post(fwdURL, { 'body' : payload }, function(error, response, body) {
-            var result = JSON.parse(body);
-            if(result && result.group_results && result.group_results.length) {
-              var newResults = [];
-              result.group_results[0].entity_results.forEach(function(entityRes){
-                // only keep results that aren't prism pro cluster
-                if (entityRes.entity_id !== '00057d50-00df-b390-0000-00000000eafd') {
-                  newResults.push(entityRes);
-                }
-              });
-              result.group_results[0].entity_results = newResults;
-            }
-            res.json(result);
+            res.json(JSON.parse(body));
           });
         }
-        // END TEMP DASHBOARD CODE. TO BE REMOVED AFTER 2021.7
+        else if (body.filter_criteria === 'feature_name==WHAT_IF_ANALYSIS;cluster_name==.*.*') {
+          // Remove the filter criteria
+          body.filter_criteria = 'cluster_name==.*.*';
+
+          var origHostPortUrl = env.proxyProtocol +'://' + PC_IP +
+          (env.proxyPort ? ':' + env.proxyPort : '');
+          var payload = JSON.stringify(body);
+          var fwdURL = origHostPortUrl + req.url;
+
+          r.post(fwdURL, { 'body' : payload }, function(error, response, body) {
+            res.json(JSON.parse(body));
+          });
+        }
+        // END CODE FOR ISSUE WHERE PRISM PRO CLUSTER IS FILTERED OUT IN CAPACITY PLANNING
         // Code for the UI ready flag
         else if(body.entity_ids && body.entity_ids[0] === '00057d50-00df-b390-0000-00000000eafd' &&
             body.group_member_attributes && body.group_member_attributes.length === 21) {

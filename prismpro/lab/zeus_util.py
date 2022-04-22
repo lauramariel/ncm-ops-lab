@@ -40,7 +40,7 @@ node_list {
   rackable_unit_id: 3
   node_position: 1
   cassandra_status: kNormalMode
-  software_version: "el7.3-release-fraser-6.0.2.2-stable-470389c914d0ceece72da65ac162e19a77c229c9"
+  software_version: "el7.3-release-euphrates-5.20.3-stable-6638c36d576ea8e8ae5a170c1c7d2e4352e55d83"
   node_serial: "ZM144S037403"
   management_server_id: 64
   acropolis_status {
@@ -63,7 +63,7 @@ node_list {
   rackable_unit_id: 3
   node_position: 1
   cassandra_status: kNormalMode
-  software_version: "el7.3-release-fraser-6.0.2.2-stable-470389c914d0ceece72da65ac162e19a77c229c9"
+  software_version: "el7.3-release-euphrates-5.20.3-stable-6638c36d576ea8e8ae5a170c1c7d2e4352e55d83"
   node_serial: "ZM144S037403"
   management_server_id: 64
   acropolis_status {
@@ -86,7 +86,7 @@ node_list {
   rackable_unit_id: 3
   node_position: 2
   cassandra_status: kNormalMode
-  software_version: "el7.3-release-fraser-6.0.2.2-stable-470389c914d0ceece72da65ac162e19a77c229c9"
+  software_version: "el7.3-release-euphrates-5.20.3-stable-6638c36d576ea8e8ae5a170c1c7d2e4352e55d83"
   node_serial: "ZM144S037403"
   management_server_id: 64
   acropolis_status {
@@ -109,7 +109,7 @@ node_list {
   rackable_unit_id: 3
   node_position: 1
   cassandra_status: kNormalMode
-  software_version: "el7.3-release-fraser-6.0.2.2-stable-470389c914d0ceece72da65ac162e19a77c229c9"
+  software_version: "el7.3-release-euphrates-5.20.3-stable-6638c36d576ea8e8ae5a170c1c7d2e4352e55d83"
   node_serial: "ZM144S037403"
   management_server_id: 64
   acropolis_status {
@@ -122,7 +122,7 @@ node_list {
   rackable_unit_uuid: "0cfd21c9-c941-4772-84dd-2caec6cb5a53"
   management_server_uuid: "f829fb6f-256c-4e4c-926b-d5e469c62139"
 }
-release_version: "el7.3-release-fraser-6.0.2.2-stable-470389c914d0ceece72da65ac162e19a77c229c9"
+release_version: "el7.3-release-euphrates-5.20.3-stable-6638c36d576ea8e8ae5a170c1c7d2e4352e55d83"
 cluster_fault_tolerance_state {
   current_max_fault_tolerance: 1
   desired_max_fault_tolerance: 1
