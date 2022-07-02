@@ -133,7 +133,7 @@ acropolis_ha_config {
 }
 cluster_functions: 1
 cluster_uuid: "00057d50-00df-b390-0000-00000000eafd"
-cluster_name: "Prism-Pro-Cluster"
+cluster_name: "OpsDemoCluster"
 extended_nfs_fhandle_enabled: true
 ncc_version: "ncc-999.0.0"
 """

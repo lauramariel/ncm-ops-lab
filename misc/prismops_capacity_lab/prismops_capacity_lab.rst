@@ -46,7 +46,7 @@ Capacity runway is a measure of the remaining capacity left within a given clust
 
 #. In **Prism Central > Main Dashboard > Cluster Runway**.
 
-#. Click on the **Prism-Pro-Cluster** cluster.
+#. Click on the **OpsDemoCluster** cluster.
  
    .. figure:: images/ppro-dashboard.png
 
@@ -161,7 +161,7 @@ Now let's look at how we can take automated action to generate this report when 
 
 #. Now let's trigger the workflow. Switch to the browser tab where you opened **PrismOpsLabUtilityServer** in the :ref:`labsetup` section with the **/alerts** URL [example 10.38.17.12/alerts]. 
 
-#. Select the **Memory Runway is Short** option and click **Simulate Alert**. This will simulate a memory constrained alert for the **Prism-Pro-Cluster**.
+#. Select the **Memory Runway is Short** option and click **Simulate Alert**. This will simulate a memory constrained alert for the **OpsDemoCluster**.
 
    .. figure:: images/cap10.png
 

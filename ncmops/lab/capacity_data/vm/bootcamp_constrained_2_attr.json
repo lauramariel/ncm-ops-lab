@@ -1,5 +1,5 @@
 {
-  "cluster_name": "Prism-Pro-Cluster",
+  "cluster_name": "OpsDemoCluster",
   "cluster": "00057d50-00df-b390-0000-00000000eafd",
   "vm_name": "bootcamp_constrained_2",
   "hypervisor_type": "kKvm",
