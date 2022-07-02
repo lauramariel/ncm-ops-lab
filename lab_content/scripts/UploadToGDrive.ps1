@@ -27,9 +27,9 @@ $newstreamreader.Dispose()
 $params = @{
     Uri = 'https://accounts.google.com/o/oauth2/token'
     Body = @(
-        "refresh_token=1//04EReUQ8kgxRYCgYIARAAGAQSNwF-L9IrpMEDNy4B6OT2w2SkU3BhrV8YzdoLMWtacp2t4vPBQVM4z9XZ80bbXkpq9zfTnV9NFGY", # Replace $RefreshToken with your refresh token
-        "client_id=366723132186-tut18j1a1mupbng7qmsp0bq4uanhbe0h.apps.googleusercontent.com",         # Replace $ClientID with your client ID
-        "client_secret=4dLWCDSXB2Dgoa5I4yWJLxgb", # Replace $ClientSecret with your client secret
+        "refresh_token=$RefreshToken", # Replace $RefreshToken with your refresh token
+        "client_id=$ClientID",         # Replace $ClientID with your client ID
+        "client_secret=$ClientSecret", # Replace $ClientSecret with your client secret
         "grant_type=refresh_token"
     ) -join '&'
     Method = 'Post'
