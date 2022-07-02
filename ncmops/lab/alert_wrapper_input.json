@@ -55,7 +55,7 @@
 {
   "alert_id":"A120094",
   "severity": "kCritical",
-  "cluster_name": "Prism-Pro-Cluster",
+  "cluster_name": "OpsDemoCluster",
   "cluster_uuid": "00057d50-00df-b390-0000-00000000eafd",
   "data_int": "93"
 }]
