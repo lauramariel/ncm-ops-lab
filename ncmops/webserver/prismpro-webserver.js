@@ -469,6 +469,19 @@ app.post('/generate_alert/:alert_uid', function(req, res) {
 
 // Endpoint to create playbooks for the Ticketsystem workflow
 app.post('/create_playbooks', function(req, res) {
+  console.log("POST create_playbooks")
+  playbooks(req, res)
+  res.send('Successfully Created Playbooks');
+});
+
+// GET for WalkMe which doesn't support POST
+app.get('/create_playbooks', function(req, res) {
+  console.log("GET create_playbooks")
+  playbooks(req, res)
+  res.redirect('/console/');
+});
+
+function playbooks(req, res) {
   var handleErr = function(error, body) {
     if ((body && body.state === 'ERROR') || error) {
       console.log(error)
@@ -533,7 +546,6 @@ app.post('/create_playbooks', function(req, res) {
             // Create the alert playbook
             r.post(origHostPortUrl + '/api/nutanix/v3/action_rules', { 'body' : JSON.stringify(alertPB) }, function(err, resp, body) {
               if (handleErr(err, body)) return;
-              res.send('Successfully Created Playbooks');
             });
           });
         });
@@ -543,7 +555,7 @@ app.post('/create_playbooks', function(req, res) {
     console.log(err)
     res.status(500).send({ message: 'Something went wrong' });
   }
-});
+}
 
 // TicketSystem
 //-------------
