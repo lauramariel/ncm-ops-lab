@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Create Zip Files
 
 # Controls when the workflow will run
 on:
@@ -37,9 +37,27 @@ jobs:
           dest: seedPC.zip
           # Whether to add subdirectories to simply zip all files to the root
           recursive: true
+      
+      # Zip up files required for Webesrver
+      - name: Easy Zip Files
+        # You may pin to the exact commit or the version.
+        # uses: vimtor/action-zip@5f1c4aa587ea41db1110df6a99981dbe19cee310
+        uses: vimtor/action-zip@v1
+        with:
+          # Files or directories to zip
+          files: ncmops/webserver
+          # Name of output zip file
+          dest: webserver.zip
+          # Whether to add subdirectories to simply zip all files to the root
+          recursive: true
           
-      - name: Upload ZIp
+      - name: Upload SeedPC
         uses: actions/upload-artifact@v1
         with:
-          name: my-artifact
+          name: seedPC
           path: ${{ github.workspace }}/seedPC.zip
+      - name: Upload Webserver
+        uses: actions/upload-artifact@v1
+        with:
+          name: webserver
+          path: ${{ github.workspace }}/webserver.zip
