@@ -34,7 +34,7 @@ jobs:
           # Files or directories to zip
           files: assets/lab
           # Name of output zip file
-          dest: seedPC.zip
+          dest: lab.zip
           # Whether to add subdirectories to simply zip all files to the root
           recursive: true
       
@@ -54,8 +54,8 @@ jobs:
       - name: Upload SeedPC
         uses: actions/upload-artifact@v1
         with:
-          name: lab
-          path: ${{ github.workspace }}/seedPC.zip
+          name: seedPC
+          path: ${{ github.workspace }}/lab.zip
       - name: Upload Webserver
         uses: actions/upload-artifact@v1
         with:
