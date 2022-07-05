@@ -54,7 +54,7 @@ jobs:
       - name: Upload SeedPC
         uses: actions/upload-artifact@v1
         with:
-          name: seedPC
+          name: lab
           path: ${{ github.workspace }}/seedPC.zip
       - name: Upload Webserver
         uses: actions/upload-artifact@v1
