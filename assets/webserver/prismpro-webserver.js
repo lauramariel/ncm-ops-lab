@@ -322,7 +322,12 @@ app.get(/\/public\/(.*)/, function (req, res) {
   res.sendfile('.' + req.path);
 });
 
-app.get(/\/build\/(.*)/, function (req, res) {
+// build path is also used in Calm so only match if there's nothing in front of it
+// e.g. /apps/static/840bl/build/en.0.js
+//      /apps/static/3.4.1/build/en.main.js
+// local request will be made by the PrismProWebserver.js client for example:
+//      /build/Ntnx-Regular.woff
+app.get(/^\/build\/(.*)/, function (req, res) {
   res.sendfile('.' + req.path);
 });
 
