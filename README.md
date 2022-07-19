@@ -9,3 +9,6 @@ This repo contains the source files required for the NCM Ops Lab to work.
   - client - this contains all the React code for the ticketsystem and alerts UI 
   - lab - this contains the seed data and scripts to be run on Prism Central
   - webserver - this contains the Node.js code for proxying through to PC, to be able to display the custom UIs for the lab and for viewing the seeded data properly
+  
+## GitLab
+This content is also being pushed to https://gitlab.rtp.nutanix.com/laura/ncm-ops-lab/
