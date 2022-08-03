@@ -11,7 +11,7 @@ the fake VMBL data in IDF.
 Additional Notes:
 ------------
 
-If you are having issues upgrading the Prism Central due to the version of the OpsDemoCluster not
+If you are having issues upgrading the Prism Central due to the version of the NCMCluster not
 being supported, you can run the python deleteprismprocluster.py from the lab directory inside the PC
 which will delete the fake cluster to allow upgrading.
 
@@ -22,4 +22,4 @@ Note: The cluster will get re created every hour because we have a cron job runn
 Troubleshooting:
 ------------
 
-* There is a small chance where either the VM Efficiency widget in the dashboard will not include the fake bootcamp VMs in its count, or the Capacity page for the OpsDemoCluster may fail to show the charts. In that case, ssh into the pc and run `cd lab; ./repair.sh <PC_IP>`. This should resolve any issues.
+* There is a small chance where either the VM Efficiency widget in the dashboard will not include the fake bootcamp VMs in its count, or the Capacity page for the NCMCluster may fail to show the charts. In that case, ssh into the pc and run `cd lab; ./repair.sh <PC_IP>`. This should resolve any issues.
