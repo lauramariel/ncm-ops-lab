@@ -6,10 +6,6 @@ PC_IP="$1"
 PC_USER="$2"
 PC_PASS="$3"
 
-echo "fix for kTransportError raised in capacity planning ENG-456322"
-cp /home/nutanix/ncc/lib/py/nutanix_gateway-server.egg /home/nutanix/neuron/lib/py/
-genesis stop neuron; cluster start
-
 echo "Temporarily fixing NCC Bug that Prevents SeedPC from working"
 # ENG-432422 PART 1
 cp ~/ncc/lib/py/nutanix_serviceability-lib.egg nutanix_serviceability-lib-previous.egg
