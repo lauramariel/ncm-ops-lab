@@ -1,5 +1,5 @@
 ## Blueprint Versions
-These blueprint were created and tested in Calm 3.4.1 / pc.2022.4.0.1
+These blueprints were created and tested in Calm 3.4.1 / pc.2022.4.0.1
 
 NCMOps.json - deploys proxy webserver only (aka PrismProLabUtilityServer)
 NCMOps-VX.json - deploys proxy webserver, and also seeds the data on PC (for use in VX runbooks for HPOC).
