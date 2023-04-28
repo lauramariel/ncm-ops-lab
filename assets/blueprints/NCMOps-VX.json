@@ -1,14 +1,14 @@
 {
     "status": {},
-    "contains_secrets": false,
-    "product_version": "3.4.1",
+    "contains_secrets": true,
+    "product_version": "3.5.2",
     "spec": {
         "description": "This blueprint deploys the NCM Ops Webserver that acts as a proxy to PC and provides a UI for generating alerts and creating tickets. It is meant to replace the steps required in Step 2 Configuring the VM here: https:\/\/docs.google.com\/document\/d\/1I94_GUZcDS2fBa5h3IggbewjyR841X3khLDrZ26eJQg\/edit?usp=sharing \n\n* [PC Proxy](http:\/\/@@{NCMOpsSvc.URL}@@)\n* [Generate Alerts](http:\/\/@@{NCMOpsSvc.URL}@@\/alerts)\n* [Ticket System](http:\/\/@@{NCMOpsSvc.URL}@@\/ticketsystem)",
         "resources": {
             "client_attrs": {
                 "c9c2e22a_deployment": {
-                    "y": 451,
-                    "x": 648.5
+                    "y": 448,
+                    "x": 465.5
                 }
             },
             "service_definition_list": [
@@ -28,6 +28,7 @@
                                         },
                                         "retries": "0",
                                         "description": "",
+                                        "inherit_target": false,
                                         "child_tasks_local_reference_list": [],
                                         "name": "cef9fdc6_dag",
                                         "attrs": {
@@ -62,6 +63,7 @@
                                         },
                                         "retries": "0",
                                         "description": "",
+                                        "inherit_target": false,
                                         "child_tasks_local_reference_list": [],
                                         "name": "536194d0_dag",
                                         "attrs": {
@@ -96,6 +98,7 @@
                                         },
                                         "retries": "0",
                                         "description": "",
+                                        "inherit_target": false,
                                         "child_tasks_local_reference_list": [],
                                         "name": "349f7463_dag",
                                         "attrs": {
@@ -130,6 +133,7 @@
                                         },
                                         "retries": "0",
                                         "description": "",
+                                        "inherit_target": false,
                                         "child_tasks_local_reference_list": [],
                                         "name": "e9f1ddd8_dag",
                                         "attrs": {
@@ -164,6 +168,7 @@
                                         },
                                         "retries": "0",
                                         "description": "",
+                                        "inherit_target": false,
                                         "child_tasks_local_reference_list": [],
                                         "name": "be5e4ddb_dag",
                                         "attrs": {
@@ -258,6 +263,7 @@
                             "nic_list": [
                                 {
                                     "nic_type": "NORMAL_NIC",
+                                    "vpc_reference": null,
                                     "ip_endpoint_list": [],
                                     "network_function_chain_reference": null,
                                     "network_function_nic_type": "INGRESS",
@@ -266,7 +272,7 @@
                                         "kind": "subnet",
                                         "type": "",
                                         "name": "",
-                                        "uuid": "93d4b272-3edf-490d-93be-67afb7fb71b4"
+                                        "uuid": "05916c22-6e20-498a-b6ab-a858d1edd026"
                                     },
                                     "type": ""
                                 }
@@ -282,7 +288,7 @@
                             "guest_customization": null,
                             "power_state": "ON",
                             "type": "",
-                            "account_uuid": "d6cab01f-6a69-4cda-9207-f2be331c9541",
+                            "account_uuid": "55037ec7-da9a-468e-a156-04b99b509e3d",
                             "boot_config": {
                                 "boot_device": {
                                     "type": "",
@@ -302,7 +308,7 @@
                                         "kind": "app_package",
                                         "type": "",
                                         "name": "NCMOpsWebserver",
-                                        "uuid": "9d89ba1f-be4e-861c-e5e3-3dd4a9142236"
+                                        "uuid": "ad9d75d9-28eb-414f-b1db-8fc7ec7c8699"
                                     },
                                     "type": "",
                                     "disk_size_mib": 0,
@@ -322,50 +328,30 @@
                         "availability_zone_reference": null,
                         "backup_policy": null,
                         "type": "",
-                        "cluster_reference": null,
-                        "categories": ""
+                        "cluster_reference": {
+                            "kind": "cluster",
+                            "type": "",
+                            "name": "Demo01",
+                            "uuid": "0005e534-cdfa-2f1e-7e06-ac1f6b6e55b1"
+                        },
+                        "categories": {}
                     },
                     "variable_list": []
                 }
             ],
             "credential_definition_list": [
                 {
-                    "username": "admin",
-                    "description": "",
-                    "type": "PASSWORD",
-                    "secret": {
-                        "attrs": {
-                            "is_secret_modified": false,
-                            "secret_reference": {}
-                        }
-                    },
-                    "name": "PC_CREDS",
-                    "cred_class": "static"
-                },
-                {
                     "username": "root",
                     "description": "",
                     "type": "PASSWORD",
                     "secret": {
                         "attrs": {
-                            "is_secret_modified": false,
+                            "is_secret_modified": true,
                             "secret_reference": {}
-                        }
+                        },
+                        "value": "zrceD3U5ujuqUX04DY4rKWZItqPRdDMTAjvJzyrXeTOV6uULb6FJNIMt:utf-8"
                     },
                     "name": "WebserverCreds",
-                    "cred_class": "static"
-                },
-                {
-                    "username": "nutanix",
-                    "description": "",
-                    "type": "PASSWORD",
-                    "secret": {
-                        "attrs": {
-                            "is_secret_modified": false,
-                            "secret_reference": {}
-                        }
-                    },
-                    "name": "PC_SSH_CREDS",
                     "cred_class": "static"
                 }
             ],
@@ -392,14 +378,15 @@
                                     },
                                     "retries": "0",
                                     "description": "",
+                                    "inherit_target": false,
                                     "child_tasks_local_reference_list": [
                                         {
                                             "kind": "app_task",
-                                            "name": "Get PC IP"
+                                            "name": "Configure Webserver"
                                         },
                                         {
                                             "kind": "app_task",
-                                            "name": "Configure Webserver"
+                                            "name": "Run SeedPC on PC"
                                         },
                                         {
                                             "kind": "app_task",
@@ -412,19 +399,19 @@
                                             {
                                                 "from_task_reference": {
                                                     "kind": "app_task",
-                                                    "name": "Get PC IP"
+                                                    "name": "Configure Webserver"
                                                 },
                                                 "edge_type": "user_defined",
                                                 "type": "",
                                                 "to_task_reference": {
                                                     "kind": "app_task",
-                                                    "name": "Configure Webserver"
+                                                    "name": "Run SeedPC on PC"
                                                 }
                                             },
                                             {
                                                 "from_task_reference": {
                                                     "kind": "app_task",
-                                                    "name": "Configure Webserver"
+                                                    "name": "Run SeedPC on PC"
                                                 },
                                                 "edge_type": "user_defined",
                                                 "type": "",
@@ -447,41 +434,15 @@
                                     },
                                     "retries": "0",
                                     "description": "",
-                                    "child_tasks_local_reference_list": [],
-                                    "name": "Get PC IP",
-                                    "attrs": {
-                                        "exit_status": [],
-                                        "script": "jwt = '@@{calm_jwt}@@'\n\n# Get PC IP and PE uuid\napi_url = 'https:\/\/localhost:9440\/api\/nutanix\/v3\/prism_central'\nheaders = {'Content-Type': 'application\/json', 'Accept': 'application\/json', 'Authorization': 'Bearer {}'.format(jwt)}\n\nr = urlreq(api_url, verb='GET', headers=headers, verify=False)\nif r.ok:\n    resp = json.loads(r.content)\n\n    pc_ip = resp['resources']['pc_vm_list'][0]['nic_list'][0]['ip_list'][0]\n\nelse:\n    print(\"Post request failed\", r.content)\n    exit(1)\n\nprint(\"PC_IP={}\".format(pc_ip))",
-                                        "eval_variables": [
-                                            "PC_IP"
-                                        ],
-                                        "eval_scope": "local",
-                                        "type": "",
-                                        "script_type": "static"
-                                    },
-                                    "timeout_secs": "0",
-                                    "type": "SET_VARIABLE",
-                                    "variable_list": []
-                                },
-                                {
-                                    "target_any_local_reference": {
-                                        "kind": "app_service",
-                                        "name": "NCMOpsSvc"
-                                    },
-                                    "retries": "0",
-                                    "description": "",
+                                    "inherit_target": false,
                                     "child_tasks_local_reference_list": [],
                                     "name": "Configure Webserver",
                                     "attrs": {
-                                        "exit_status": [],
-                                        "script": "echo \"configuring local-config-ssp.js\"\necho \"Setting proxyHost to IP @@{PC_IP}@@\"\nsed -i \"s\/proxyHost: ''\/proxyHost: '@@{PC_IP}@@'\/g\" \/root\/webserver\/local-config-ssp.js\necho \"Setting userPass to @@{PC_CREDS.secret}@@\"\nsed -i \"s\/userPass: 'Nutanix\\\/4u'\/userPass: '@@{PC_CREDS.secret}@@'\/g\" \/root\/webserver\/local-config-ssp.js\necho \"Setting sshPass to @@{PC_SSH_CREDS.secret}@@\"\nsed -i \"s\/sshPass: 'nutanix\\\/4u'\/sshPass: '@@{PC_SSH_CREDS.secret}@@'\/g\" \/root\/webserver\/local-config-ssp.js\necho \"Restarting webserver\"\npm2 restart prismpro-webserver",
-                                        "script_type": "sh",
+                                        "script": "echo \"configuring local-config-ssp.js\"\necho \"Setting proxyHost to IP @@{PCIP}@@\"\nsed -i \"s\/proxyHost: ''\/proxyHost: '@@{PCIP}@@'\/g\" \/root\/webserver\/local-config-ssp.js\necho \"Setting userPass to @@{PC_UI_CREDS}@@\"\nsed -i \"s\/userPass: 'Nutanix\\\/4u'\/userPass: '@@{PC_UI_CREDS}@@'\/g\" \/root\/webserver\/local-config-ssp.js\necho \"Setting sshPass to @@{PC_SSH_CREDS}@@\"\nsed -i \"s\/sshPass: 'nutanix\\\/4u'\/sshPass: '@@{PC_SSH_CREDS}@@'\/g\" \/root\/webserver\/local-config-ssp.js\necho \"Updating efficiency.json\"\nsed -i \"s\/Prism-Pro-Cluster\/NCMCluster\/g\" sample_data\/prismpro\/efficiency.json\necho \"Restarting webserver\"\npm2 restart prismpro-webserver",
                                         "type": "",
                                         "command_line_args": "",
-                                        "login_credential_local_reference": {
-                                            "kind": "app_credential",
-                                            "name": "WebserverCreds"
-                                        }
+                                        "exit_status": [],
+                                        "script_type": "sh"
                                     },
                                     "timeout_secs": "0",
                                     "type": "EXEC",
@@ -494,6 +455,28 @@
                                     },
                                     "retries": "0",
                                     "description": "",
+                                    "inherit_target": false,
+                                    "child_tasks_local_reference_list": [],
+                                    "name": "Run SeedPC on PC",
+                                    "attrs": {
+                                        "script": "PC_IP=\"@@{PCIP}@@\"\nPC_PW=\"@@{PC_SSH_CREDS}@@\"\n\necho \"Downloading SeedPC.zip\"\ncurl -o seedPC.zip @@{SEED_PC_PATH}@@\n\necho \"Copying seedPC to PC\"\nexport SSHPASS=\"$PC_PW\"\nsshpass -e scp -o StrictHostKeyChecking=no seedPC.zip nutanix@$PC_IP:~\/\n\necho \"Running seedPC on PC\"\nsshpass -e ssh -o StrictHostKeyChecking=no nutanix@$PC_IP \"source \/etc\/profile\nunzip \/home\/nutanix\/seedPC.zip\npushd \/home\/nutanix\/lab\/\n\/home\/nutanix\/lab\/initialize_lab.sh $PC_IP admin $PC_PW> \/home\/nutanix\/initialize_lab.log 2>&1 &\npopd\"\n\necho \"Done\"",
+                                        "type": "",
+                                        "command_line_args": "",
+                                        "exit_status": [],
+                                        "script_type": "sh"
+                                    },
+                                    "timeout_secs": "0",
+                                    "type": "EXEC",
+                                    "variable_list": []
+                                },
+                                {
+                                    "target_any_local_reference": {
+                                        "kind": "app_service",
+                                        "name": "NCMOpsSvc"
+                                    },
+                                    "retries": "0",
+                                    "description": "",
+                                    "inherit_target": false,
                                     "child_tasks_local_reference_list": [],
                                     "name": "Set URL",
                                     "attrs": {
@@ -529,6 +512,7 @@
                                     },
                                     "retries": "0",
                                     "description": "",
+                                    "inherit_target": false,
                                     "child_tasks_local_reference_list": [],
                                     "name": "e82cd195_dag",
                                     "attrs": {
@@ -547,7 +531,8 @@
                                 "name": "e82cd195_dag"
                             },
                             "variable_list": []
-                        }
+                        },
+                        "upgrade_runbook": {}
                     },
                     "variable_list": []
                 },
@@ -563,9 +548,17 @@
                         "name": "NCMOpsWebserver",
                         "resources": {
                             "image_type": "DISK_IMAGE",
-                            "checksum": {},
+                            "checksum": {
+                                "checksum_algorithm": "",
+                                "type": "",
+                                "checksum_value": ""
+                            },
                             "source_uri": "http:\/\/10.42.194.11\/workshop_staging\/NCMOpsLabUtilityServer.qcow2 ",
-                            "version": {},
+                            "version": {
+                                "product_version": "",
+                                "type": "",
+                                "product_name": ""
+                            },
                             "architecture": "X86_64",
                             "type": ""
                         },
@@ -600,269 +593,112 @@
                             "description": ""
                         }
                     ],
-                    "environment_reference_list": [
-                        "e52688ed-aad5-1c33-9237-9f4e8569cb4e"
-                    ],
-                    "patch_list": [
-                        {
-                            "name": "Config1",
-                            "type": "PATCH",
-                            "is_system_generated": false,
-                            "variable_list": [],
-                            "attrs_list": [
-                                {
-                                    "target_any_local_reference": {
-                                        "kind": "app_blueprint_deployment",
-                                        "name": "c9c2e22a_deployment"
-                                    },
-                                    "data": {
-                                        "num_vcpus_per_socket_ruleset": {
-                                            "type": ""
-                                        },
-                                        "num_sockets_ruleset": {
-                                            "type": ""
-                                        },
-                                        "disk_delete_allowed": false,
-                                        "pre_defined_nic_list": [
-                                            {
-                                                "nic_type": "NORMAL_NIC",
-                                                "ip_endpoint_list": [],
-                                                "network_function_chain_reference": null,
-                                                "editable": false,
-                                                "network_function_nic_type": "INGRESS",
-                                                "mac_address": "",
-                                                "subnet_reference": {
-                                                    "kind": "subnet",
-                                                    "type": "",
-                                                    "name": "",
-                                                    "uuid": "93d4b272-3edf-490d-93be-67afb7fb71b4"
-                                                },
-                                                "operation": "modify",
-                                                "identifier": "0",
-                                                "type": ""
-                                            }
-                                        ],
-                                        "categories_delete_allowed": false,
-                                        "pre_defined_categories": [],
-                                        "pre_defined_disk_list": [
-                                            {
-                                                "device_properties": {
-                                                    "type": "",
-                                                    "disk_address": {
-                                                        "type": "",
-                                                        "device_index": 0,
-                                                        "adapter_type": "SCSI"
-                                                    },
-                                                    "device_type": "DISK"
-                                                },
-                                                "operation": "modify",
-                                                "data_source_reference": {
-                                                    "kind": "image",
-                                                    "type": "",
-                                                    "name": "NCMOpsLabUtilityServer.qcow2",
-                                                    "uuid": "280373c8-cc9a-4418-a3d4-87cf0748e56e"
-                                                },
-                                                "type": "",
-                                                "disk_size_mib": null,
-                                                "volume_group_reference": null
-                                            }
-                                        ],
-                                        "nic_delete_allowed": false,
-                                        "type": "nutanix",
-                                        "memory_size_mib_ruleset": {
-                                            "type": ""
-                                        },
-                                        "categories_add_allowed": false
-                                    },
-                                    "deployment_strategy": {},
-                                    "uuid": "6e603d29-0d9b-a685-b5b3-81b82967fb1e"
-                                }
-                            ],
-                            "runbook": {
-                                "task_definition_list": [
-                                    {
-                                        "target_any_local_reference": {
-                                            "kind": "app_profile",
-                                            "name": "Default"
-                                        },
-                                        "retries": "0",
-                                        "description": "",
-                                        "child_tasks_local_reference_list": [
-                                            {
-                                                "kind": "app_task",
-                                                "name": "Config1_meta_task"
-                                            }
-                                        ],
-                                        "name": "SYS_GEN__DAG_Patch_Config1_8d50bf54_a6b6_bd7b_d8f4_08a6e9611a66",
-                                        "attrs": {
-                                            "edges": [],
-                                            "type": "DAG"
-                                        },
-                                        "timeout_secs": "0",
-                                        "type": "DAG",
-                                        "variable_list": []
-                                    },
-                                    {
-                                        "target_any_local_reference": {
-                                            "kind": "app_profile",
-                                            "name": "Default"
-                                        },
-                                        "retries": "0",
-                                        "description": "",
-                                        "child_tasks_local_reference_list": [
-                                            {
-                                                "kind": "app_task",
-                                                "name": "Config1_update_spec_task"
-                                            },
-                                            {
-                                                "kind": "app_task",
-                                                "name": "Config1_Service1"
-                                            }
-                                        ],
-                                        "name": "Config1_meta_task",
-                                        "attrs": {
-                                            "type": "",
-                                            "patch_attrs_reference": [
-                                                "6e603d29-0d9b-a685-b5b3-81b82967fb1e"
-                                            ]
-                                        },
-                                        "timeout_secs": "0",
-                                        "type": "PATCH_META",
-                                        "variable_list": []
-                                    },
-                                    {
-                                        "target_any_local_reference": {
-                                            "kind": "app_profile",
-                                            "name": "Default"
-                                        },
-                                        "retries": "0",
-                                        "description": "",
-                                        "child_tasks_local_reference_list": [],
-                                        "name": "Config1_update_spec_task",
-                                        "attrs": {
-                                            "type": ""
-                                        },
-                                        "timeout_secs": "0",
-                                        "type": "UPDATE_SPEC",
-                                        "variable_list": []
-                                    },
-                                    {
-                                        "target_any_local_reference": {
-                                            "kind": "app_blueprint_deployment",
-                                            "name": "c9c2e22a_deployment"
-                                        },
-                                        "retries": "0",
-                                        "description": "",
-                                        "child_tasks_local_reference_list": [
-                                            {
-                                                "kind": "app_task",
-                                                "name": "SYS_GEN__stop"
-                                            },
-                                            {
-                                                "kind": "app_task",
-                                                "name": "SYS_GEN__Nutanix_Update_a1057dd7_f1f9_ef94_86ab_94ac7c56b9af"
-                                            },
-                                            {
-                                                "kind": "app_task",
-                                                "name": "SYS_GEN__start"
-                                            }
-                                        ],
-                                        "name": "Config1_Service1",
-                                        "attrs": {
-                                            "loop_variable": "",
-                                            "type": "",
-                                            "loop_counter": "",
-                                            "exit_condition_type": "",
-                                            "patch_attr_reference": "6e603d29-0d9b-a685-b5b3-81b82967fb1e",
-                                            "loop_over_list": ""
-                                        },
-                                        "timeout_secs": "0",
-                                        "type": "FOR_LOOP",
-                                        "variable_list": []
-                                    },
-                                    {
-                                        "target_any_local_reference": {
-                                            "kind": "app_service",
-                                            "name": "NCMOpsSvc"
-                                        },
-                                        "retries": "0",
-                                        "description": "",
-                                        "child_tasks_local_reference_list": [],
-                                        "name": "SYS_GEN__stop",
-                                        "attrs": {
-                                            "type": "CALL_RUNBOOK",
-                                            "inarg_list": [],
-                                            "runbook_reference": {
-                                                "kind": "app_runbook",
-                                                "name": "63d9f30e_runbook"
-                                            }
-                                        },
-                                        "timeout_secs": "0",
-                                        "type": "CALL_RUNBOOK",
-                                        "variable_list": []
-                                    },
-                                    {
-                                        "target_any_local_reference": {
-                                            "kind": "app_substrate",
-                                            "name": "VM1"
-                                        },
-                                        "retries": "0",
-                                        "description": "",
-                                        "child_tasks_local_reference_list": [],
-                                        "name": "SYS_GEN__Nutanix_Update_a1057dd7_f1f9_ef94_86ab_94ac7c56b9af",
-                                        "attrs": {
-                                            "type": ""
-                                        },
-                                        "timeout_secs": "0",
-                                        "type": "UPDATE_NUTANIX",
-                                        "variable_list": []
-                                    },
-                                    {
-                                        "target_any_local_reference": {
-                                            "kind": "app_service",
-                                            "name": "NCMOpsSvc"
-                                        },
-                                        "retries": "0",
-                                        "description": "",
-                                        "child_tasks_local_reference_list": [],
-                                        "name": "SYS_GEN__start",
-                                        "attrs": {
-                                            "type": "CALL_RUNBOOK",
-                                            "inarg_list": [],
-                                            "runbook_reference": {
-                                                "kind": "app_runbook",
-                                                "name": "9f509ed1_runbook"
-                                            }
-                                        },
-                                        "timeout_secs": "0",
-                                        "type": "CALL_RUNBOOK",
-                                        "variable_list": []
-                                    }
-                                ],
-                                "description": "",
-                                "name": "SYS_GEN__Runbook_Patch_Config1_8d50bf54_a6b6_bd7b_d8f4_08a6e9611a66",
-                                "main_task_local_reference": {
-                                    "kind": "app_task",
-                                    "name": "SYS_GEN__DAG_Patch_Config1_8d50bf54_a6b6_bd7b_d8f4_08a6e9611a66"
-                                },
-                                "variable_list": []
-                            },
-                            "config_reference_list": [],
-                            "description": ""
-                        }
-                    ],
+                    "environment_reference_list": [],
+                    "application_url": "",
                     "description": "",
                     "action_list": [],
                     "name": "Default",
                     "restore_config_list": [],
                     "snapshot_config_list": [],
-                    "variable_list": []
+                    "patch_list": [],
+                    "variable_list": [
+                        {
+                            "val_type": "STRING",
+                            "is_mandatory": false,
+                            "description": "",
+                            "data_type": "BASE",
+                            "type": "LOCAL",
+                            "name": "PC_SSH_CREDS",
+                            "value": "nutanix\/4u",
+                            "label": "",
+                            "attrs": {
+                                "type": ""
+                            },
+                            "is_hidden": false,
+                            "options": {
+                                "type": "PREDEFINED",
+                                "choices": []
+                            }
+                        },
+                        {
+                            "val_type": "STRING",
+                            "is_mandatory": false,
+                            "description": "",
+                            "data_type": "BASE",
+                            "type": "LOCAL",
+                            "name": "PC_UI_CREDS",
+                            "value": "Nutanix.123",
+                            "label": "",
+                            "attrs": {
+                                "type": ""
+                            },
+                            "is_hidden": false,
+                            "options": {
+                                "type": "PREDEFINED",
+                                "choices": []
+                            }
+                        },
+                        {
+                            "val_type": "STRING",
+                            "is_mandatory": false,
+                            "description": "",
+                            "data_type": "BASE",
+                            "type": "LOCAL",
+                            "name": "WebserverCreds",
+                            "value": "nutanix\/4u",
+                            "label": "",
+                            "attrs": {
+                                "type": ""
+                            },
+                            "is_hidden": false,
+                            "options": {
+                                "type": "PREDEFINED",
+                                "choices": []
+                            }
+                        },
+                        {
+                            "val_type": "STRING",
+                            "is_mandatory": false,
+                            "description": "",
+                            "data_type": "BASE",
+                            "type": "LOCAL",
+                            "name": "PCIP",
+                            "value": "10.38.8.9",
+                            "label": "",
+                            "attrs": {
+                                "type": ""
+                            },
+                            "is_hidden": false,
+                            "options": {
+                                "type": "PREDEFINED",
+                                "choices": []
+                            }
+                        },
+                        {
+                            "val_type": "STRING",
+                            "is_mandatory": false,
+                            "description": "",
+                            "data_type": "BASE",
+                            "type": "LOCAL",
+                            "name": "SEED_PC_PATH",
+                            "value": "https:\/\/storage.googleapis.com\/ntnx-td-image-repo\/seedPC-2022.4.zip",
+                            "label": "",
+                            "attrs": {
+                                "type": ""
+                            },
+                            "is_hidden": false,
+                            "options": {
+                                "type": "PREDEFINED",
+                                "choices": []
+                            }
+                        }
+                    ]
                 }
             ],
             "published_service_definition_list": [],
             "default_credential_local_reference": {
                 "kind": "app_credential",
-                "name": "PC_CREDS"
+                "name": "WebserverCreds"
             },
             "type": "USER"
         },
@@ -870,10 +706,10 @@
     },
     "api_version": "3.0",
     "metadata": {
-        "last_update_time": "1656723778568528",
+        "last_update_time": "1659742950395355",
         "kind": "blueprint",
-        "spec_version": 31,
-        "creation_time": "1656717392116493",
+        "spec_version": 18,
+        "creation_time": "1659666466311076",
         "name": "NCMOps"
     }
 }
