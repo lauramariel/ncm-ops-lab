@@ -51,16 +51,16 @@ cd ../
 # ENG-432422 PART 2 replace the ncc egg back to prevent any issues now that the seeding is complete
 cp nutanix_serviceability-lib-previous.egg ~/ncc/lib/py/nutanix_serviceability-lib.egg
 
-echo "Seeding Application Discovery Data"
+# echo "Seeding Application Discovery Data"
 
-cp mock_epoch_response.json ~/config/xdiscovery/mock_epoch_response.json
+# cp mock_epoch_response.json ~/config/xdiscovery/mock_epoch_response.json
 
-# Wait for the discovery service to come up
-sleep 60
+# # Wait for the discovery service to come up
+# sleep 60
 
-echo "Now restart the Discovery Service"
-genesis stop dpm_server
-genesis stop xdiscovery
+# echo "Now restart the Discovery Service"
+# genesis stop dpm_server
+# genesis stop xdiscovery
 # Stop cluster health and neuron for the NCC Bug ENG-432422
 genesis stop cluster_health
 genesis stop neuron
