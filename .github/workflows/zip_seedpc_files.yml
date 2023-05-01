@@ -32,7 +32,7 @@ jobs:
         uses: vimtor/action-zip@v1
         with:
           # Files or directories to zip
-          files: assets/lab
+          files: assets/lab/
           # Name of output zip file
           dest: seedPC.zip
           # Whether to add subdirectories to simply zip all files to the root
